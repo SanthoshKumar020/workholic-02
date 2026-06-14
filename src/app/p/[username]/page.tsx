@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
-import { Globe, Linkedin, Github, ExternalLink, Award, CheckCircle } from "lucide-react";
+import { Globe, Link2, ExternalLink, Award, CheckCircle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -76,13 +76,13 @@ export default async function PublicProfilePage({ params }: Props) {
                 {profile.linkedin_url && (
                   <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 rounded-lg border border-[#0077b5]/30 bg-[#0077b5]/5 px-3 py-1.5 text-xs font-semibold text-[#0077b5] hover:bg-[#0077b5]/10 transition">
-                    <Linkedin className="h-3.5 w-3.5" /> LinkedIn
+                    <Link2 className="h-3.5 w-3.5" /> LinkedIn
                   </a>
                 )}
                 {profile.github_url && (
                   <a href={profile.github_url} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition">
-                    <Github className="h-3.5 w-3.5" /> GitHub
+                    <Link2 className="h-3.5 w-3.5" /> GitHub
                   </a>
                 )}
                 {profile.portfolio_url && (

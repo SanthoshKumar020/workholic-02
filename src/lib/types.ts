@@ -13,6 +13,15 @@ export interface Profile {
   streak: number;
   last_active: string | null;
   created_at: string;
+  // Public profile fields
+  full_name: string | null;
+  username: string | null;
+  public_bio: string | null;
+  is_public: boolean | null;
+  linkedin_url: string | null;
+  github_url: string | null;
+  portfolio_url: string | null;
+  completed_certs: unknown[] | null;
 }
 
 export interface Resume {

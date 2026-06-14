@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { sanitizeJson } from "@/lib/json-utils";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -77,51 +76,4 @@ export async function DELETE(request: Request) {
   const { error } = await supabase.from("job_applications").delete().eq("id", id).eq("user_id", user.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
-}
-
-// POST /api/tracker/follow-up — AI draft follow-up email
-export { POST as default };
-
-// Named export for follow-up (separate route handles this)
-export async function generateFollowUp(app: {
-  company: string; role: string; applied_date: string;
-  contact_name?: string; notes?: string;
-}) {
-  const groqKey = process.env.GROQ_API_KEY;
-  if (!groqKey) return null;
-
-  const days = Math.floor((Date.now() - new Date(app.applied_date).getTime()) / 86400000);
-
-  const prompt = `Write a professional job application follow-up email.
-
-Company: ${app.company}
-Role: ${app.role}
-Applied: ${days} days ago
-Contact: ${app.contact_name || "Hiring Manager"}
-Notes: ${app.notes || "none"}
-
-Return ONLY valid JSON:
-{
-  "subject": "<email subject line>",
-  "body": "<full email body — 3-4 short paragraphs, professional and not pushy, reiterate interest, ask for update>"
-}`;
-
-  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey}` },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.5,
-      max_tokens: 800,
-    }),
-    signal: AbortSignal.timeout(20000),
-  });
-
-  if (!res.ok) return null;
-  const data = await res.json();
-  const text = data.choices?.[0]?.message?.content ?? "";
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) return null;
-  return JSON.parse(sanitizeJson(match[0]));
 }

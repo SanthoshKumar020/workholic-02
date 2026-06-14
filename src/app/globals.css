@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 239 84% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 239 84% 58%;
+    --radius: 0.75rem;
+    color-scheme: light;
+  }
+
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 239 84% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 239 84% 65%;
+  }
+
+  html,
+  body {
+    @apply bg-[#f8f9ff] text-slate-900 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html.dark,
+  html.dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  * {
+    @apply box-border;
+  }
+}
+
+@layer utilities {
+  .hero-gradient {
+    background:
+      radial-gradient(80rem 60rem at 90% -5%, rgba(99, 102, 241, 0.15) 0%, transparent 65%),
+      radial-gradient(60rem 60rem at -10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+      radial-gradient(40rem 40rem at 60% 100%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+  }
+
+  .glass-card {
+    @apply rounded-2xl border border-white/60 bg-white/80 shadow-lg shadow-slate-200/60 backdrop-blur-sm;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-600 via-violet-500 to-brand-700 bg-clip-text text-transparent;
+  }
+
+  .ring-glow {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), 0 4px 24px rgba(99, 102, 241, 0.14);
+  }
+}

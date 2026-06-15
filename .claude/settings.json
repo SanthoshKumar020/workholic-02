@@ -3,6 +3,9 @@
     "allow": [
       "Bash(Get-Content \"d:\\\\resume-maker\\\\src\\\\components\\\\InterviewClient.tsx\")",
       "Bash(Select-Object -First 50)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\santh\\Downloads"
     ]
   }
 }

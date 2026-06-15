@@ -10,6 +10,7 @@
     "postinstall": "node scripts/copy-pdf-worker.mjs"
   },
   "dependencies": {
+    "@cashfreepayments/cashfree-js": "^1.0.7",
     "@radix-ui/react-dialog": "^1.1.16",
     "@radix-ui/react-popover": "^1.1.16",
     "@radix-ui/react-progress": "^1.1.9",
@@ -19,6 +20,7 @@
     "@stripe/stripe-js": "^4.8.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.4",
+    "cashfree-pg": "^6.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

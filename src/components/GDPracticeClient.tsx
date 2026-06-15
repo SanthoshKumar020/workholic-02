@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/Button";
-import { Mic, Square, RotateCcw, Volume2, CheckCircle, AlertCircle, Timer } from "lucide-react";
+import { Mic, Square, RotateCcw, Play, CheckCircle, AlertCircle, Timer } from "lucide-react";
 
 const CATEGORIES = [
   { key: "Technology",        emoji: "💻", color: "border-blue-200 bg-blue-50 text-blue-700" },
@@ -55,12 +55,15 @@ export function GDPracticeClient() {
   const [feedback, setFeedback] = useState<GDFeedback | null>(null);
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const MAX_SECONDS = 120;
 
@@ -83,6 +86,7 @@ export function GDPracticeClient() {
   }, [phase]);
 
   const stopRecording = useCallback(() => {
+    mediaRecorderRef.current?.stop();
     recognitionRef.current?.stop();
     setPhase("review");
   }, []);
@@ -113,25 +117,50 @@ export function GDPracticeClient() {
 
   function startRecording() {
     setElapsed(0);
-    if (!speechSupported) { setPhase("speaking"); return; }
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const rec = new SpeechRecognition();
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.lang = "en-US";
-    let finalText = "";
-    rec.onresult = (e: SpeechRecognitionEvent) => {
-      let interim = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (e.results[i].isFinal) finalText += e.results[i][0].transcript + " ";
-        else interim += e.results[i][0].transcript;
-      }
-      setTranscript(finalText);
-      setInterimTranscript(interim);
-    };
-    rec.onerror = () => setPhase("review");
-    recognitionRef.current = rec;
-    rec.start();
+    setTranscript("");
+    setInterimTranscript("");
+
+    // Audio recording via MediaRecorder
+    if (navigator.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        const mr = new MediaRecorder(stream);
+        audioChunksRef.current = [];
+        mr.ondataavailable = (e) => {
+          if (e.data.size > 0) audioChunksRef.current.push(e.data);
+        };
+        mr.onstop = () => {
+          const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+          if (audioUrl) URL.revokeObjectURL(audioUrl);
+          setAudioUrl(URL.createObjectURL(blob));
+          stream.getTracks().forEach((t) => t.stop());
+        };
+        mr.start();
+        mediaRecorderRef.current = mr;
+      }).catch(() => {});
+    }
+
+    // Speech recognition runs silently — transcript is used only for AI feedback
+    if (speechSupported) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const rec = new SpeechRecognition();
+      rec.continuous = true;
+      rec.interimResults = true;
+      rec.lang = "en-US";
+      let finalText = "";
+      rec.onresult = (e: SpeechRecognitionEvent) => {
+        let interim = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) finalText += e.results[i][0].transcript + " ";
+          else interim += e.results[i][0].transcript;
+        }
+        setTranscript(finalText);
+        setInterimTranscript(interim);
+      };
+      rec.onerror = () => {};
+      recognitionRef.current = rec;
+      rec.start();
+    }
+
     setPhase("speaking");
   }
 
@@ -157,7 +186,23 @@ export function GDPracticeClient() {
     }
   }
 
-  function reset() { setPhase("setup"); setTopic(null); setFeedback(null); setTranscript(""); setInterimTranscript(""); setError(null); }
+  function reRecord() {
+    setTranscript("");
+    setInterimTranscript("");
+    setElapsed(0);
+    startRecording();
+  }
+
+  function reset() {
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    setAudioUrl(null);
+    setPhase("setup");
+    setTopic(null);
+    setFeedback(null);
+    setTranscript("");
+    setInterimTranscript("");
+    setError(null);
+  }
 
   const timerPct = Math.min((elapsed / MAX_SECONDS) * 100, 100);
   const timerDisplay = `${Math.floor((MAX_SECONDS - elapsed) / 60).toString().padStart(2, "0")}:${((MAX_SECONDS - elapsed) % 60).toString().padStart(2, "0")}`;
@@ -183,7 +228,7 @@ export function GDPracticeClient() {
 
       <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
         <p className="text-xs font-semibold text-blue-800">🎤 Voice Practice</p>
-        <p className="mt-0.5 text-xs text-blue-600">You&apos;ll get 2 minutes to speak your response. Works best in Chrome/Edge. Text fallback available.</p>
+        <p className="mt-0.5 text-xs text-blue-600">You&apos;ll get 2 minutes to speak. After recording, play it back and get AI feedback.</p>
       </div>
 
       {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
@@ -257,26 +302,6 @@ export function GDPracticeClient() {
         </div>
       </div>
 
-      {/* Live transcript */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="flex items-center gap-2 mb-2">
-          <Volume2 className="h-4 w-4 text-brand-400 animate-pulse" />
-          <span className="text-xs font-semibold text-slate-500">Live Transcript</span>
-        </div>
-        <div className="min-h-[80px] rounded-xl bg-slate-50 border border-slate-100 p-3 text-sm text-slate-700 leading-relaxed">
-          {transcript && <span>{transcript}</span>}
-          {interimTranscript && <span className="text-slate-400 italic">{interimTranscript}</span>}
-          {!transcript && !interimTranscript && (
-            <span className="text-slate-300">{speechSupported ? "Listening… start speaking" : "Type your response below"}</span>
-          )}
-        </div>
-        {!speechSupported && (
-          <textarea rows={5} value={transcript} onChange={(e) => setTranscript(e.target.value)} autoFocus
-            placeholder="Type your response here…"
-            className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 resize-none" />
-        )}
-      </div>
-
       <Button onClick={stopRecording} variant="outline" size="lg" className="w-full border-red-200 text-red-600 hover:bg-red-50">
         <Square className="h-4 w-4" /> Stop Recording
       </Button>
@@ -287,6 +312,7 @@ export function GDPracticeClient() {
 
   if (phase === "review") {
     const fullText = (transcript + interimTranscript).trim();
+    const wordCount = fullText.split(/\s+/).filter(Boolean).length;
     return (
       <div className="space-y-4">
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -294,16 +320,34 @@ export function GDPracticeClient() {
           <p className="font-semibold text-slate-900">{topic?.topic}</p>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-semibold text-slate-700">Your Response</span>
-            <span className="text-xs text-slate-400">{fullText.split(/\s+/).filter(Boolean).length} words · {elapsed}s</span>
+        {/* Audio playback */}
+        {audioUrl ? (
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Play className="h-4 w-4 text-brand-500" />
+                <span className="text-sm font-semibold text-slate-700">Your Recording</span>
+              </div>
+              <span className="text-xs text-slate-400">{elapsed}s{wordCount > 0 ? ` · ${wordCount} words` : ""}</span>
+            </div>
+            <audio src={audioUrl} controls className="w-full rounded-xl" />
           </div>
-          <textarea rows={6} value={fullText} onChange={(e) => setTranscript(e.target.value)}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 resize-none"
-          />
-          <p className="mt-1 text-xs text-slate-400">Edit if the transcription made any mistakes before submitting</p>
-        </div>
+        ) : (
+          /* Fallback textarea if audio capture failed */
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="mb-2 text-sm font-semibold text-slate-700">Type your response</p>
+            <textarea rows={6} value={fullText} onChange={(e) => setTranscript(e.target.value)}
+              placeholder="Type your response here…"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 resize-none"
+            />
+          </div>
+        )}
+
+        {!fullText && audioUrl && (
+          <p className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-700">
+            Speech detection wasn&apos;t available — AI feedback requires voice detection. Try Chrome or Edge for best results.
+          </p>
+        )}
 
         {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
 
@@ -311,7 +355,7 @@ export function GDPracticeClient() {
           <Button onClick={getFeedback} loading={loading} disabled={!fullText} className="flex-1" size="lg">
             Get Feedback
           </Button>
-          <Button onClick={() => { setTranscript(""); setInterimTranscript(""); setElapsed(0); startRecording(); }} variant="outline" className="flex-1">
+          <Button onClick={reRecord} variant="outline" className="flex-1">
             <Mic className="h-4 w-4" /> Re-record
           </Button>
         </div>
@@ -334,6 +378,17 @@ export function GDPracticeClient() {
           <p className="mt-2 text-xs text-amber-600">~{feedback.fillerWordCount} filler words detected</p>
         )}
       </div>
+
+      {/* Audio playback in feedback phase */}
+      {audioUrl && (
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center gap-2">
+            <Play className="h-4 w-4 text-brand-500" />
+            <span className="text-sm font-semibold text-slate-700">Your Recording</span>
+          </div>
+          <audio src={audioUrl} controls className="w-full rounded-xl" />
+        </div>
+      )}
 
       {/* 3 dimensions */}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">

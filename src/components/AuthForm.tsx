@@ -62,11 +62,10 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
       if (error) throw error;
-      // Browser redirects to Google.
     } catch (err) {
       setError(err instanceof Error ? err.message : "Google sign-in failed.");
       setOauthLoading(false);

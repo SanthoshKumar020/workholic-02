@@ -204,7 +204,7 @@ export function PublicProfileSetupClient({
           <div>
             <p className="text-sm font-semibold text-blue-900">Share on LinkedIn</p>
             <p className="mt-0.5 text-xs text-blue-700">
-              Copy your profile link and post it on LinkedIn with: &ldquo;Excited to share my verified career profile and certifications!&rdquo; This gets you visibility and markets ResumeBoost for free.
+              Copy your profile link and post it on LinkedIn with: &ldquo;Excited to share my verified career profile and certifications!&rdquo; This gets you visibility and markets HYRISE for free.
             </p>
           </div>
         </div>

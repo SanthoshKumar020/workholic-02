@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Dashboard — ResumeBoost" };
+export const metadata = { title: "Dashboard — HYRISE" };
 
 const TOOLS = [
   { href: "/builder",    icon: FileText,   label: "Resume Builder",    desc: "Enhance & export PDF",              free: true  },

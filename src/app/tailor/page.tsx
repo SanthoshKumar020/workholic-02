@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
-export const metadata = { title: "Company Tailoring — ResumeBoost" };
+export const metadata = { title: "Company Tailoring — HYRISE" };
 
 export default async function TailorPage() {
   const profile = await getCurrentProfile();

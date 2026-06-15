@@ -5,7 +5,7 @@ import { InterviewClient } from "@/components/InterviewClient";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata = { title: "Mock Interview — ResumeBoost" };
+export const metadata = { title: "Mock Interview — HYRISE" };
 
 export default async function InterviewPage() {
   const profile = await getCurrentProfile();

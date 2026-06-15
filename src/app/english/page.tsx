@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { EnglishClient } from "@/components/EnglishClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "English Learning — ResumeBoost" };
+export const metadata = { title: "English Learning — HYRISE" };
 
 export default async function EnglishPage() {
   const profile = await getCurrentProfile();

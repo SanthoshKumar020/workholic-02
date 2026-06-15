@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       if (profile?.email) {
         await sendEmail({
           to: profile.email,
-          subject: "Welcome to ResumeBoost Pro 🎉",
+          subject: "Welcome to HYRISE Pro 🎉",
           html: `<p>Your upgrade is complete. All features are now unlocked. <a href="https://workholic-02-orpin.vercel.app/dashboard">Go to dashboard →</a></p>`,
         });
       }

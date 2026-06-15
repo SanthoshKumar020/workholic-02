@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { CompanyPrepClient } from "@/components/CompanyPrepClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "Company Interview Prep — ResumeBoost" };
+export const metadata = { title: "Company Interview Prep — HYRISE" };
 
 export default async function CompanyPrepPage() {
   const profile = await getCurrentProfile();

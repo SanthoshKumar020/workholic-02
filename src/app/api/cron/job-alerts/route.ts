@@ -61,7 +61,7 @@ export async function GET(request: Request) {
         .join("");
 
       await resend.emails.send({
-        from: "ResumeBoost Jobs <jobs@resumeboost.app>",
+        from: "HYRISE Jobs <jobs@HYRISE.app>",
         to: alert.email,
         subject: `🔍 ${jobs.length} new remote jobs for you`,
         html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto"><h2 style="color:#1e293b">Your daily job matches</h2><p style="color:#64748b">Keywords: <strong>${alert.keywords || alert.role || "remote"}</strong></p><ul style="padding-left:20px">${listHtml}</ul><p style="margin-top:24px"><a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs" style="background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;text-decoration:none">View all jobs</a></p><p style="color:#94a3b8;font-size:12px;margin-top:24px">To unsubscribe, go to your <a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs">job alerts settings</a>.</p></div>`,

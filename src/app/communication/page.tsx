@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
-export const metadata = { title: "Communication Coach — ResumeBoost" };
+export const metadata = { title: "Communication Coach — HYRISE" };
 
 export default async function CommunicationPage() {
   const profile = await getCurrentProfile();

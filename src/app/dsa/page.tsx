@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { DSAPracticeClient } from "@/components/DSAPracticeClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "DSA Practice — ResumeBoost" };
+export const metadata = { title: "DSA Practice — HYRISE" };
 
 export default async function DSAPage() {
   const profile = await getCurrentProfile();

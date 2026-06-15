@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
-export const metadata = { title: "Salary Negotiation Coach — ResumeBoost" };
+export const metadata = { title: "Salary Negotiation Coach — HYRISE" };
 
 export default async function SalaryPage() {
   const profile = await getCurrentProfile();

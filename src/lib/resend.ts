@@ -7,7 +7,7 @@ const apiKey = process.env.RESEND_API_KEY;
 /** Resend client (server only). Null if not configured so callers can no-op. */
 export const resend = apiKey ? new Resend(apiKey) : null;
 
-const FROM = process.env.EMAIL_FROM || "ResumeBoost <onboarding@resend.dev>";
+const FROM = process.env.EMAIL_FROM || "HYRISE <onboarding@resend.dev>";
 
 /**
  * Send a transactional email. Safely no-ops (logs) if Resend isn't configured,

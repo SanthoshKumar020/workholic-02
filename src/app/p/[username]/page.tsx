@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 interface Props { params: { username: string } }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  return { title: `${params.username} — ResumeBoost Profile` };
+  return { title: `${params.username} — HYRISE Profile` };
 }
 
 function certId(userId: string, title: string): string {
@@ -42,7 +42,7 @@ export default async function PublicProfilePage({ params }: Props) {
       {/* Header bar */}
       <div className="border-b border-slate-200 bg-white/80 backdrop-blur px-4 py-3">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
-          <Link href="/" className="text-sm font-bold text-brand-700">ResumeBoost</Link>
+          <Link href="/" className="text-sm font-bold text-brand-700">HYRISE</Link>
           <Link href="/login" className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition">
             Sign in
           </Link>
@@ -144,7 +144,7 @@ export default async function PublicProfilePage({ params }: Props) {
 
         {/* Footer CTA */}
         <div className="rounded-2xl border border-brand-200 bg-brand-50 p-5 text-center">
-          <p className="text-sm font-semibold text-brand-800">Build your own career profile with ResumeBoost</p>
+          <p className="text-sm font-semibold text-brand-800">Build your own career profile with HYRISE</p>
           <p className="mt-0.5 text-xs text-brand-600">Free tools: Resume builder, Job match, Aptitude prep, Roadmaps & more</p>
           <Link href="/signup" className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-brand-gradient px-5 py-2 text-sm font-semibold text-white shadow hover:opacity-90 transition">
             Get started free <ExternalLink className="h-3.5 w-3.5" />
@@ -154,3 +154,4 @@ export default async function PublicProfilePage({ params }: Props) {
     </div>
   );
 }
+

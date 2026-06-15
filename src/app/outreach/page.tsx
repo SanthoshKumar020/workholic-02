@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { OutreachClient } from "@/components/OutreachClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "Outreach Generator — ResumeBoost" };
+export const metadata = { title: "Outreach Generator — HYRISE" };
 
 export default async function OutreachPage() {
   const profile = await getCurrentProfile();

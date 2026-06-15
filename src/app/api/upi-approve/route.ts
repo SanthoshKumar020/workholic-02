@@ -51,16 +51,16 @@ export async function GET(request: Request) {
 
     // Notify user of rejection
     await resend.emails.send({
-      from: process.env.EMAIL_FROM ?? "ResumeBoost <onboarding@resend.dev>",
+      from: process.env.EMAIL_FROM ?? "HYRISE <onboarding@resend.dev>",
       to: [req.user_email],
-      subject: "Your ResumeBoost payment could not be verified",
+      subject: "Your HYRISE payment could not be verified",
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
           <h2 style="color:#dc2626">Payment Not Verified</h2>
           <p>Hi ${req.full_name},</p>
           <p>We could not verify your UPI payment with transaction ID <strong>${req.transaction_id}</strong>.</p>
           <p>Please contact us at <a href="mailto:kumarsanthosh2743@gmail.com">kumarsanthosh2743@gmail.com</a> or WhatsApp <strong>6374310315</strong> with your payment screenshot and we'll resolve it.</p>
-          <p>— ResumeBoost Team</p>
+          <p>— HYRISE Team</p>
         </div>
       `,
     });
@@ -89,9 +89,9 @@ export async function GET(request: Request) {
   // Notify user of approval
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "ResumeBoost <onboarding@resend.dev>",
+    from: process.env.EMAIL_FROM ?? "HYRISE <onboarding@resend.dev>",
     to: [req.user_email],
-    subject: "🎉 You're now a Pro member — ResumeBoost",
+    subject: "🎉 You're now a Pro member — HYRISE",
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
         <h2 style="color:#16a34a">🎉 Welcome to Pro!</h2>
@@ -102,7 +102,7 @@ export async function GET(request: Request) {
           Go to Dashboard →
         </a>
         <p style="color:#64748b;font-size:14px">Transaction ID: ${req.transaction_id}</p>
-        <p>— ResumeBoost Team</p>
+        <p>— HYRISE Team</p>
       </div>
     `,
   });

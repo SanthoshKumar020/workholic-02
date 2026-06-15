@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { VideosClient } from "@/components/VideosClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "Learning Videos — ResumeBoost" };
+export const metadata = { title: "Learning Videos — HYRISE" };
 
 export default async function VideosPage() {
   const profile = await getCurrentProfile();

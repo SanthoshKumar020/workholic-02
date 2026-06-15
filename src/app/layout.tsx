@@ -5,9 +5,9 @@ import { CareerChatWrapper } from "@/components/CareerChatWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "ResumeBoost — AI Career Platform",
+  title: "HYRISE — Elevate Your Future",
   description:
-    "Boost your career with AI-powered resume enhancement, ATS scoring, mock interviews, job matching, learning roadmaps, and more. Free to start.",
+    "AI-powered career platform. Resume enhancement, ATS scoring, mock interviews, job matching, learning roadmaps, and more. Free to start.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
 };
 

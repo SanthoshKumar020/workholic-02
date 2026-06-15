@@ -5,7 +5,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Settings — ResumeBoost" };
+export const metadata = { title: "Settings — HYRISE" };
 
 const ROADMAP_OPTIONS = [
   "Full Stack Developer",

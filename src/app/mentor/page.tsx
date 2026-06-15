@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Lock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "AI Career Mentor — ResumeBoost" };
+export const metadata = { title: "AI Career Mentor — HYRISE" };
 
 export default async function MentorPage() {
   const profile = await getCurrentProfile();

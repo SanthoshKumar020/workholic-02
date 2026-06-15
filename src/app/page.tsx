@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AtsChecker } from "@/components/AtsChecker";
 import { PricingSection } from "@/components/PricingSection";
+import { createClient } from "@/lib/supabase/server";
 
 const FEATURES = [
   { icon: "📄", title: "AI Resume Enhancement", desc: "Rewrite bullet points, add strong action verbs, quantify impact — all with Groq AI." },
@@ -23,7 +24,10 @@ const STATS = [
   { value: "PDF", label: "Instant export" },
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
     <>
       <Navbar />
@@ -144,7 +148,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <PricingSection />
+      <PricingSection isLoggedIn={!!user} />
 
       {/* ── Final CTA ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-4 pb-24">

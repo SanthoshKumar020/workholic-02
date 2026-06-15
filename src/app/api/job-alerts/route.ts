@@ -76,7 +76,7 @@ export async function POST(request: Request) {
   if (user.email && payload.enabled) {
     await sendEmail({
       to: user.email,
-      subject: "Your ResumeBoost job alerts are on",
+      subject: "Your HYRISE job alerts are on",
       html: `<p>You're set to receive <strong>${payload.frequency}</strong> job alerts${
         payload.role ? ` for <strong>${payload.role}</strong>` : ""
       }. You can change this anytime from the Jobs page.</p>`,

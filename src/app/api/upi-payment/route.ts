@@ -54,13 +54,13 @@ export async function POST(request: Request) {
 
   // Send admin notification email
   await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "ResumeBoost <onboarding@resend.dev>",
+    from: process.env.EMAIL_FROM ?? "HYRISE <onboarding@resend.dev>",
     to: ["kumarsanthosh2743@gmail.com"],
     subject: `💰 New UPI Payment — ${fullName} (${plan})`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
         <h2 style="color:#1e293b;margin-bottom:4px">New UPI Payment Request</h2>
-        <p style="color:#64748b;margin-top:0">Someone paid for ResumeBoost Pro. Verify and approve below.</p>
+        <p style="color:#64748b;margin-top:0">Someone paid for HYRISE Pro. Verify and approve below.</p>
 
         <table style="width:100%;border-collapse:collapse;margin:24px 0;background:#f8fafc;border-radius:12px;overflow:hidden">
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Name</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${fullName}</td></tr>

@@ -5,7 +5,7 @@ import { BillingClient } from "@/components/BillingClient";
 import { getCurrentProfile, isPro } from "@/lib/plan";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Upgrade to Pro — ResumeBoost" };
+export const metadata = { title: "Upgrade to Pro — HYRISE" };
 
 export default async function BillingPage() {
   const profile = await getCurrentProfile();
@@ -25,7 +25,7 @@ export default async function BillingPage() {
           {pro && (
             <div className="mb-8 text-center">
               <h1 className="text-2xl font-bold text-slate-900">Subscription</h1>
-              <p className="mt-1 text-sm text-slate-500">Manage your ResumeBoost Pro plan.</p>
+              <p className="mt-1 text-sm text-slate-500">Manage your HYRISE Pro plan.</p>
             </div>
           )}
           <Suspense fallback={<div className="text-sm text-slate-400">Loading…</div>}>

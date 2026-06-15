@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { MatchClient } from "@/components/MatchClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "Job Match Analyzer — ResumeBoost" };
+export const metadata = { title: "Job Match Analyzer — HYRISE" };
 
 export default async function MatchPage() {
   const profile = await getCurrentProfile();

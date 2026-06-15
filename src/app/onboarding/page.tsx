@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/plan";
 import { OnboardingClient } from "@/components/OnboardingClient";
 
-export const metadata = { title: "Get Started — ResumeBoost" };
+export const metadata = { title: "Get Started — HYRISE" };
 
 export default async function OnboardingPage() {
   const profile = await getCurrentProfile();

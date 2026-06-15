@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
-export const metadata = { title: "Recruiter Scan — ResumeBoost" };
+export const metadata = { title: "Recruiter Scan — HYRISE" };
 
 export default async function RecruiterScanPage() {
   const profile = await getCurrentProfile();

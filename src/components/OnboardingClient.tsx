@@ -50,7 +50,7 @@ export function OnboardingClient({ profile }: { profile: Profile }) {
         {/* Logo */}
         <div className="mb-6 flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-gradient text-white font-bold text-sm">RB</div>
-          <span className="font-bold text-slate-900">ResumeBoost</span>
+          <span className="font-bold text-slate-900">HYRISE</span>
         </div>
 
         <h1 className="text-2xl font-bold text-slate-900">Let&apos;s personalise your experience</h1>

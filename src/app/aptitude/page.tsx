@@ -4,7 +4,7 @@ import { AptitudeHubClient } from "@/components/AptitudeHubClient";
 import { APTITUDE_CATEGORIES } from "@/lib/aptitude-topics";
 
 export const metadata = {
-  title: "Aptitude Prep — ResumeBoost",
+  title: "Aptitude Prep — HYRISE",
   description: "Master aptitude, speed maths tricks, and logical reasoning with AI-powered lessons and quizzes.",
 };
 

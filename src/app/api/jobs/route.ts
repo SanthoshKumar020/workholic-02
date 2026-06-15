@@ -78,10 +78,10 @@ export async function POST(request: Request) {
           .map((j) => `<li><a href="${j.url}">${j.title}</a> @ ${j.company} (${j.location})</li>`)
           .join("");
         await resend.emails.send({
-          from: "ResumeBoost <jobs@resumeboost.app>",
+          from: "HYRISE <jobs@HYRISE.app>",
           to: emailTo,
           subject: `🔍 ${jobs.length} remote jobs matching "${keywords || role}"`,
-          html: `<h2>Your job matches</h2><ul>${listHtml}</ul><p><a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs">View all on ResumeBoost</a></p>`,
+          html: `<h2>Your job matches</h2><ul>${listHtml}</ul><p><a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs">View all on HYRISE</a></p>`,
         });
       } catch {
         // Email failure is non-fatal

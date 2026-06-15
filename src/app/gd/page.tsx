@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/plan";
 import { GDPracticeClient } from "@/components/GDPracticeClient";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "GD Practice — ResumeBoost" };
+export const metadata = { title: "GD Practice — HYRISE" };
 
 export default async function GDPage() {
   const profile = await getCurrentProfile();

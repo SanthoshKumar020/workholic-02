@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
-export const metadata = { title: "Cover Letter Generator — ResumeBoost" };
+export const metadata = { title: "Cover Letter Generator — HYRISE" };
 
 export default async function CoverLetterPage() {
   const profile = await getCurrentProfile();

@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Sparkles, Lock } from "lucide-react";
 
-export const metadata = { title: "Profile Optimizer — ResumeBoost" };
+export const metadata = { title: "Profile Optimizer — HYRISE" };
 
 export default async function ProfileOptimizerPage() {
   const profile = await getCurrentProfile();

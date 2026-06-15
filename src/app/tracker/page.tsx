@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Application Tracker — ResumeBoost" };
+export const metadata = { title: "Application Tracker — HYRISE" };
 
 export default async function TrackerPage() {
   const profile = await getCurrentProfile();

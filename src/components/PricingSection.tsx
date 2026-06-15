@@ -22,7 +22,7 @@ const PRO_FEATURES = [
   "Save unlimited resumes",
 ];
 
-export function PricingSection() {
+export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
 
   return (
@@ -46,6 +46,29 @@ export function PricingSection() {
           </p>
         </div>
 
+        {/* Not logged in — lock gate */}
+        {!isLoggedIn && (
+          <div className="mx-auto mt-12 max-w-md rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-50">
+              <svg className="h-7 w-7 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="mt-4 text-lg font-bold text-slate-900">Sign in to view pricing</h3>
+            <p className="mt-2 text-sm text-slate-500">Create a free account or log in to see our plans and upgrade to Pro.</p>
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <Link href="/signup" className="rounded-xl bg-brand-gradient px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">
+                Create free account
+              </Link>
+              <Link href="/login" className="rounded-xl border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                Log in
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Logged in — show plans */}
+        {isLoggedIn && (<>
         {/* Toggle */}
         <div className="mt-8 flex justify-center">
           <div className="inline-flex items-center rounded-2xl border border-slate-200 bg-slate-50 p-1 gap-1">
@@ -167,10 +190,11 @@ export function PricingSection() {
         </div>
 
         <p className="mx-auto mt-10 max-w-xl text-center text-xs text-slate-400">
-          ResumeBoost by{" "}
+          HYRISE by{" "}
           <span className="font-semibold text-slate-500">Santo Square Automation</span>. We help
           you improve your resume — we do not guarantee interviews, offers, or employment outcomes.
         </p>
+        </>)}
       </div>
     </section>
   );

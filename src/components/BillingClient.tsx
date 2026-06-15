@@ -70,7 +70,7 @@ export function BillingClient({ isPro }: { isPro: boolean }) {
             <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-white">ACTIVE</span>
           </div>
           <a
-            href="mailto:santhosh.k@swache.in?subject=ResumeBoost Pro - Manage Subscription"
+            href="mailto:santhosh.k@swache.in?subject=HYRISE Pro - Manage Subscription"
             className="mt-5 flex w-full items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
           >
             Manage subscription

@@ -136,7 +136,7 @@ export function CertificatePdfDocument({ userName, topic, completedDate }: Certi
 
         <View style={styles.content}>
           <View style={styles.brandBadge}>
-            <Text style={styles.brandText}>RESUMEBOOST</Text>
+            <Text style={styles.brandText}>HYRISE</Text>
           </View>
 
           <Text style={styles.titleSmall}>Certificate of Completion</Text>
@@ -157,7 +157,7 @@ export function CertificatePdfDocument({ userName, topic, completedDate }: Certi
           </View>
           <View style={styles.signatureBox}>
             <View style={styles.signatureLine} />
-            <Text style={styles.signatureLabel}>ResumeBoost AI Platform</Text>
+            <Text style={styles.signatureLabel}>HYRISE AI Platform</Text>
           </View>
         </View>
       </Page>

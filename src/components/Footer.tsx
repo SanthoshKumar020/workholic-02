@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const PRODUCT_LINKS = [
   { href: "/#ats", label: "Free ATS Checker" },
@@ -23,21 +24,12 @@ export function Footer() {
 
           {/* Brand column */}
           <div className="lg:col-span-2">
-            {/* ResumeBoost logo */}
-            <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="grid h-9 w-9 place-items-center rounded-xl bg-brand-gradient shadow-sm">
-                <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 text-white" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6-4h6M5 8h.01M5 12h.01M3 4h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" />
-                </svg>
-              </div>
-              <span className="text-[17px] font-bold tracking-tight text-slate-900">
-                Resume<span className="text-brand-600">Boost</span>
-              </span>
+            <Link href="/" className="inline-flex items-center group">
+              <Image src="/logo.png" alt="HYRISE" width={120} height={40} className="h-9 w-auto object-contain" />
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
-              AI-powered resume enhancement and ATS scoring. Upload, improve, pick a clean template,
-              and export a polished PDF — completely free to start.
+              AI-powered career platform to help you hire faster and rise higher. Resume enhancement, mock interviews, job matching, and more — free to start.
             </p>
 
             {/* Company attribution */}
@@ -105,8 +97,7 @@ export function Footer() {
             reserved.
           </p>
           <p className="text-center">
-            ResumeBoost helps you improve your resume. Results vary — we do not guarantee job
-            outcomes.
+            HYRISE helps you elevate your career. Results vary — we do not guarantee job outcomes.
           </p>
         </div>
       </div>

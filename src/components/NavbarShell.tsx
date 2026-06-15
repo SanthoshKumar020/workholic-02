@@ -22,7 +22,7 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2">
 
         {/* Logo */}
-        <Link href="/" onClick={close} className="flex items-center shrink-0">
+        <Link href="/dashboard" onClick={close} className="flex items-center shrink-0">
           <Image
             src="/logo.png"
             alt="HYRISE"

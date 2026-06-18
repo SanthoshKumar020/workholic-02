@@ -13,6 +13,7 @@ export interface Profile {
   streak: number;
   last_active: string | null;
   created_at: string;
+  dsa_mode: "kid" | "beginner" | "interview" | null;
   // Public profile fields
   full_name: string | null;
   username: string | null;

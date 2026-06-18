@@ -1,0 +1,87 @@
+// Shared types for the DSA Adventure learning experience.
+import type { ComponentType, ReactNode } from "react";
+
+/** The three adaptive explanation levels. The SAME concept, presented differently. */
+export type DsaMode = "kid" | "beginner" | "interview";
+
+/** Role-based highlights for the current step. Values are indices/ids into the state. */
+export interface Highlight {
+  active?: number[]; // the element(s) being acted on right now
+  compare?: number[]; // being compared
+  swap?: number[]; // being swapped
+  visited?: number[]; // already processed
+  placed?: number[]; // in final/settled position
+}
+
+/** An optional active-recall checkpoint shown by the Visualizer (predict-the-next-step). */
+export interface QuizCheck {
+  prompt: string;
+  /** boolean => yes/no question. string => one of `options` is correct. */
+  answer: boolean | string;
+  options?: string[];
+  hint?: string;
+}
+
+/**
+ * One precomputed moment in an animation. The player walks an ordered Step[],
+ * which is what enables step-forward, step-back, and replay (nothing animates live).
+ */
+export interface Step {
+  /** Snapshot of the data structure at this moment (array | {kind,items} | tree | …). */
+  state: unknown;
+  highlight: Highlight;
+  /** Index into the topic's pythonCode lines to highlight (-1 = none). */
+  codeLine: number;
+  /** Plain-language tutor sentence (may contain <b> tags). Used in Beginner/Interview. */
+  narration: string;
+  /** Even simpler sentence for Kid mode. Falls back to `narration` if absent. */
+  kidNarration?: string;
+  action: string; // 'push' | 'pop' | 'compare' | 'swap' | 'enqueue' | 'done' …
+  quiz?: QuizCheck;
+}
+
+/** Per-mode lesson copy for a topic. */
+export interface LessonContent {
+  /** STORY layer: real-world analogy, no jargon. The technical name is revealed last. */
+  story: string[];
+  /** Plain-English steps (Beginner/Interview). */
+  steps?: string[];
+  complexity?: { time: string; space: string; note?: string };
+  edgeCases?: string[];
+  interviewTips?: string[];
+}
+
+/** Props every StructureView render component receives. */
+export interface StructureViewProps {
+  state: unknown;
+  highlight: Highlight;
+  mode: DsaMode;
+}
+
+/**
+ * A topic module. Adding a new data structure = writing ONE of these — no new player code.
+ * Modules live in `src/components/dsa/topics/*.tsx` because StructureView is a React component.
+ */
+export interface TopicModule {
+  slug: string;
+  /** Optional named demos within a topic (e.g. Stack vs Queue), each with its own code + steps. */
+  demos: {
+    key: string;
+    label: string;
+    emoji: string;
+    pythonCode: string[];
+    buildSteps: () => Step[];
+  }[];
+  lesson: LessonContent;
+  StructureView: ComponentType<StructureViewProps>;
+  /** A short worked example → faded → independent prompt (active recall). */
+  recall: {
+    question: string;
+    answer: boolean | string;
+    options?: string[];
+    explain: string;
+  }[];
+}
+
+/** Helper used by StructureView components to render mascot-flavoured empty state, etc. */
+export type Renderable = ReactNode;

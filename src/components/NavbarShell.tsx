@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 const AUTH_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/builder", label: "Builder" },
+  { href: "/dsa", label: "Learn DSA" },
   { href: "/roadmaps", label: "Roadmaps" },
   { href: "/jobs", label: "Jobs" },
   { href: "/billing", label: "Billing" },

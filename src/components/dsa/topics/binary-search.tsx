@@ -33,24 +33,24 @@ function buildSearch(): Step[] {
     const mid = Math.floor((lo + hi) / 2);
     steps.push({
       state: A(v, { pointers: { low: lo, mid, high: hi }, caption: `mid = ${v[mid]}` }),
-      highlight: { active: [mid], visited: [...eliminated] },
+      highlight: { active: [mid], visited: Array.from(eliminated) },
       codeLine: 3,
       action: "compare",
       narration: `Middle is index ${mid} (value ${v[mid]}). Compare with ${target}.`,
       kidNarration: `Middle guess is ${v[mid]}.`,
     });
     if (v[mid] === target) {
-      steps.push({ state: A(v, { pointers: { mid }, caption: `found at index ${mid}` }), highlight: { placed: [mid], visited: [...eliminated] }, codeLine: 4, action: "done", narration: `<b>${v[mid]} = ${target}</b> 🎉 Found in just a few guesses — that's <b>O(log n)</b>.`, kidNarration: `Found it! 🎉` });
+      steps.push({ state: A(v, { pointers: { mid }, caption: `found at index ${mid}` }), highlight: { placed: [mid], visited: Array.from(eliminated) }, codeLine: 4, action: "done", narration: `<b>${v[mid]} = ${target}</b> 🎉 Found in just a few guesses — that's <b>O(log n)</b>.`, kidNarration: `Found it! 🎉` });
       break;
     }
     if (v[mid] < target) {
       for (let k = lo; k <= mid; k++) eliminated.add(k);
       lo = mid + 1;
-      steps.push({ state: A(v, { pointers: { low: lo, high: hi }, caption: `${v[mid]} < ${target} → go right` }), highlight: { visited: [...eliminated] }, codeLine: 5, action: "move", narration: `${v[mid]} is too small — the answer must be to the <b>right</b>. Throw away the left half.`, kidNarration: `Too low! Look in the bigger half.` });
+      steps.push({ state: A(v, { pointers: { low: lo, high: hi }, caption: `${v[mid]} < ${target} → go right` }), highlight: { visited: Array.from(eliminated) }, codeLine: 5, action: "move", narration: `${v[mid]} is too small — the answer must be to the <b>right</b>. Throw away the left half.`, kidNarration: `Too low! Look in the bigger half.` });
     } else {
       for (let k = mid; k <= hi; k++) eliminated.add(k);
       hi = mid - 1;
-      steps.push({ state: A(v, { pointers: { low: lo, high: hi }, caption: `${v[mid]} > ${target} → go left` }), highlight: { visited: [...eliminated] }, codeLine: 6, action: "move", narration: `${v[mid]} is too big — the answer must be to the <b>left</b>. Throw away the right half.`, kidNarration: `Too high! Look in the smaller half.` });
+      steps.push({ state: A(v, { pointers: { low: lo, high: hi }, caption: `${v[mid]} > ${target} → go left` }), highlight: { visited: Array.from(eliminated) }, codeLine: 6, action: "move", narration: `${v[mid]} is too big — the answer must be to the <b>left</b>. Throw away the right half.`, kidNarration: `Too high! Look in the smaller half.` });
     }
   }
   return steps;

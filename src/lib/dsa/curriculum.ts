@@ -80,7 +80,7 @@ export const ISLANDS: Island[] = [
     analogy: "A treasure hunt: each clue points to the next clue.",
     prereqs: ["arrays-strings"],
     free: true,
-    built: false,
+    built: true,
     gradient: "from-emerald-400 to-teal-500",
   },
   {
@@ -104,7 +104,7 @@ export const ISLANDS: Island[] = [
     analogy: "A coat-check counter: a ticket (key) fetches your coat (value).",
     prereqs: ["arrays-strings"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-rose-400 to-pink-500",
   },
   {
@@ -116,7 +116,7 @@ export const ISLANDS: Island[] = [
     analogy: "Russian nesting dolls / two mirrors facing each other.",
     prereqs: ["stacks-queues"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-purple-400 to-indigo-500",
   },
   {
@@ -128,7 +128,7 @@ export const ISLANDS: Island[] = [
     analogy: "Sorting toys: smaller goes left, bigger goes right.",
     prereqs: ["recursion"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-green-400 to-emerald-600",
   },
   {
@@ -140,7 +140,7 @@ export const ISLANDS: Island[] = [
     analogy: "Walking through every room in a house.",
     prereqs: ["trees-bst"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-lime-400 to-green-500",
   },
   {
@@ -152,7 +152,7 @@ export const ISLANDS: Island[] = [
     analogy: "A map of towns joined by roads; BFS = ripples in a pond, DFS = a maze.",
     prereqs: ["trees-bst"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-cyan-400 to-sky-600",
   },
   {
@@ -164,7 +164,7 @@ export const ISLANDS: Island[] = [
     analogy: "The 'guess my number — higher or lower?' game.",
     prereqs: ["arrays-strings"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-teal-400 to-cyan-600",
   },
   {
@@ -176,7 +176,7 @@ export const ISLANDS: Island[] = [
     analogy: "Lining up friends from shortest to tallest.",
     prereqs: ["binary-search"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-orange-400 to-red-500",
   },
   {
@@ -188,7 +188,7 @@ export const ISLANDS: Island[] = [
     analogy: "A tournament bracket: the champion floats to the top.",
     prereqs: ["trees-bst"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-yellow-400 to-amber-600",
   },
   {
@@ -200,7 +200,7 @@ export const ISLANDS: Island[] = [
     analogy: "Trying maze paths and stepping back when stuck.",
     prereqs: ["recursion"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-indigo-400 to-purple-600",
   },
   {
@@ -212,7 +212,7 @@ export const ISLANDS: Island[] = [
     analogy: "Always grabbing the biggest cookie available.",
     prereqs: ["sorting"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-amber-500 to-yellow-600",
   },
   {
@@ -224,7 +224,7 @@ export const ISLANDS: Island[] = [
     analogy: "Keeping a cheat sheet so you never solve the same thing twice.",
     prereqs: ["recursion"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-violet-400 to-fuchsia-600",
   },
   {
@@ -236,7 +236,7 @@ export const ISLANDS: Island[] = [
     analogy: "Phone autocomplete / a dictionary tree.",
     prereqs: ["trees-bst"],
     free: false,
-    built: false,
+    built: true,
     gradient: "from-pink-400 to-rose-600",
   },
 ];

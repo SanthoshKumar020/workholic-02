@@ -9,7 +9,6 @@ import { getTopicModule } from "@/components/dsa/topics/registry";
 import { ModeSwitch } from "@/components/dsa/ModeSwitch";
 import { Visualizer } from "@/components/dsa/Visualizer";
 import { Tutor } from "@/components/dsa/Tutor";
-import { PlateStacker } from "@/components/dsa/games/PlateStacker";
 import { Bit, BitSays } from "@/components/dsa/Mascot";
 import { Confetti } from "@/components/dsa/Confetti";
 import { useReadAloud } from "@/components/dsa/useReadAloud";
@@ -196,10 +195,27 @@ export function IslandClient({
 
         {/* 3. TRY IT */}
         <Section id="try" emoji="🎮" title="Your turn — try it!">
-          <BitSays mood="happy" className="mb-4">
-            Now you build it! Stack the plates so the top one is the last you added.
-          </BitSays>
-          <PlateStacker onWin={(s) => setGameStars((g) => Math.max(g, s))} />
+          {module.Game ? (
+            <>
+              <BitSays mood="happy" className="mb-4">
+                Now you try it yourself — I&apos;ll cheer you on!
+              </BitSays>
+              <module.Game onWin={(s) => setGameStars((g) => Math.max(g, s))} />
+            </>
+          ) : (
+            <div className="rounded-3xl border border-brand-100 bg-gradient-to-b from-brand-50/60 to-white p-6">
+              <BitSays mood="think">
+                Best way to practise this one: scroll up to <b>See it</b>, flip on <b>“Quiz me”</b>, and try to predict
+                each next step before I reveal it. Get them right and you&apos;ll earn your stars below! 🌟
+              </BitSays>
+              <a
+                href="#see"
+                className="mt-4 inline-block rounded-xl bg-brand-gradient px-4 py-2 text-sm font-bold text-white shadow-md hover:opacity-90"
+              >
+                Go predict the steps →
+              </a>
+            </div>
+          )}
         </Section>
 
         {/* 4. CODE */}
@@ -218,6 +234,21 @@ export function IslandClient({
         <Section id="recall" emoji="⭐" title="Master it">
           <RecallCheck island={island} module={module} gameStars={gameStars} />
         </Section>
+
+        {/* Practice */}
+        <Link
+          href={`/dsa/${island.slug}/practice`}
+          className="flex items-center justify-between gap-3 rounded-3xl border border-brand-100 bg-gradient-to-r from-brand-50 to-fuchsia-50 p-5 transition hover:-translate-y-0.5 hover:shadow-md"
+        >
+          <div className="flex items-center gap-3">
+            <Bit mood="cheer" size="md" />
+            <div>
+              <p className="text-base font-extrabold text-slate-900">Practice problems 💪</p>
+              <p className="text-sm text-slate-500">Guided, gamified problem-solving — predict the approach, earn stars, level up.</p>
+            </div>
+          </div>
+          <span className="shrink-0 rounded-xl bg-brand-gradient px-4 py-2 text-sm font-bold text-white shadow-md">Start →</span>
+        </Link>
 
         {/* Tutor */}
         <Tutor topic={island.techName} mode={mode} />

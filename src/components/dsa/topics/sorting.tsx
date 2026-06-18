@@ -49,14 +49,14 @@ function buildBubble(): Step[] {
   const steps: Step[] = [{ state: A([...v]), highlight: {}, codeLine: 0, action: "start", narration: "Bubble sort: repeatedly compare <b>neighbours</b> and swap the bigger one rightward.", kidNarration: "Let's bubble the big ones to the end!" }];
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n - 1 - i; j++) {
-      steps.push({ state: A([...v], { caption: "compare neighbours" }), highlight: { compare: [j, j + 1], placed: [...placed] }, codeLine: 4, action: "compare", narration: `Compare ${v[j]} and ${v[j + 1]}.`, kidNarration: `Is ${v[j]} bigger than ${v[j + 1]}?` });
+      steps.push({ state: A([...v], { caption: "compare neighbours" }), highlight: { compare: [j, j + 1], placed: Array.from(placed) }, codeLine: 4, action: "compare", narration: `Compare ${v[j]} and ${v[j + 1]}.`, kidNarration: `Is ${v[j]} bigger than ${v[j + 1]}?` });
       if (v[j] > v[j + 1]) {
         [v[j], v[j + 1]] = [v[j + 1], v[j]];
-        steps.push({ state: A([...v]), highlight: { swap: [j, j + 1], placed: [...placed] }, codeLine: 5, action: "swap", narration: `Swap — bigger one moves right.`, kidNarration: `Swap them!` });
+        steps.push({ state: A([...v]), highlight: { swap: [j, j + 1], placed: Array.from(placed) }, codeLine: 5, action: "swap", narration: `Swap — bigger one moves right.`, kidNarration: `Swap them!` });
       }
     }
     placed.add(n - 1 - i);
-    steps.push({ state: A([...v], { caption: `${placed.size} in place` }), highlight: { placed: [...placed] }, codeLine: 3, action: "place", narration: `The largest unsorted value has bubbled to position ${n - 1 - i}.`, kidNarration: `That one's locked in! ✅` });
+    steps.push({ state: A([...v], { caption: `${placed.size} in place` }), highlight: { placed: Array.from(placed) }, codeLine: 3, action: "place", narration: `The largest unsorted value has bubbled to position ${n - 1 - i}.`, kidNarration: `That one's locked in! ✅` });
   }
   steps.push({ state: A([...v], { caption: "sorted!" }), highlight: { placed: v.map((_, i) => i) }, codeLine: 6, action: "done", narration: "Sorted! Bubble sort is <b>O(n²)</b> — simple but slow.", kidNarration: "All lined up shortest to tallest! 🎉" });
   return steps;
@@ -69,14 +69,14 @@ function buildSelection(): Step[] {
   const steps: Step[] = [{ state: A([...v]), highlight: {}, codeLine: 0, action: "start", narration: "Selection sort: find the <b>smallest</b> remaining value and put it next.", kidNarration: "Find the shortest, move it to the front!" }];
   for (let i = 0; i < n; i++) {
     let m = i;
-    steps.push({ state: A([...v], { caption: "looking for the min" }), highlight: { active: [m], placed: [...placed] }, codeLine: 2, action: "active", narration: `Assume index ${i} (${v[i]}) is the smallest for now.`, kidNarration: `Start with this one.` });
+    steps.push({ state: A([...v], { caption: "looking for the min" }), highlight: { active: [m], placed: Array.from(placed) }, codeLine: 2, action: "active", narration: `Assume index ${i} (${v[i]}) is the smallest for now.`, kidNarration: `Start with this one.` });
     for (let j = i + 1; j < n; j++) {
-      steps.push({ state: A([...v]), highlight: { compare: [j], active: [m], placed: [...placed] }, codeLine: 4, action: "compare", narration: `Is ${v[j]} smaller than ${v[m]}?`, kidNarration: `Smaller?` });
+      steps.push({ state: A([...v]), highlight: { compare: [j], active: [m], placed: Array.from(placed) }, codeLine: 4, action: "compare", narration: `Is ${v[j]} smaller than ${v[m]}?`, kidNarration: `Smaller?` });
       if (v[j] < v[m]) m = j;
     }
     if (m !== i) {
       [v[i], v[m]] = [v[m], v[i]];
-      steps.push({ state: A([...v]), highlight: { swap: [i, m], placed: [...placed] }, codeLine: 6, action: "swap", narration: `Swap the smallest into position ${i}.`, kidNarration: `Move the shortest up!` });
+      steps.push({ state: A([...v]), highlight: { swap: [i, m], placed: Array.from(placed) }, codeLine: 6, action: "swap", narration: `Swap the smallest into position ${i}.`, kidNarration: `Move the shortest up!` });
     }
     placed.add(i);
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Step, StructureViewProps, TopicModule } from "@/lib/dsa/types";
+import { PlateStacker } from "@/components/dsa/games/PlateStacker";
 import { cn } from "@/lib/utils";
 
 // ── State shape for this topic ───────────────────────────────────────────────
@@ -314,6 +315,7 @@ function buildQueueSteps(): Step[] {
 export const stacksQueuesModule: TopicModule = {
   slug: "stacks-queues",
   StructureView,
+  Game: PlateStacker,
   demos: [
     { key: "stack", label: "Stack (plates)", emoji: "🍽️", pythonCode: STACK_CODE, buildSteps: buildStackSteps },
     { key: "queue", label: "Queue (ice-cream line)", emoji: "🍦", pythonCode: QUEUE_CODE, buildSteps: buildQueueSteps },

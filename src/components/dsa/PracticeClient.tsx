@@ -133,6 +133,10 @@ export function PracticeClient({
       </div>
       {genError && <p className="text-sm font-medium text-amber-600">{genError}</p>}
 
+      <Link href="/dsa/playground" className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:underline">
+        🧪 Just want to experiment? Open the code playground →
+      </Link>
+
       {/* Filter */}
       <div className="flex gap-2">
         {(["all", "easy", "medium", "hard"] as Filter[]).map((f) => (

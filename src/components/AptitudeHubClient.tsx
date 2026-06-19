@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { BitSays } from "@/components/dsa/Mascot";
 import type { AptitudeCategory } from "@/lib/aptitude-topics";
 import { DIFFICULTY_COLOR, DIFFICULTY_LABEL } from "@/lib/aptitude-topics";
 
@@ -41,6 +42,10 @@ export function AptitudeHubClient({ categories }: Props) {
 
   return (
     <div className="space-y-6">
+      <BitSays mood="wave">
+        Hi, I&apos;m Bit! 🤖 Pick any topic and I&apos;ll teach it the easy way — a simple explanation first, then a fun quiz. Let&apos;s go!
+      </BitSays>
+
       {/* Search */}
       <div className="relative">
         <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />

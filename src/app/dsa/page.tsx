@@ -41,12 +41,20 @@ export default async function DSAMapPage() {
           <p className="mt-2 text-slate-500">
             Learn data structures &amp; algorithms by exploring islands — from playful stories to interview-ready code.
           </p>
-          <Link
-            href="/dsa/practice"
-            className="mt-3 inline-block text-sm font-semibold text-brand-600 hover:underline"
-          >
-            Looking for coding practice problems? →
-          </Link>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <Link href="/dsa/playground" className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+              🧪 Code Playground
+            </Link>
+            <Link href="/dsa/review" className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+              🧠 Daily Practice
+            </Link>
+            <Link href="/dsa/practice" className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+              ⚡ Interview practice
+            </Link>
+          </div>
+          <p className="mt-3 text-xs text-slate-400">
+            New here? Tap the first island and switch to <b>Kid</b> mode for the gentlest start.
+          </p>
         </div>
 
         <WorldMapClient

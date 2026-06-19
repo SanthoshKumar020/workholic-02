@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ArrowRight, Lightbulb, Star, X, Code2 } from "lucide-react";
 import type { DsaMode, DsaProblem } from "@/lib/dsa/types";
 import { Visualizer } from "@/components/dsa/Visualizer";
+import { CodeRunner } from "@/components/dsa/CodeRunner";
 import { Bit, BitSays } from "@/components/dsa/Mascot";
 import { Confetti } from "@/components/dsa/Confetti";
 import { useReadAloud } from "@/components/dsa/useReadAloud";
@@ -38,6 +39,7 @@ export function GuidedProblem({
     const s: string[] = ["read"];
     if (problem.approachQuiz) s.push("predict");
     s.push("hints");
+    if (problem.code) s.push("code");
     if (problem.walkthrough) s.push("walk");
     s.push("solution", "recall");
     return s;
@@ -47,6 +49,7 @@ export function GuidedProblem({
   const [predictPick, setPredictPick] = useState<string | null>(null);
   const [predictWrong, setPredictWrong] = useState(false);
   const [hintsShown, setHintsShown] = useState(0);
+  const [codePassed, setCodePassed] = useState(false);
   const [solved, setSolved] = useState(false);
   const [earnedStars, setEarnedStars] = useState(0);
   const readAloud = useReadAloud({ defaultEnabled: mode === "kid" });
@@ -61,8 +64,10 @@ export function GuidedProblem({
   }
 
   async function finish(confidenceKey: string) {
+    // Writing working code yourself = full marks; otherwise dock for wrong
+    // prediction or leaning on lots of hints.
     const penalty = (predictWrong ? 1 : 0) + (hintsShown >= 2 ? 1 : 0);
-    const stars = Math.max(1, 3 - penalty);
+    const stars = codePassed ? 3 : Math.max(1, 3 - penalty);
     setEarnedStars(stars);
     setSolved(true);
     const quality = CONFIDENCE_TO_QUALITY[confidenceKey] ?? 3;
@@ -178,6 +183,19 @@ export function GuidedProblem({
               </button>
             )}
             <PrimaryBtn onClick={next}>{problem.walkthrough ? "Watch the walkthrough" : "See the solution"}</PrimaryBtn>
+          </div>
+        </div>
+      )}
+
+      {/* ── WRITE CODE & RUN ── */}
+      {stage === "code" && problem.code && (
+        <div className="space-y-4">
+          <BitSays mood={codePassed ? "cheer" : "happy"}>
+            {codePassed ? "All tests pass — you wrote it yourself! 🌟 That's a 3-star solve." : "Your turn — write the function and hit Run. It runs right here in your browser. Pass all tests for 3 stars!"}
+          </BitSays>
+          <CodeRunner starter={problem.code.starter} functionName={problem.code.functionName} tests={problem.code.tests} onAllPass={() => setCodePassed(true)} />
+          <div className="flex flex-wrap gap-2">
+            <PrimaryBtn onClick={next}>{codePassed ? "Continue" : problem.walkthrough ? "Show me the walkthrough" : "Show me the solution"}</PrimaryBtn>
           </div>
         </div>
       )}

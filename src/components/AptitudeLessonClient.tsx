@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Zap, BookOpen, ChevronDown, ChevronUp, CheckCircle, XCircle, Trophy, RotateCcw } from "lucide-react";
+import { Loader2, Zap, BookOpen, ChevronDown, ChevronUp, CheckCircle, XCircle, Trophy, RotateCcw, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Bit, BitSays } from "@/components/dsa/Mascot";
+import { Confetti } from "@/components/dsa/Confetti";
+import { useReadAloud } from "@/components/dsa/useReadAloud";
 
 interface Lesson {
   title: string;
@@ -66,6 +69,7 @@ function Quiz({ topicId, topicTitle }: { topicId: string; topicTitle: string }) 
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [done, setDone] = useState(false);
+  const [burst, setBurst] = useState(0); // confetti trigger
 
   async function loadQuiz() {
     setLoading(true);
@@ -98,6 +102,7 @@ function Quiz({ topicId, topicTitle }: { topicId: string; topicTitle: string }) 
     const newAnswers = [...answers];
     newAnswers[current] = idx;
     setAnswers(newAnswers);
+    if (idx === questions[current]?.correctIndex) setBurst((b) => b + 1);
   }
 
   function next() {
@@ -106,6 +111,8 @@ function Quiz({ topicId, topicTitle }: { topicId: string; topicTitle: string }) 
       setSelected(null);
     } else {
       setDone(true);
+      const finalScore = answers.filter((a, i) => a === questions[i]?.correctIndex).length;
+      if (finalScore / questions.length >= 0.6) setBurst((b) => b + 1);
       // Save completion to localStorage
       try {
         const stored: string[] = JSON.parse(localStorage.getItem("aptitude_completed") ?? "[]");
@@ -151,11 +158,13 @@ function Quiz({ topicId, topicTitle }: { topicId: string; topicTitle: string }) 
     const pct = Math.round((score / questions.length) * 100);
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center space-y-5">
+        <Confetti key={burst} fire={burst > 0} />
+        <Bit mood={pct >= 60 ? "cheer" : "happy"} size="lg" className="mx-auto" />
         <Trophy className={`mx-auto h-12 w-12 ${pct >= 80 ? "text-amber-400" : pct >= 60 ? "text-brand-400" : "text-slate-300"}`} />
         <div>
           <p className="text-3xl font-extrabold text-slate-900">{score}/{questions.length}</p>
           <p className="mt-1 text-slate-500">
-            {pct === 100 ? "Perfect score! 🎉" : pct >= 80 ? "Excellent work!" : pct >= 60 ? "Good effort!" : "Keep practicing!"}
+            {pct === 100 ? "Perfect score! 🎉" : pct >= 80 ? "Excellent work! 🌟" : pct >= 60 ? "Good effort — keep going!" : "Nice try! Review and have another go 🙂"}
           </p>
         </div>
 
@@ -197,6 +206,7 @@ function Quiz({ topicId, topicTitle }: { topicId: string; topicTitle: string }) 
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+      <Confetti key={burst} fire={burst > 0} />
       {/* Progress bar */}
       <div className="h-1.5 w-full bg-slate-100">
         <div className="h-full bg-brand-500 transition-all" style={{ width: `${((current + (selected !== null ? 1 : 0)) / questions.length) * 100}%` }} />
@@ -250,7 +260,7 @@ function Quiz({ topicId, topicTitle }: { topicId: string; topicTitle: string }) 
                 : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />}
               <div>
                 <p className="text-sm font-semibold text-slate-800 mb-0.5">
-                  {selected === q.correctIndex ? "Correct!" : `Wrong — Correct answer: ${q.options[q.correctIndex]}`}
+                  {selected === q.correctIndex ? "Nailed it! 🎉" : `Almost! The answer is ${q.options[q.correctIndex]} 🙂`}
                 </p>
                 <p className="text-sm text-slate-600">{q.explanation}</p>
               </div>
@@ -276,6 +286,7 @@ export function AptitudeLessonClient({ topicId, topicTitle }: { topicId: string;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showQuiz, setShowQuiz] = useState(false);
+  const readAloud = useReadAloud({ defaultEnabled: false });
 
   useEffect(() => {
     async function load() {
@@ -322,6 +333,11 @@ export function AptitudeLessonClient({ topicId, topicTitle }: { topicId: string;
 
   return (
     <div className="space-y-6">
+      {/* Mascot greeting */}
+      <BitSays mood="wave">
+        Hi, I&apos;m Bit! 🤖 Let&apos;s learn <b>{lesson.title}</b> together — start with the simple idea, then try the quiz. You&apos;ve got this!
+      </BitSays>
+
       {/* Tagline */}
       <p className="text-slate-500 italic">{lesson.tagline}</p>
 
@@ -330,6 +346,15 @@ export function AptitudeLessonClient({ topicId, topicTitle }: { topicId: string;
         <div className="mb-2 flex items-center gap-2">
           <span className="text-xl">👶</span>
           <p className="text-sm font-bold text-blue-800">Explain like I&apos;m 5</p>
+          {readAloud.supported && (
+            <button
+              onClick={() => readAloud.speak(`${lesson.likeIm5}. ${lesson.concept}`, true)}
+              aria-label="Read aloud"
+              className="ml-auto rounded-full p-1.5 text-blue-600 hover:bg-blue-100"
+            >
+              <Volume2 className="h-4 w-4" />
+            </button>
+          )}
         </div>
         <p className="text-sm text-blue-900 leading-relaxed">{lesson.likeIm5}</p>
       </div>

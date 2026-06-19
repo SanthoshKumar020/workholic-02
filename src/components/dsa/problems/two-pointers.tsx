@@ -70,6 +70,14 @@ export const twoPointersProblems: DsaProblem[] = [
     pythonCode: ["def reverse(arr):", "    l, r = 0, len(arr) - 1", "    while l < r:", "        arr[l], arr[r] = arr[r], arr[l]", "        l, r = l + 1, r - 1", "    return arr"],
     complexity: { time: "O(n)", space: "O(1)" },
     takeaway: "Reverse in place = two pointers swapping from both ends (O(1) space).",
+    code: {
+      starter: "def reverse(arr):\n    # reverse arr in place and return it\n    return arr",
+      functionName: "reverse",
+      tests: [
+        { args: [["h", "e", "l", "l", "o"]], expected: ["o", "l", "l", "e", "h"] },
+        { args: [["a", "b"]], expected: ["b", "a"] },
+      ],
+    },
     walkthrough: { pythonCode: ["def reverse(arr):", "    l, r = 0, len(arr) - 1", "    while l < r:", "        arr[l], arr[r] = arr[r], arr[l]", "        l, r = l + 1, r - 1", "    return arr"], StructureView: ArrayView, buildSteps: reverseSteps },
   },
   {
@@ -90,6 +98,14 @@ export const twoPointersProblems: DsaProblem[] = [
     pythonCode: ["def two_sum_sorted(arr, target):", "    l, r = 0, len(arr) - 1", "    while l < r:", "        s = arr[l] + arr[r]", "        if s == target:", "            return [l, r]", "        if s < target:", "            l += 1", "        else:", "            r -= 1"],
     complexity: { time: "O(n)", space: "O(1)" },
     takeaway: "Sorted + 'find a pair' → two pointers from both ends, not nested loops.",
+    code: {
+      starter: "def two_sum_sorted(arr, target):\n    # return the indices [i, j] of the two numbers adding to target\n    pass",
+      functionName: "two_sum_sorted",
+      tests: [
+        { args: [[2, 3, 5, 8, 11], 10], expected: [0, 3] },
+        { args: [[1, 2, 4, 7], 9], expected: [1, 3] },
+      ],
+    },
     walkthrough: { pythonCode: ["def two_sum_sorted(arr, target):", "    l, r = 0, len(arr) - 1", "    while l < r:", "        s = arr[l] + arr[r]", "        if s == target:", "            return [l, r]", "        if s < target:", "            l += 1", "        else:", "            r -= 1"], StructureView: ArrayView, buildSteps: twoSumSteps },
   },
   {
@@ -110,6 +126,14 @@ export const twoPointersProblems: DsaProblem[] = [
     pythonCode: ["def is_palindrome(s):", "    l, r = 0, len(s) - 1", "    while l < r:", "        while l < r and not s[l].isalpha(): l += 1", "        while l < r and not s[r].isalpha(): r -= 1", "        if s[l].lower() != s[r].lower():", "            return False", "        l, r = l + 1, r - 1", "    return True"],
     complexity: { time: "O(n)", space: "O(1)" },
     takeaway: "Palindrome check = two pointers comparing inward (O(1) space).",
+    code: {
+      starter: "def is_palindrome(s):\n    # True if s reads the same both ways (letters only, ignore case)\n    pass",
+      functionName: "is_palindrome",
+      tests: [
+        { args: ["Race car"], expected: true },
+        { args: ["hello"], expected: false },
+      ],
+    },
   },
   {
     id: "two-pointers:remove-duplicates",
@@ -129,6 +153,14 @@ export const twoPointersProblems: DsaProblem[] = [
     pythonCode: ["def remove_dups(arr):", "    if not arr: return 0", "    slow = 1", "    for fast in range(1, len(arr)):", "        if arr[fast] != arr[slow - 1]:", "            arr[slow] = arr[fast]", "            slow += 1", "    return slow"],
     complexity: { time: "O(n)", space: "O(1)" },
     takeaway: "In-place de-dup of a sorted list = slow/fast same-direction pointers.",
+    code: {
+      starter: "def remove_dups(arr):\n    # remove duplicates in place; return the new length\n    pass",
+      functionName: "remove_dups",
+      tests: [
+        { args: [[1, 1, 2, 2, 2, 3]], expected: 4 },
+        { args: [[5]], expected: 1 },
+      ],
+    },
   },
   {
     id: "two-pointers:move-zeroes",
@@ -148,6 +180,14 @@ export const twoPointersProblems: DsaProblem[] = [
     pythonCode: ["def move_zeroes(arr):", "    slow = 0", "    for fast in range(len(arr)):", "        if arr[fast] != 0:", "            arr[slow], arr[fast] = arr[fast], arr[slow]", "            slow += 1", "    return arr"],
     complexity: { time: "O(n)", space: "O(1)" },
     takeaway: "Partition in place (move X to the end) = slow/fast pointers.",
+    code: {
+      starter: "def move_zeroes(arr):\n    # move zeros to the end in place; return arr\n    return arr",
+      functionName: "move_zeroes",
+      tests: [
+        { args: [[0, 1, 0, 3, 12]], expected: [1, 3, 12, 0, 0] },
+        { args: [[0, 0, 1]], expected: [1, 0, 0] },
+      ],
+    },
     walkthrough: { pythonCode: ["def move_zeroes(arr):", "    slow = 0", "    for fast in range(len(arr)):", "        if arr[fast] != 0:", "            arr[slow], arr[fast] = arr[fast], arr[slow]", "            slow += 1", "    return arr"], StructureView: ArrayView, buildSteps: moveZeroesSteps },
   },
   {
@@ -168,5 +208,13 @@ export const twoPointersProblems: DsaProblem[] = [
     pythonCode: ["def max_area(h):", "    l, r = 0, len(h) - 1", "    best = 0", "    while l < r:", "        area = (r - l) * min(h[l], h[r])", "        best = max(best, area)", "        if h[l] < h[r]:", "            l += 1", "        else:", "            r -= 1", "    return best"],
     complexity: { time: "O(n)", space: "O(1)" },
     takeaway: "Max area between two lines: two pointers, always move the shorter line inward.",
+    code: {
+      starter: "def max_area(h):\n    # return the max water area between two of the lines\n    pass",
+      functionName: "max_area",
+      tests: [
+        { args: [[1, 8, 6, 2, 5, 4, 8, 3, 7]], expected: 49 },
+        { args: [[1, 1]], expected: 1 },
+      ],
+    },
   },
 ];

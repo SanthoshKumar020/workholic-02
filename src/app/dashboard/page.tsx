@@ -8,7 +8,7 @@ import { StreakWidget } from "@/components/StreakWidget";
 import type { Resume } from "@/lib/types";
 import {
   FileText, Briefcase, Map, Mic, MessageSquare, BookOpen, Search, Lock, Sparkles, Brain, Bot, DollarSign,
-  Eye, Target, Share2, Code2, Users, Building2,
+  Eye, Target, Share2, Code2, Users, Building2, Compass, Terminal,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -18,11 +18,13 @@ const TOOLS = [
   { href: "/builder",    icon: FileText,   label: "Resume Builder",    desc: "Enhance & export PDF",              free: true  },
   { href: "/match",      icon: Search,     label: "Job Match",          desc: "ATS keyword analysis",              free: true  },
   { href: "/aptitude",   icon: Brain,      label: "Aptitude Prep",      desc: "Speed tricks, lessons & quizzes",   free: true  },
+  { href: "/domains",    icon: Compass,    label: "Learning Domains",   desc: "Roadmaps to master any field A→Z",  free: true  },
   { href: "/roadmap",    icon: Map,        label: "Learning Roadmap",   desc: "Step-by-step career plan",          free: true  },
   { href: "/interview",  icon: Mic,        label: "Mock Interview",     desc: "AI feedback on answers",            free: true  },
   { href: "/english",    icon: BookOpen,   label: "English Learning",   desc: "Lessons, quizzes & chat",           free: true  },
   { href: "/outreach",   icon: Share2,     label: "Outreach Generator", desc: "LinkedIn DM · cold email · referral",free: true  },
-  { href: "/dsa",        icon: Code2,      label: "DSA Practice",       desc: "Problems · AI hints · complexity",  free: true  },
+  { href: "/dsa",        icon: Code2,      label: "DSA Adventure",      desc: "Gamified A→Z · visualizers · code practice", free: true },
+  { href: "/dsa/playground", icon: Terminal, label: "Code Playground",  desc: "Run Python right in your browser",  free: true  },
   { href: "/gd",           icon: Users,      label: "GD Practice",        desc: "AI-scored group discussion (voice)",free: true  },
   { href: "/company-prep", icon: Building2,  label: "Company Interview Prep", desc: "Google · Amazon · Flipkart · 12 companies", free: true },
   { href: "/mentor",     icon: Bot,        label: "AI Career Mentor",   desc: "Weekly plan · memory · check-in",  free: false },

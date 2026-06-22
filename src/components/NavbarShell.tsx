@@ -9,6 +9,7 @@ const AUTH_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/builder", label: "Builder" },
   { href: "/dsa", label: "Learn DSA" },
+  { href: "/ppt", label: "Slides" },
   { href: "/roadmaps", label: "Roadmaps" },
   { href: "/jobs", label: "Jobs" },
   { href: "/billing", label: "Billing" },

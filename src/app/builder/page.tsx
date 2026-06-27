@@ -19,9 +19,10 @@ export default async function BuilderPage() {
   let resumesUsed = 0;
   if (!proUser && user) {
     const { count } = await supabase
-      .from("resumes")
+      .from("feature_usage")
       .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .eq("feature", "enhance");
     resumesUsed = count ?? 0;
   }
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Link2, Mail, Users, Copy, Check, RotateCcw } from "lucide-react";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 interface OutreachResult { message: string; subject: string | null; charCount?: number; tips: string[]; }
 type TemplateType = "linkedin_dm" | "cold_email" | "referral";
@@ -27,7 +28,13 @@ function CopyBtn({ text }: { text: string }) {
   );
 }
 
-export function OutreachClient({ defaultName, defaultRole }: { defaultName: string; defaultRole: string }) {
+export function OutreachClient({
+  defaultName, defaultRole,
+  freeUsed = 0, freeLimit = 5, isPro = false,
+}: {
+  defaultName: string; defaultRole: string;
+  freeUsed?: number; freeLimit?: number; isPro?: boolean;
+}) {
   const [activeTab, setActiveTab] = useState<TemplateType>("linkedin_dm");
   const [yourName, setYourName] = useState(defaultName);
   const [yourRole, setYourRole] = useState(defaultRole);
@@ -40,6 +47,8 @@ export function OutreachClient({ defaultName, defaultRole }: { defaultName: stri
   const [results, setResults] = useState<Partial<Record<TemplateType, OutreachResult>>>({});
   const [loading, setLoading] = useState<TemplateType | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [limitReached, setLimitReached] = useState(false);
+  const exhausted = !isPro && freeUsed >= freeLimit;
 
   async function generate(action: TemplateType) {
     if (!targetCompany.trim() || !targetRole.trim()) return;
@@ -52,6 +61,7 @@ export function OutreachClient({ defaultName, defaultRole }: { defaultName: stri
         body: JSON.stringify({ yourName, yourRole, yourBackground, targetCompany, targetRole, contactName, mutualConnection, action }),
       });
       const d = await res.json();
+      if (res.status === 403 && d.error === "free_limit_reached") { setLimitReached(true); return; }
       if (!res.ok) throw new Error(d.error);
       setResults((prev) => ({ ...prev, [action]: d }));
     } catch (e) {
@@ -65,6 +75,10 @@ export function OutreachClient({ defaultName, defaultRole }: { defaultName: stri
 
   return (
     <div className="space-y-5">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="outreach" />
+      )}
+      {limitReached && <UpgradeWall limit={freeLimit} feature="outreach" />}
       {/* Form */}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-5 py-4">
@@ -179,7 +193,7 @@ export function OutreachClient({ defaultName, defaultRole }: { defaultName: stri
             </>
           ) : (
             <Button onClick={() => generate(activeTab)} loading={loading === activeTab}
-              disabled={!targetCompany.trim() || !targetRole.trim()} className="w-full" size="lg">
+              disabled={!targetCompany.trim() || !targetRole.trim() || exhausted || limitReached} className="w-full" size="lg">
               {loading === activeTab ? "Generating…" : `Generate ${TABS.find((t) => t.key === activeTab)?.label}`}
             </Button>
           )}

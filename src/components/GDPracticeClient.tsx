@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/Button";
 import { Mic, Square, RotateCcw, Play, CheckCircle, AlertCircle, Timer } from "lucide-react";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 const CATEGORIES = [
   { key: "Technology",        emoji: "💻", color: "border-blue-200 bg-blue-50 text-blue-700" },
@@ -48,7 +49,11 @@ function ScoreBar({ label, score, feedback }: { label: string; score: number; fe
   );
 }
 
-export function GDPracticeClient() {
+export function GDPracticeClient({
+  freeUsed = 0, freeLimit = 5, isPro = false,
+}: {
+  freeUsed?: number; freeLimit?: number; isPro?: boolean;
+} = {}) {
   const [phase, setPhase] = useState<Phase>("setup");
   const [category, setCategory] = useState("");
   const [topic, setTopic] = useState<GDTopic | null>(null);
@@ -60,6 +65,8 @@ export function GDPracticeClient() {
   const [speechSupported, setSpeechSupported] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [limitReached, setLimitReached] = useState(false);
+  const exhausted = !isPro && freeUsed >= freeLimit;
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -102,6 +109,7 @@ export function GDPracticeClient() {
         body: JSON.stringify({ action: "topic", category }),
       });
       const d = await res.json();
+      if (res.status === 403 && d.error === "free_limit_reached") { setLimitReached(true); return; }
       if (!res.ok) throw new Error(d.error);
       setTopic(d);
       setTranscript("");
@@ -211,6 +219,10 @@ export function GDPracticeClient() {
 
   if (phase === "setup") return (
     <div className="space-y-5">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="GD practice" />
+      )}
+      {limitReached && <UpgradeWall limit={freeLimit} feature="GD practice" />}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <h3 className="mb-4 font-bold text-slate-900">Choose a Category</h3>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -232,7 +244,7 @@ export function GDPracticeClient() {
       </div>
 
       {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
-      <Button onClick={getTopic} loading={loading} disabled={!category} className="w-full" size="lg">
+      <Button onClick={getTopic} loading={loading} disabled={!category || exhausted || limitReached} className="w-full" size="lg">
         Get GD Topic
       </Button>
     </div>

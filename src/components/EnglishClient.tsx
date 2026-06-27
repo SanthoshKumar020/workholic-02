@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Mic, MicOff, Send, RefreshCw } from "lucide-react";
 import type { ChatMessage, EnglishLesson, EnglishQuizQuestion } from "@/lib/types";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 const LEVELS = ["beginner", "intermediate", "advanced"];
 const TOPICS = [
@@ -24,7 +25,13 @@ interface QuizState {
   submitted: boolean;
 }
 
-export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string; preferredLanguage: string }) {
+export function EnglishClient({
+  plan, preferredLanguage: _lang,
+  freeUsed = 0, freeLimit = 5, isPro = false,
+}: {
+  plan: string; preferredLanguage: string;
+  freeUsed?: number; freeLimit?: number; isPro?: boolean;
+}) {
   const [level, setLevel] = useState("intermediate");
   const [topic, setTopic] = useState(TOPICS[0]);
 
@@ -35,6 +42,8 @@ export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string
   // Quiz state
   const [quiz, setQuiz] = useState<QuizState | null>(null);
   const [loadingQuiz, setLoadingQuiz] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
+  const exhausted = !isPro && freeUsed >= freeLimit;
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -72,6 +81,7 @@ export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string
         body: JSON.stringify({ mode: "lesson", level, topic }),
       });
       const data = await res.json();
+      if (res.status === 403 && data.error === "free_limit_reached") { setLimitReached(true); return; }
       setLesson(data.lesson || null);
     } catch {
       setLesson(null);
@@ -89,6 +99,7 @@ export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string
         body: JSON.stringify({ mode: "quiz", level, topic }),
       });
       const data = await res.json();
+      if (res.status === 403 && data.error === "free_limit_reached") { setLimitReached(true); return; }
       const q: EnglishQuizQuestion[] = Array.isArray(data.quiz?.questions) ? data.quiz.questions : [];
       setQuiz({ questions: q, answers: {}, submitted: false });
     } catch {
@@ -126,6 +137,10 @@ export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string
 
   return (
     <div className="space-y-6">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="english learning" />
+      )}
+      {limitReached && <UpgradeWall limit={freeLimit} feature="english learning" />}
       {/* Level + Topic selectors */}
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
         <div>
@@ -164,7 +179,7 @@ export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string
         {/* LESSON TAB */}
         <TabsContent value="lesson">
           <div className="space-y-4">
-            <Button onClick={loadLesson} loading={loadingLesson} variant="outline">
+            <Button onClick={loadLesson} loading={loadingLesson} disabled={exhausted || limitReached} variant="outline">
               {lesson ? <><RefreshCw className="h-4 w-4" /> New lesson</> : "Load lesson"}
             </Button>
             {lesson && (
@@ -203,7 +218,7 @@ export function EnglishClient({ plan, preferredLanguage: _lang }: { plan: string
         {/* QUIZ TAB */}
         <TabsContent value="quiz">
           <div className="space-y-4">
-            <Button onClick={loadQuiz} loading={loadingQuiz} variant="outline">
+            <Button onClick={loadQuiz} loading={loadingQuiz} disabled={exhausted || limitReached} variant="outline">
               {quiz ? <><RefreshCw className="h-4 w-4" /> New quiz</> : "Start quiz"}
             </Button>
             {quiz && (

@@ -4,7 +4,8 @@ import { Footer } from "@/components/Footer";
 import { RoadmapClient } from "@/components/RoadmapClient";
 import { RoadmapRenderer } from "@/components/RoadmapRenderer";
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProfile } from "@/lib/plan";
+import { getCurrentProfile, isUserPro } from "@/lib/plan";
+import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 import type { RoadmapRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -16,12 +17,23 @@ interface Props {
 export default async function RoadmapPage({ searchParams }: Props) {
   const id = searchParams.id?.trim();
   const profile = await getCurrentProfile();
+  const supabase = createClient();
 
   let savedRoadmap: RoadmapRow | null = null;
   if (id) {
-    const supabase = createClient();
     const { data } = await supabase.from("roadmaps").select("*").eq("id", id).single();
     savedRoadmap = (data as RoadmapRow) ?? null;
+  }
+
+  const proUser = profile ? isUserPro(profile.plan, profile.email) : false;
+  let freeUsed = 0;
+  if (!proUser && profile) {
+    const { count } = await supabase
+      .from("feature_usage")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", profile.id)
+      .eq("feature", "roadmap");
+    freeUsed = count ?? 0;
   }
 
   return (
@@ -66,7 +78,7 @@ export default async function RoadmapPage({ searchParams }: Props) {
               </Link>
             </div>
           ) : (
-            <RoadmapClient />
+            <RoadmapClient freeUsed={freeUsed} freeLimit={FREE_FEATURE_LIMIT} isPro={proUser} />
           )}
         </div>
       </main>

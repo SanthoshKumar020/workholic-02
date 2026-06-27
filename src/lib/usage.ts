@@ -5,6 +5,7 @@ export const FREE_FEATURE_LIMIT = 5;
 export const FREE_ENHANCE_LIMIT = 5;
 
 export type FeatureKey =
+  | "enhance"
   | "ats-check"
   | "match"
   | "interview-questions"

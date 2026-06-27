@@ -5,16 +5,28 @@ import { Crown } from "lucide-react";
 import { DOMAINS } from "@/lib/domains/catalog";
 import { BitSays } from "@/components/dsa/Mascot";
 import { cn } from "@/lib/utils";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 export function DomainsHubClient({
   progress,
   pro,
+  freeUsed = 0,
+  freeLimit = 5,
+  isPro = false,
 }: {
-  progress: Record<string, number>; // domain slug -> mastered topic count
+  progress: Record<string, number>;
   pro: boolean;
+  freeUsed?: number;
+  freeLimit?: number;
+  isPro?: boolean;
 }) {
+  const exhausted = !isPro && freeUsed >= freeLimit;
   return (
     <div className="space-y-6">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="domains" />
+      )}
+      {exhausted && <UpgradeWall limit={freeLimit} feature="domain lessons" />}
       <BitSays mood="wave" size="lg">
         Pick a field and I&apos;ll take you from <b>A to Z</b> — a roadmap of bite-sized lessons, each with diagrams,
         a quick game, and a quiz. Master one topic to unlock the next! 🚀

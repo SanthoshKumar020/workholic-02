@@ -6,12 +6,16 @@ import { Search } from "lucide-react";
 import { BitSays } from "@/components/dsa/Mascot";
 import type { AptitudeCategory } from "@/lib/aptitude-topics";
 import { DIFFICULTY_COLOR, DIFFICULTY_LABEL } from "@/lib/aptitude-topics";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 interface Props {
   categories: AptitudeCategory[];
+  freeUsed?: number;
+  freeLimit?: number;
+  isPro?: boolean;
 }
 
-export function AptitudeHubClient({ categories }: Props) {
+export function AptitudeHubClient({ categories, freeUsed = 0, freeLimit = 5, isPro = false }: Props) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -40,8 +44,14 @@ export function AptitudeHubClient({ categories }: Props) {
     } catch { return new Set(); }
   });
 
+  const exhausted = !isPro && freeUsed >= freeLimit;
+
   return (
     <div className="space-y-6">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="aptitude" />
+      )}
+      {exhausted && <UpgradeWall limit={freeLimit} feature="aptitude lessons" />}
       <BitSays mood="wave">
         Hi, I&apos;m Bit! 🤖 Pick any topic and I&apos;ll teach it the easy way — a simple explanation first, then a fun quiz. Let&apos;s go!
       </BitSays>

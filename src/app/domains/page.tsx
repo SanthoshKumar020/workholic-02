@@ -4,6 +4,7 @@ import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { DomainsHubClient } from "@/components/domains/DomainsHubClient";
 import { redirect } from "next/navigation";
+import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 
 export const metadata = { title: "Learning Domains — HYRISE" };
 export const dynamic = "force-dynamic";
@@ -13,14 +14,27 @@ export default async function DomainsPage() {
   if (!profile) redirect("/login?redirectTo=/domains");
 
   const supabase = createClient();
-  const { data: rows } = await supabase
-    .from("domain_progress")
-    .select("domain, status")
-    .eq("user_id", profile.id)
-    .eq("status", "mastered");
+  const proUser = isUserPro(profile.plan, profile.email);
+
+  const [progressResult, usageResult] = await Promise.all([
+    supabase
+      .from("domain_progress")
+      .select("domain, status")
+      .eq("user_id", profile.id)
+      .eq("status", "mastered"),
+    !proUser
+      ? supabase
+          .from("feature_usage")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", profile.id)
+          .eq("feature", "domains")
+      : Promise.resolve({ count: 0 }),
+  ]);
 
   const progress: Record<string, number> = {};
-  for (const r of rows ?? []) progress[r.domain] = (progress[r.domain] ?? 0) + 1;
+  for (const r of progressResult.data ?? []) progress[r.domain] = (progress[r.domain] ?? 0) + 1;
+
+  const freeUsed = (usageResult as { count: number | null }).count ?? 0;
 
   return (
     <>
@@ -34,7 +48,13 @@ export default async function DomainsPage() {
             Choose a field, follow the roadmap, and master every topic with games, diagrams, and quizzes.
           </p>
         </div>
-        <DomainsHubClient progress={progress} pro={isUserPro(profile.plan, profile.email)} />
+        <DomainsHubClient
+          progress={progress}
+          pro={proUser}
+          freeUsed={freeUsed}
+          freeLimit={FREE_FEATURE_LIMIT}
+          isPro={proUser}
+        />
       </main>
       <Footer />
     </>

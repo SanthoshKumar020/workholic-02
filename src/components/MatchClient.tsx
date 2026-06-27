@@ -7,8 +7,19 @@ import { AtsScoreRing } from "@/components/AtsScoreRing";
 import { Lock, Upload, FileText, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import type { MatchResult } from "@/lib/types";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
-export function MatchClient({ plan }: { plan: string }) {
+export function MatchClient({
+  plan,
+  freeUsed = 0,
+  freeLimit = 5,
+  isPro = false,
+}: {
+  plan: string;
+  freeUsed?: number;
+  freeLimit?: number;
+  isPro?: boolean;
+}) {
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,7 +28,9 @@ export function MatchClient({ plan }: { plan: string }) {
   const [uploading, setUploading] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const exhausted = !isPro && freeUsed >= freeLimit;
 
   async function parseFile(file: File) {
     if (!["pdf", "docx", "txt"].includes(file.name.split(".").pop()?.toLowerCase() ?? "")) {
@@ -66,6 +79,11 @@ export function MatchClient({ plan }: { plan: string }) {
         body: JSON.stringify({ resumeText, jobDescription }),
       });
       const data = await res.json();
+      if (res.status === 403 && data.error === "free_limit_reached") {
+        setLimitReached(true);
+        setLoading(false);
+        return;
+      }
       if (!res.ok) throw new Error(data.error || "Analysis failed.");
       setResult(data);
     } catch (e) {
@@ -77,6 +95,10 @@ export function MatchClient({ plan }: { plan: string }) {
 
   return (
     <div className="space-y-6">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="job match" />
+      )}
+      {limitReached && <UpgradeWall limit={freeLimit} feature="job match" />}
       <form onSubmit={handleAnalyze} className="grid gap-5 md:grid-cols-2">
         {/* Resume column */}
         <div className="flex flex-col gap-3">
@@ -141,7 +163,7 @@ export function MatchClient({ plan }: { plan: string }) {
 
         <div className="md:col-span-2">
           {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
-          <Button type="submit" loading={loading} disabled={uploading} size="lg">
+          <Button type="submit" loading={loading} disabled={uploading || exhausted || limitReached} size="lg">
             Analyze Match
           </Button>
         </div>

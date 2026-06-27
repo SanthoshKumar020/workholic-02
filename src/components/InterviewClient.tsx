@@ -8,6 +8,7 @@ import {
   CheckCircle, AlertCircle, Trophy, RotateCcw, Play, Square,
   Loader2, Building2, User, Timer,
 } from "lucide-react";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -666,14 +667,20 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export function InterviewClient({ plan, targetRole, sessionsToday }: {
+export function InterviewClient({
+  plan, targetRole, sessionsToday,
+  freeUsed = 0, freeLimit = 5, isPro = false,
+}: {
   plan: string; targetRole: string; sessionsToday: number;
+  freeUsed?: number; freeLimit?: number; isPro?: boolean;
 }) {
   const [phase, setPhase] = useState<Phase>("setup");
   const [config, setConfig] = useState<{ role: string; company: string; interviewType: string; level: string } | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [report, setReport] = useState<Report | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [limitReached, setLimitReached] = useState(false);
+  const exhausted = !isPro && freeUsed >= freeLimit;
 
   async function handleStart(cfg: { role: string; company: string; interviewType: string; level: string; count: number }) {
     setError(null);
@@ -686,6 +693,11 @@ export function InterviewClient({ plan, targetRole, sessionsToday }: {
         body: JSON.stringify(cfg),
       });
       const data = await res.json();
+      if (res.status === 403 && data.error === "free_limit_reached") {
+        setLimitReached(true);
+        setPhase("setup");
+        return;
+      }
       if (!res.ok) throw new Error(data.error);
       setQuestions(data.questions ?? []);
       setPhase("interviewing");
@@ -723,9 +735,15 @@ export function InterviewClient({ plan, targetRole, sessionsToday }: {
   }
 
   if (phase === "setup") return (
-    <div>
-      {error && <p className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">{error}</p>}
-      <SetupScreen targetRole={targetRole} onStart={handleStart} loading={false} />
+    <div className="space-y-4">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="mock interview" />
+      )}
+      {(exhausted || limitReached) && <UpgradeWall limit={freeLimit} feature="mock interview" />}
+      {error && <p className="rounded-xl bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">{error}</p>}
+      {!exhausted && !limitReached && (
+        <SetupScreen targetRole={targetRole} onStart={handleStart} loading={false} />
+      )}
     </div>
   );
 

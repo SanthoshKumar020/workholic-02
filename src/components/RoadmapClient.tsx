@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { RoadmapRenderer } from "@/components/RoadmapRenderer";
 import type { RoadmapRow } from "@/lib/types";
+import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
 // ── Language catalogue ────────────────────────────────────────────────────────
 const CONTENT_LANGUAGES = [
@@ -63,7 +64,15 @@ interface GenerateResponse {
   error?: string;
 }
 
-export function RoadmapClient() {
+export function RoadmapClient({
+  freeUsed = 0,
+  freeLimit = 5,
+  isPro = false,
+}: {
+  freeUsed?: number;
+  freeLimit?: number;
+  isPro?: boolean;
+}) {
   const [topic, setTopic] = useState("");
   const [lang, setLang] = useState("en");
   const [activeCategory, setActiveCategory] = useState(0);
@@ -71,6 +80,8 @@ export function RoadmapClient() {
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const [roadmap, setRoadmap] = useState<RoadmapRow | null>(null);
+  const [limitReached, setLimitReached] = useState(false);
+  const exhausted = !isPro && freeUsed >= freeLimit;
 
   async function generate(overrideTopic?: string) {
     const trimmed = (overrideTopic ?? topic).trim();
@@ -88,6 +99,11 @@ export function RoadmapClient() {
         body: JSON.stringify({ topic: trimmed, lang }),
       });
       const data: GenerateResponse = await res.json();
+      if (res.status === 403 && data.error === "free_limit_reached") {
+        setLimitReached(true);
+        setLoading(false);
+        return;
+      }
       if (!res.ok || !data.roadmap) throw new Error(data.error ?? "Roadmap generation failed.");
       if (data.warning) setWarning(data.warning);
       setRoadmap(data.roadmap);
@@ -126,6 +142,10 @@ export function RoadmapClient() {
   // ── Input view ─────────────────────────────────────────────────────────────
   return (
     <div className="space-y-6">
+      {!isPro && (
+        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="roadmap" />
+      )}
+      {limitReached && <UpgradeWall limit={freeLimit} feature="roadmap" />}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="h-1 w-full bg-brand-gradient" />
         <div className="p-6 sm:p-8 space-y-6">
@@ -147,7 +167,7 @@ export function RoadmapClient() {
               disabled={loading}
               className="flex-1"
             />
-            <Button onClick={() => generate()} loading={loading} size="lg" className="shrink-0">
+            <Button onClick={() => generate()} loading={loading} disabled={exhausted || limitReached} size="lg" className="shrink-0">
               {loading ? "Generating…" : "Generate"}
             </Button>
           </div>
@@ -207,7 +227,7 @@ export function RoadmapClient() {
                   key={s}
                   type="button"
                   onClick={() => { setTopic(s); generate(s); }}
-                  disabled={loading}
+                  disabled={loading || exhausted || limitReached}
                   className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-brand-900/30 dark:hover:text-brand-400"
                 >
                   {s}

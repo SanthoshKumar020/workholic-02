@@ -413,7 +413,9 @@ export function ResumeBuilderClient({
       }
       if (!res.ok) throw new Error(data?.error || "Enhancement failed.");
       setResult(data as EnhanceResponse);
-      setResumeUsedCount(c => c + 1);
+      // Only count it if the resume was actually saved to the DB (the limit is
+      // counted from the resumes table, so a save failure must not inflate it).
+      if (data?.resume) setResumeUsedCount(c => c + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {

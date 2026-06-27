@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroq } from "@/lib/groq";
 import { FREE_TEMPLATE_ID, isPro, isSuperAdmin } from "@/lib/plan";
-import { FREE_ENHANCE_LIMIT, checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
+import { checkResumeLimit, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -38,8 +38,9 @@ export async function POST(request: Request) {
     .eq("id", user.id)
     .single();
 
-  // Enforce free-plan usage limit (permanent — not affected by resume deletion)
-  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "enhance");
+  // Enforce free-plan limit, counted directly from saved resumes in the DB.
+  // Free users can't delete resumes, so this count is permanent.
+  const { allowed } = await checkResumeLimit(supabase, user.id, user.email);
   if (!allowed) return limitReachedResponse();
 
   let result: { enhancedResume?: string; improvements?: string[]; atsScore?: number };
@@ -89,9 +90,6 @@ export async function POST(request: Request) {
     })
     .select()
     .single();
-
-  // Record permanent usage (not tied to resume rows — deletion won't restore quota)
-  await recordUsage(supabase, user.id, "enhance");
 
   // Award XP for enhancement
   await supabase

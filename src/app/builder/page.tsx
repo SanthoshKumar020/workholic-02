@@ -16,13 +16,13 @@ export default async function BuilderPage() {
 
   const proUser = isPro(profile?.plan) || isSuperAdmin(user?.email);
 
+  // Count the free-plan usage directly from saved resumes (permanent source of truth).
   let resumesUsed = 0;
   if (!proUser && user) {
     const { count } = await supabase
-      .from("feature_usage")
+      .from("resumes")
       .select("id", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("feature", "enhance");
+      .eq("user_id", user.id);
     resumesUsed = count ?? 0;
   }
 

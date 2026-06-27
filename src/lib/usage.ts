@@ -47,6 +47,35 @@ export async function checkFreeLimit(
   return { allowed: used < FREE_FEATURE_LIMIT, used };
 }
 
+/**
+ * Resume-enhance limit, counted DIRECTLY from the `resumes` table.
+ * This is the permanent source of truth — free users cannot delete resumes,
+ * so the saved-resume count can only ever grow. Pro / super-admin are unlimited.
+ */
+export async function checkResumeLimit(
+  supabase: SupabaseClient,
+  userId: string,
+  userEmail: string | null | undefined
+): Promise<{ allowed: boolean; used: number }> {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("id", userId)
+    .single();
+
+  if (isPro(profile?.plan) || isSuperAdmin(userEmail)) {
+    return { allowed: true, used: 0 };
+  }
+
+  const { count } = await supabase
+    .from("resumes")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId);
+
+  const used = count ?? 0;
+  return { allowed: used < FREE_ENHANCE_LIMIT, used };
+}
+
 /** Insert a usage record after a successful AI call. */
 export async function recordUsage(
   supabase: SupabaseClient,

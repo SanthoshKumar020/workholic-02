@@ -102,7 +102,10 @@ function parseResume(text: string): { contact: string[]; sections: Section[] } {
     // Detect section headings
     const lower = trimmed.toLowerCase().replace(/:$/, "").trim();
     const mapped = HEADING_MAP[lower];
-    if (mapped || (trimmed.length < 45 && trimmed === trimmed.toUpperCase() && /[A-Z]{3}/.test(trimmed) && !/[@.]/.test(trimmed))) {
+    // Generic all-caps check only fires after we've captured at least one contact line,
+    // so a name like "SOPNA K" at the very top isn't mistaken for a section heading.
+    const isGenericHeading = !inHeader || contact.length > 0;
+    if (mapped || (isGenericHeading && trimmed.length < 45 && trimmed === trimmed.toUpperCase() && /[A-Z]{3}/.test(trimmed) && !/[@.]/.test(trimmed))) {
       inHeader = false;
       if (current) sections.push(current);
       current = { heading: mapped || trimmed.replace(/:$/, ""), rawLines: [], entries: [], isSkills: (mapped || trimmed).toLowerCase().includes("skill") || (mapped || trimmed).toLowerCase().includes("competen") };
@@ -216,7 +219,7 @@ function ExecutiveTemplate({ data }: { data: ResumePdfData }) {
 
   const displayName = data.name || nameLines[0] || "Your Name";
   const contactDisplay = [data.email, data.phone, data.location, data.linkedin].filter(Boolean) as string[];
-  if (!contactDisplay.length) contactDisplay.push(...contactLines.slice(0, 4));
+  if (!contactDisplay.length) contactDisplay.push(...contactLines.filter(l => !/^[^:]+:\s*$/.test(l.trim())).slice(0, 4));
 
   return (
     <Document>
@@ -272,7 +275,7 @@ function MinimalTemplate({ data }: { data: ResumePdfData }) {
   const { contact, sections } = parseResume(data.enhancedText);
   const displayName = data.name || contact[0] || "Your Name";
   const contactDisplay = [data.email, data.phone, data.location, data.linkedin].filter(Boolean) as string[];
-  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1, 5));
+  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1).filter(l => !/^[^:]+:\s*$/.test(l.trim())).slice(0, 4));
 
   const s = StyleSheet.create({
     page: { paddingTop: 48, paddingBottom: 40, paddingHorizontal: 52, fontSize: 10, fontFamily: "Helvetica", color: DARK, lineHeight: 1.5, backgroundColor: "#fafafa" },
@@ -340,7 +343,7 @@ function SidebarTemplate({ data, accent }: { data: ResumePdfData; accent: string
   const { contact, sections } = parseResume(data.enhancedText);
   const displayName = data.name || contact[0] || "Your Name";
   const contactDisplay = [data.email, data.phone, data.location, data.linkedin, data.portfolio].filter(Boolean) as string[];
-  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1, 6));
+  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1).filter(l => !/^[^:]+:\s*$/.test(l.trim())).slice(0, 5));
 
   // Split sections: short/skill sections go in sidebar, long ones in main
   const sidebarSections = sections.filter((s) => s.isSkills || /language|certif|interest|hobby|award/i.test(s.heading));
@@ -436,7 +439,7 @@ function CorporateTemplate({ data }: { data: ResumePdfData }) {
   const { contact, sections } = parseResume(data.enhancedText);
   const displayName = data.name || contact[0] || "Your Name";
   const contactDisplay = [data.email, data.phone, data.location, data.linkedin].filter(Boolean) as string[];
-  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1, 5));
+  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1).filter(l => !/^[^:]+:\s*$/.test(l.trim())).slice(0, 4));
 
   const s = StyleSheet.create({
     page: { paddingTop: 44, paddingBottom: 40, paddingHorizontal: 50, fontSize: 10, fontFamily: "Helvetica", color: DARK, lineHeight: 1.45, backgroundColor: "#fffbfb" },
@@ -505,7 +508,7 @@ function ImpactTemplate({ data }: { data: ResumePdfData }) {
   const { contact, sections } = parseResume(data.enhancedText);
   const displayName = data.name || contact[0] || "Your Name";
   const contactDisplay = [data.email, data.phone, data.location, data.linkedin].filter(Boolean) as string[];
-  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1, 5));
+  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1).filter(l => !/^[^:]+:\s*$/.test(l.trim())).slice(0, 4));
 
   const s = StyleSheet.create({
     page: { padding: 0, fontSize: 10, fontFamily: "Helvetica", color: TEXT, lineHeight: 1.45, backgroundColor: "#ffffff" },
@@ -577,7 +580,7 @@ function ClassicTemplate({ data }: { data: ResumePdfData }) {
   const { contact, sections } = parseResume(data.enhancedText);
   const displayName = (data.name || contact[0] || "YOUR NAME").toUpperCase();
   const contactDisplay = [data.location, data.email, data.phone, data.linkedin].filter(Boolean) as string[];
-  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1, 5));
+  if (!contactDisplay.length) contactDisplay.push(...contact.slice(1).filter(l => !/^[^:]+:\s*$/.test(l.trim())).slice(0, 4));
 
   const s = StyleSheet.create({
     page: { paddingTop: 24, paddingBottom: 40, paddingHorizontal: 52, fontSize: 10, fontFamily: "Helvetica", color: BLACK, lineHeight: 1.45, backgroundColor: "#ffffff" },

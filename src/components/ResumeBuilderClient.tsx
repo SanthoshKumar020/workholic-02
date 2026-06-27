@@ -286,6 +286,10 @@ export function ResumeBuilderClient({
   // ── Submit ─────────────────────────────────────────────────────────────────
   async function handleSubmit() {
     setError(null);
+    if (mode === "upload" && !name.trim()) {
+      setError("Please enter your full name.");
+      return;
+    }
     const resumeText = buildResumeText();
     if (resumeText.length < 30) {
       setError("Please add more details before enhancing.");
@@ -437,10 +441,12 @@ export function ResumeBuilderClient({
             </div>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input label="Full name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Santhosh Kumar" />
-            <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
+          <Input
+            label="Full name *"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. Santhosh Kumar"
+          />
           <Combobox
             label="Target role (optional)"
             placeholder="Search role, e.g. Software Engineer"
@@ -460,7 +466,7 @@ export function ResumeBuilderClient({
           )}
 
           {error && <Alert tone="error">{error}</Alert>}
-          <Button size="lg" onClick={handleSubmit} loading={loading} disabled={uploading || !uploadedText}>
+          <Button size="lg" onClick={handleSubmit} loading={loading} disabled={uploading || !uploadedText || !name.trim()}>
             Enhance with AI
           </Button>
         </div>

@@ -161,10 +161,12 @@ export function TemplatePicker({
   isPro,
   baseData,
   onTemplateChange,
+  fileBaseName,
 }: {
   isPro: boolean;
   baseData: Omit<ResumePdfData, "templateId" | "withPhoto" | "photoDataUrl">;
   onTemplateChange?: (templateId: string) => void;
+  fileBaseName?: string;
 }) {
   const [withPhoto, setWithPhoto] = useState(false);
   const [photoDataUrl, setPhotoDataUrl] = useState<string | undefined>();
@@ -256,7 +258,7 @@ export function TemplatePicker({
                   <div className="mt-auto pt-1">
                     <ResumeDownloadButton
                       data={pdfData}
-                      fileName={`${baseData.name || "resume"}-${t.name.toLowerCase().replace(/\s+/g, "-")}.pdf`}
+                      fileName={`${fileBaseName || baseData.name || "resume"}-${t.name.toLowerCase().replace(/\s+/g, "-")}.pdf`}
                       label="Download PDF"
                       fullWidth
                       onClick={() => onTemplateChange?.(t.id)}

@@ -352,7 +352,12 @@ export function ResumeBuilderClient({
           <div className="mt-5">
             <TemplatePicker
               isPro={isPro}
-              baseData={{ name: name || "Your Name", targetRole, email, phone, location, linkedin, portfolio, enhancedText: result.enhancedResume || "", atsScore: result.atsScore ?? null }}
+              fileBaseName={mode === "upload" ? (name || undefined) : undefined}
+              baseData={
+                mode === "upload"
+                  ? { name: "", targetRole, enhancedText: result.enhancedResume || "", atsScore: result.atsScore ?? null }
+                  : { name: name || "Your Name", targetRole, email, phone, location, linkedin, portfolio, enhancedText: result.enhancedResume || "", atsScore: result.atsScore ?? null }
+              }
               onTemplateChange={(templateId) => {
                 if (result.resume?.id) {
                   fetch("/api/resumes", {

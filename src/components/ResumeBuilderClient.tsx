@@ -599,7 +599,7 @@ export function ResumeBuilderClient({
           ) : (
             <>
               {error && <Alert tone="error">{error}</Alert>}
-              <Button size="lg" onClick={handleSubmit} loading={loading} disabled={uploading || !uploadedText || !name.trim() || (!isPro && resumesUsed >= freeLimit)}>
+              <Button size="lg" onClick={handleSubmit} loading={loading} disabled={uploading || !uploadedText || !name.trim() || (!isPro && resumeUsedCount >= freeLimit)}>
                 Enhance with AI
               </Button>
             </>

@@ -174,7 +174,7 @@ export async function GET(request: Request) {
       const jobs = await fetchJobsViaGroq(
         alert.role ?? "",
         alert.keywords ?? "",
-        alert.location ?? "",
+        "", // job_alerts has no location column — Groq defaults to India
         groqKey,
       );
       if (jobs.length === 0) continue;

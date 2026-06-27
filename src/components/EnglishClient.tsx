@@ -83,6 +83,7 @@ export function EnglishClient({
       });
       const data = await res.json();
       if (res.status === 403 && data.error === "free_limit_reached") { setLimitReached(true); return; }
+      if (!res.ok) { setLesson(null); return; }
       setLesson(data.lesson || null);
       setUsedCount(c => c + 1);
     } catch {
@@ -102,6 +103,7 @@ export function EnglishClient({
       });
       const data = await res.json();
       if (res.status === 403 && data.error === "free_limit_reached") { setLimitReached(true); return; }
+      if (!res.ok) { setQuiz(null); return; }
       const q: EnglishQuizQuestion[] = Array.isArray(data.quiz?.questions) ? data.quiz.questions : [];
       setQuiz({ questions: q, answers: {}, submitted: false });
       setUsedCount(c => c + 1);
@@ -126,6 +128,12 @@ export function EnglishClient({
         body: JSON.stringify({ mode: "chat", level, userMessage: msg, history: messages.slice(-10) }),
       });
       const data = await res.json();
+      if (res.status === 403 && data.error === "free_limit_reached") {
+        setLimitReached(true);
+        setMessages([...newMessages, { role: "assistant", content: "You've reached your free limit. Upgrade to Pro to keep chatting." }]);
+        return;
+      }
+      if (res.ok) setUsedCount(c => c + 1);
       setMessages([...newMessages, { role: "assistant", content: data.reply || "..." }]);
     } catch {
       setMessages([...newMessages, { role: "assistant", content: "Sorry, I couldn't respond. Please try again." }]);

@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   description:
     "AI-powered career platform. Resume enhancement, ATS scoring, mock interviews, job matching, learning roadmaps, and more. Free to start.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   icons: {
     icon: "/logo.png",
     shortcut: "/logo.png",

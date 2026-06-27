@@ -42,11 +42,24 @@ export async function POST(request: Request) {
     result = await callGroq([
       {
         role: "system",
-        content: `You are an expert resume writer and ATS optimization specialist. Rewrite and enhance the provided resume to maximize ATS score and hiring manager impact. Use strong action verbs, quantified achievements, and industry-relevant keywords. Do NOT invent facts — only rephrase and restructure what's given. Return JSON with keys: enhancedResume (string), improvements (string array, 3-5 points), atsScore (integer 0-100).`,
+        content: [
+          "You are an expert resume writer and ATS optimization specialist.",
+          "Rewrite and enhance the resume the user provides. Rules:",
+          "- Use strong action verbs and quantified achievements.",
+          "- Tailor content toward the target role if provided.",
+          "- Do NOT invent facts; only rephrase and restructure what is given.",
+          "- Preserve all section headings, contact details, and structure from the original.",
+          "",
+          "You MUST respond with ONLY a valid JSON object — no markdown, no explanation, no code fences.",
+          "JSON schema: { \"enhancedResume\": string, \"improvements\": string[], \"atsScore\": number }",
+          "- enhancedResume: the full rewritten resume as plain text",
+          "- improvements: 3 to 5 short bullet points describing what was improved",
+          "- atsScore: integer 0–100 estimating ATS compatibility",
+        ].join("\n"),
       },
       {
         role: "user",
-        content: `Name: ${body.name || "Not specified"}\nTarget Role: ${body.targetRole || "Not specified"}\n\nResume:\n${resumeText}`,
+        content: `Target Role: ${body.targetRole || "Not specified"}\n\nResume:\n${resumeText}`,
       },
     ]);
   } catch (err) {

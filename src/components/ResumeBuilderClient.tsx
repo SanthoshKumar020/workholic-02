@@ -11,7 +11,7 @@ import { TemplatePicker } from "@/components/TemplatePicker";
 import {
   Plus, Trash2, Upload, FileText, X, Loader2,
   ChevronDown, ChevronUp, User, Briefcase, GraduationCap,
-  Code2, FolderGit2, Award, Globe,
+  Code2, FolderGit2, Award, Globe, Trophy, Heart, BookOpen, Users, Star,
 } from "lucide-react";
 import type { EnhanceResult } from "@/lib/types";
 
@@ -80,6 +80,20 @@ interface Certification {
 interface Language {
   id: string; language: string; proficiency: string;
 }
+interface Volunteer {
+  id: string; organization: string; role: string; startDate: string; endDate: string; current: boolean; description: string;
+}
+interface AwardEntry {
+  id: string; title: string; issuer: string; year: string; description: string;
+}
+interface Publication {
+  id: string; title: string; publisher: string; year: string; url: string;
+}
+interface Reference {
+  id: string; name: string; title: string; company: string; contact: string;
+}
+
+type OptionalSectionKey = "volunteer" | "awards" | "interests" | "publications" | "references";
 
 function uid() { return Math.random().toString(36).slice(2); }
 
@@ -98,6 +112,26 @@ function emptyCert(): Certification {
 function emptyLang(): Language {
   return { id: uid(), language: "", proficiency: "Intermediate" };
 }
+function emptyVol(): Volunteer {
+  return { id: uid(), organization: "", role: "", startDate: "", endDate: "", current: false, description: "" };
+}
+function emptyAward(): AwardEntry {
+  return { id: uid(), title: "", issuer: "", year: "", description: "" };
+}
+function emptyPub(): Publication {
+  return { id: uid(), title: "", publisher: "", year: "", url: "" };
+}
+function emptyRef(): Reference {
+  return { id: uid(), name: "", title: "", company: "", contact: "" };
+}
+
+const OPTIONAL_SECTIONS: { key: OptionalSectionKey; label: string; icon: React.ReactNode }[] = [
+  { key: "volunteer",     label: "Volunteer Experience",   icon: <Heart className="h-4 w-4" /> },
+  { key: "awards",        label: "Awards & Achievements",  icon: <Trophy className="h-4 w-4" /> },
+  { key: "interests",     label: "Interests & Hobbies",    icon: <Star className="h-4 w-4" /> },
+  { key: "publications",  label: "Publications",           icon: <BookOpen className="h-4 w-4" /> },
+  { key: "references",    label: "References",             icon: <Users className="h-4 w-4" /> },
+];
 
 interface EnhanceResponse extends EnhanceResult {
   resume?: { id: string };
@@ -105,7 +139,7 @@ interface EnhanceResponse extends EnhanceResult {
 }
 
 type Mode = "form" | "upload";
-type Section = "contact" | "experience" | "education" | "skills" | "projects" | "certifications" | "languages";
+type Section = "contact" | "experience" | "education" | "skills" | "projects" | "certifications" | "languages" | OptionalSectionKey;
 
 // ── Section header ────────────────────────────────────────────────────────────
 function SectionHeader({
@@ -159,10 +193,31 @@ export function ResumeBuilderClient({
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [languages, setLanguages] = useState<Language[]>([{ id: uid(), language: "English", proficiency: "Native/Fluent" }]);
 
+  // Optional sections
+  const [activeOptional, setActiveOptional] = useState<Set<OptionalSectionKey>>(new Set());
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
+  const [awardEntries, setAwardEntries] = useState<AwardEntry[]>([]);
+  const [interests, setInterests] = useState("");
+  const [publications, setPublications] = useState<Publication[]>([]);
+  const [references, setReferences] = useState<Reference[]>([]);
+
+  function addOptionalSection(key: OptionalSectionKey) {
+    setActiveOptional((prev) => new Set(Array.from(prev).concat(key)));
+    setOpenSections((o) => ({ ...o, [key]: true }));
+    if (key === "volunteer" && volunteers.length === 0) setVolunteers([emptyVol()]);
+    if (key === "awards" && awardEntries.length === 0) setAwardEntries([emptyAward()]);
+    if (key === "publications" && publications.length === 0) setPublications([emptyPub()]);
+    if (key === "references" && references.length === 0) setReferences([emptyRef()]);
+  }
+  function removeOptionalSection(key: OptionalSectionKey) {
+    setActiveOptional((prev) => { const n = new Set(Array.from(prev)); n.delete(key); return n; });
+  }
+
   // Open/close sections
   const [openSections, setOpenSections] = useState<Record<Section, boolean>>({
     contact: true, experience: true, education: true,
     skills: true, projects: false, certifications: false, languages: false,
+    volunteer: false, awards: false, interests: false, publications: false, references: false,
   });
   function toggleSection(s: Section) {
     setOpenSections((prev) => ({ ...prev, [s]: !prev[s] }));
@@ -278,6 +333,53 @@ export function ResumeBuilderClient({
     if (validLangs.length) {
       lines.push("LANGUAGES");
       lines.push(validLangs.map((l) => `${l.language} (${l.proficiency})`).join(", "));
+      lines.push("");
+    }
+
+    // Optional sections
+    const validVols = volunteers.filter((v) => v.organization || v.role);
+    if (activeOptional.has("volunteer") && validVols.length) {
+      lines.push("VOLUNTEER EXPERIENCE");
+      validVols.forEach((v) => {
+        const period = v.current ? `${v.startDate} – Present` : `${v.startDate}${v.endDate ? ` – ${v.endDate}` : ""}`;
+        lines.push(`${v.role}${v.organization ? ` at ${v.organization}` : ""}${period ? `  (${period})` : ""}`);
+        if (v.description) lines.push(v.description);
+        lines.push("");
+      });
+    }
+
+    const validAwards = awardEntries.filter((a) => a.title);
+    if (activeOptional.has("awards") && validAwards.length) {
+      lines.push("AWARDS & ACHIEVEMENTS");
+      validAwards.forEach((a) => {
+        lines.push(`${a.title}${a.issuer ? ` — ${a.issuer}` : ""}${a.year ? ` (${a.year})` : ""}`);
+        if (a.description) lines.push(a.description);
+        lines.push("");
+      });
+    }
+
+    if (activeOptional.has("interests") && interests.trim()) {
+      lines.push("INTERESTS & HOBBIES");
+      lines.push(interests.trim());
+      lines.push("");
+    }
+
+    const validPubs = publications.filter((p) => p.title);
+    if (activeOptional.has("publications") && validPubs.length) {
+      lines.push("PUBLICATIONS");
+      validPubs.forEach((p) => {
+        lines.push(`${p.title}${p.publisher ? ` — ${p.publisher}` : ""}${p.year ? ` (${p.year})` : ""}${p.url ? `  [${p.url}]` : ""}`);
+        lines.push("");
+      });
+    }
+
+    const validRefs = references.filter((r) => r.name);
+    if (activeOptional.has("references") && validRefs.length) {
+      lines.push("REFERENCES");
+      validRefs.forEach((r) => {
+        lines.push(`${r.name}${r.title ? `, ${r.title}` : ""}${r.company ? ` — ${r.company}` : ""}${r.contact ? `  |  ${r.contact}` : ""}`);
+      });
+      lines.push("");
     }
 
     return lines.join("\n").trim();
@@ -796,6 +898,209 @@ export function ResumeBuilderClient({
               </div>
             )}
           </div>
+
+          {/* ── Optional sections ── */}
+          {activeOptional.has("volunteer") && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <button type="button" onClick={() => toggleSection("volunteer")} className="flex items-center gap-2 text-left">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Heart className="h-4 w-4" /></span>
+                  <span className="font-semibold text-slate-900">Volunteer Experience</span>
+                  {openSections.volunteer ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                </button>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => { setVolunteers((p) => [...p, emptyVol()]); setOpenSections((o) => ({ ...o, volunteer: true })); }}
+                    className="flex items-center gap-1 rounded-lg border border-dashed border-brand-300 px-3 py-1 text-xs font-medium text-brand-600 hover:bg-brand-50">
+                    <Plus className="h-3 w-3" /> Add
+                  </button>
+                  <button type="button" onClick={() => removeOptionalSection("volunteer")} className="text-slate-300 hover:text-red-500" title="Remove section">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+              {openSections.volunteer && (
+                <div className="space-y-4 pt-1">
+                  {volunteers.map((vol, idx) => (
+                    <div key={vol.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Entry {idx + 1}</span>
+                        {volunteers.length > 1 && (
+                          <button type="button" onClick={() => setVolunteers((p) => p.filter((x) => x.id !== vol.id))} className="text-slate-300 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        )}
+                      </div>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <Input label="Role / Position" value={vol.role} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, role: e.target.value } : x))} placeholder="e.g. Event Coordinator" />
+                        <Input label="Organization" value={vol.organization} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, organization: e.target.value } : x))} placeholder="e.g. Red Cross" />
+                        <Input label="Start date" value={vol.startDate} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, startDate: e.target.value } : x))} placeholder="Jan 2022" />
+                        <Input label="End date" value={vol.endDate} disabled={vol.current} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, endDate: e.target.value } : x))} placeholder="Dec 2023" />
+                      </div>
+                      <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                        <input type="checkbox" checked={vol.current} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, current: e.target.checked, endDate: "" } : x))} className="h-4 w-4 rounded border-slate-300 accent-brand-600" />
+                        Currently volunteering here
+                      </label>
+                      <Textarea label="Description" rows={3} placeholder="What did you do? What impact did you make?" value={vol.description} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, description: e.target.value } : x))} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeOptional.has("awards") && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <button type="button" onClick={() => toggleSection("awards")} className="flex items-center gap-2 text-left">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Trophy className="h-4 w-4" /></span>
+                  <span className="font-semibold text-slate-900">Awards & Achievements</span>
+                  {openSections.awards ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                </button>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => { setAwardEntries((p) => [...p, emptyAward()]); setOpenSections((o) => ({ ...o, awards: true })); }}
+                    className="flex items-center gap-1 rounded-lg border border-dashed border-brand-300 px-3 py-1 text-xs font-medium text-brand-600 hover:bg-brand-50">
+                    <Plus className="h-3 w-3" /> Add
+                  </button>
+                  <button type="button" onClick={() => removeOptionalSection("awards")} className="text-slate-300 hover:text-red-500" title="Remove section"><X className="h-4 w-4" /></button>
+                </div>
+              </div>
+              {openSections.awards && (
+                <div className="space-y-3 pt-1">
+                  {awardEntries.map((aw, idx) => (
+                    <div key={aw.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Award {idx + 1}</span>
+                        {awardEntries.length > 1 && (
+                          <button type="button" onClick={() => setAwardEntries((p) => p.filter((x) => x.id !== aw.id))} className="text-slate-300 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        )}
+                      </div>
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        <Input label="Award / Achievement *" value={aw.title} onChange={(e) => setAwardEntries((p) => p.map((x) => x.id === aw.id ? { ...x, title: e.target.value } : x))} placeholder="e.g. Best Employee of the Year" />
+                        <Input label="Issuing organization" value={aw.issuer} onChange={(e) => setAwardEntries((p) => p.map((x) => x.id === aw.id ? { ...x, issuer: e.target.value } : x))} placeholder="e.g. Google" />
+                        <Input label="Year" value={aw.year} onChange={(e) => setAwardEntries((p) => p.map((x) => x.id === aw.id ? { ...x, year: e.target.value } : x))} placeholder="2024" />
+                      </div>
+                      <Textarea label="Description (optional)" rows={2} placeholder="Brief description of the achievement…" value={aw.description} onChange={(e) => setAwardEntries((p) => p.map((x) => x.id === aw.id ? { ...x, description: e.target.value } : x))} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeOptional.has("interests") && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <button type="button" onClick={() => toggleSection("interests")} className="flex items-center gap-2 text-left">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Star className="h-4 w-4" /></span>
+                  <span className="font-semibold text-slate-900">Interests & Hobbies</span>
+                  {openSections.interests ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                </button>
+                <button type="button" onClick={() => removeOptionalSection("interests")} className="text-slate-300 hover:text-red-500" title="Remove section"><X className="h-4 w-4" /></button>
+              </div>
+              {openSections.interests && (
+                <div className="pt-1">
+                  <Textarea rows={2} placeholder="e.g. Photography, Open-source contribution, Chess, Hiking, Reading" value={interests} onChange={(e) => setInterests(e.target.value)} />
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeOptional.has("publications") && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <button type="button" onClick={() => toggleSection("publications")} className="flex items-center gap-2 text-left">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><BookOpen className="h-4 w-4" /></span>
+                  <span className="font-semibold text-slate-900">Publications</span>
+                  {openSections.publications ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                </button>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => { setPublications((p) => [...p, emptyPub()]); setOpenSections((o) => ({ ...o, publications: true })); }}
+                    className="flex items-center gap-1 rounded-lg border border-dashed border-brand-300 px-3 py-1 text-xs font-medium text-brand-600 hover:bg-brand-50">
+                    <Plus className="h-3 w-3" /> Add
+                  </button>
+                  <button type="button" onClick={() => removeOptionalSection("publications")} className="text-slate-300 hover:text-red-500" title="Remove section"><X className="h-4 w-4" /></button>
+                </div>
+              </div>
+              {openSections.publications && (
+                <div className="space-y-3 pt-1">
+                  {publications.map((pub, idx) => (
+                    <div key={pub.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Publication {idx + 1}</span>
+                        {publications.length > 1 && (
+                          <button type="button" onClick={() => setPublications((p) => p.filter((x) => x.id !== pub.id))} className="text-slate-300 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        )}
+                      </div>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <Input label="Title *" value={pub.title} onChange={(e) => setPublications((p) => p.map((x) => x.id === pub.id ? { ...x, title: e.target.value } : x))} placeholder="e.g. Deep Learning for NLP" />
+                        <Input label="Publisher / Journal" value={pub.publisher} onChange={(e) => setPublications((p) => p.map((x) => x.id === pub.id ? { ...x, publisher: e.target.value } : x))} placeholder="e.g. IEEE Transactions" />
+                        <Input label="Year" value={pub.year} onChange={(e) => setPublications((p) => p.map((x) => x.id === pub.id ? { ...x, year: e.target.value } : x))} placeholder="2024" />
+                        <Input label="URL / DOI" value={pub.url} onChange={(e) => setPublications((p) => p.map((x) => x.id === pub.id ? { ...x, url: e.target.value } : x))} placeholder="https://doi.org/..." />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeOptional.has("references") && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <button type="button" onClick={() => toggleSection("references")} className="flex items-center gap-2 text-left">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Users className="h-4 w-4" /></span>
+                  <span className="font-semibold text-slate-900">References</span>
+                  {openSections.references ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                </button>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => { setReferences((p) => [...p, emptyRef()]); setOpenSections((o) => ({ ...o, references: true })); }}
+                    className="flex items-center gap-1 rounded-lg border border-dashed border-brand-300 px-3 py-1 text-xs font-medium text-brand-600 hover:bg-brand-50">
+                    <Plus className="h-3 w-3" /> Add
+                  </button>
+                  <button type="button" onClick={() => removeOptionalSection("references")} className="text-slate-300 hover:text-red-500" title="Remove section"><X className="h-4 w-4" /></button>
+                </div>
+              </div>
+              {openSections.references && (
+                <div className="space-y-3 pt-1">
+                  {references.map((ref, idx) => (
+                    <div key={ref.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Reference {idx + 1}</span>
+                        {references.length > 1 && (
+                          <button type="button" onClick={() => setReferences((p) => p.filter((x) => x.id !== ref.id))} className="text-slate-300 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
+                        )}
+                      </div>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <Input label="Name *" value={ref.name} onChange={(e) => setReferences((p) => p.map((x) => x.id === ref.id ? { ...x, name: e.target.value } : x))} placeholder="e.g. John Smith" />
+                        <Input label="Job title" value={ref.title} onChange={(e) => setReferences((p) => p.map((x) => x.id === ref.id ? { ...x, title: e.target.value } : x))} placeholder="e.g. Senior Manager" />
+                        <Input label="Company" value={ref.company} onChange={(e) => setReferences((p) => p.map((x) => x.id === ref.id ? { ...x, company: e.target.value } : x))} placeholder="e.g. Infosys" />
+                        <Input label="Email / Phone" value={ref.contact} onChange={(e) => setReferences((p) => p.map((x) => x.id === ref.id ? { ...x, contact: e.target.value } : x))} placeholder="john@company.com" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Add optional section picker */}
+          {OPTIONAL_SECTIONS.some((s) => !activeOptional.has(s.key)) && (
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-5">
+              <p className="mb-3 text-sm font-medium text-slate-500">Add more sections</p>
+              <div className="flex flex-wrap gap-2">
+                {OPTIONAL_SECTIONS.filter((s) => !activeOptional.has(s.key)).map((s) => (
+                  <button
+                    key={s.key}
+                    type="button"
+                    onClick={() => addOptionalSection(s.key)}
+                    className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-brand-300 hover:text-brand-600 transition"
+                  >
+                    {s.icon}
+                    <Plus className="h-3 w-3" />
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {error && <Alert tone="error">{error}</Alert>}
 

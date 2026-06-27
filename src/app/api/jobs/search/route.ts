@@ -14,8 +14,48 @@ interface JobListing {
   description: string;
   requirements: string[];
   postedAt: string;
-  applyUrl: string;
   matchScore: number;
+}
+
+export interface ApplyLink {
+  platform: string;
+  url: string;
+}
+
+export interface JobResult extends JobListing {
+  applyUrl: string;        // primary (LinkedIn)
+  applyLinks: ApplyLink[]; // all platforms
+}
+
+/** Build direct job-board search links specific to company + role + location. */
+function buildApplyLinks(title: string, company: string, location: string): ApplyLink[] {
+  const q = encodeURIComponent(`${title} ${company}`);
+  const loc = encodeURIComponent(location);
+  const isIndia =
+    /india/i.test(location) ||
+    /bangalore|mumbai|delhi|hyderabad|chennai|pune|noida|gurgaon|kolkata|kochi|ahmedabad|jaipur|indore/i.test(location);
+
+  const links: ApplyLink[] = [
+    {
+      platform: "LinkedIn",
+      url: `https://www.linkedin.com/jobs/search/?keywords=${q}&location=${loc}&f_TPR=r604800&sortBy=DD`,
+    },
+    {
+      platform: "Indeed",
+      url: `https://www.indeed.com/jobs?q=${q}&l=${loc}&sort=date`,
+    },
+  ];
+
+  if (isIndia) {
+    const city = location.split(",")[0].trim().toLowerCase().replace(/\s+/g, "-");
+    const roleSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
+    links.splice(1, 0, {
+      platform: "Naukri",
+      url: `https://www.naukri.com/${roleSlug}-jobs-in-${city}?src=jobsearchDesk&nignbevent_src=jobsearchDeskGNB`,
+    });
+  }
+
+  return links;
 }
 
 export async function POST(request: Request) {
@@ -41,6 +81,7 @@ export async function POST(request: Request) {
     workMode?: string;
     experience?: string;
     skills?: string;
+    resumeText?: string;
   };
 
   const role = (body.role || "").trim();
@@ -48,6 +89,7 @@ export async function POST(request: Request) {
   const workMode = (body.workMode || "Any").trim();
   const experience = (body.experience || "Any").trim();
   const skills = (body.skills || "").trim();
+  const resumeText = (body.resumeText || "").trim().slice(0, 3000); // cap to keep prompt size sane
 
   if (!role) {
     return NextResponse.json({ error: "Role is required." }, { status: 400 });
@@ -61,25 +103,30 @@ export async function POST(request: Request) {
   const locationStr = location || "India";
   const workModeStr = workMode === "Any" ? "Remote, Hybrid, or On-site" : workMode;
   const expStr = experience === "Any" ? "any experience level" : experience;
-  const skillsStr = skills ? `Key skills from resume: ${skills}.` : "";
 
-  const prompt = `You are a job search engine. Generate exactly 12 realistic job listings that EXACTLY match this criteria:
+  const resumeSection = resumeText
+    ? `\nCandidate resume excerpt (use this to compute accurate match scores):\n"""\n${resumeText}\n"""\nScore each job 30–99 based on how well it matches the candidate's actual skills, experience, and background in the resume.`
+    : `\nNo resume provided — score each job 70–90 based on the role and skills criteria only.`;
+
+  const skillsSection = skills ? `Key skills: ${skills}.` : "";
+
+  const prompt = `You are a job search engine. Generate exactly 15 realistic job listings matching this search:
 - Role: ${role}
 - Location: ${locationStr}
 - Work Mode: ${workModeStr}
 - Experience: ${expStr}
-${skillsStr}
+- ${skillsSection}
+${resumeSection}
 
-Requirements:
-- Each job must genuinely match the role and location
+Rules:
 - Use real, well-known companies operating in that region
-- Salary in appropriate local currency (₹ LPA for India, $ for US/global, £ for UK, etc.)
-- applyUrl must be a real LinkedIn jobs search URL: https://www.linkedin.com/jobs/search/?keywords=ENCODED_ROLE&location=ENCODED_LOCATION
-- matchScore is 75-99 based on how well the job matches the criteria
-- postedAt should be "X days/hours ago" style
-- requirements: 4-5 specific technical requirements matching the role
+- Salary in local currency (₹ LPA for India, $ for US, £ for UK)
+- postedAt: "X days/hours ago"
+- requirements: 4–6 specific technical skills required for the job
+- matchScore: integer, be realistic — vary scores widely based on fit
+- Do NOT include an applyUrl field
 
-Respond with ONLY valid JSON in this exact format:
+Respond with ONLY valid JSON:
 {
   "jobs": [
     {
@@ -88,10 +135,9 @@ Respond with ONLY valid JSON in this exact format:
       "location": "string",
       "workMode": "Remote|Hybrid|On-site",
       "salary": "string",
-      "description": "2-3 sentence job description",
+      "description": "2–3 sentence job description",
       "requirements": ["string", "string", "string", "string"],
       "postedAt": "string",
-      "applyUrl": "string",
       "matchScore": number
     }
   ]
@@ -107,26 +153,33 @@ Respond with ONLY valid JSON in this exact format:
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
-        max_tokens: 4000,
+        temperature: 0.6,
+        max_tokens: 4500,
       }),
       signal: AbortSignal.timeout(45000),
     });
 
-    if (!res.ok) {
-      throw new Error(`Groq error ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`Groq error ${res.status}`);
 
     const groqData = await res.json();
-    const text = groqData.choices?.[0]?.message?.content ?? "";
+    const text: string = groqData.choices?.[0]?.message?.content ?? "";
 
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("No JSON in response");
 
     const parsed = JSON.parse(jsonMatch[0]) as { jobs: JobListing[] };
-    const jobs = (parsed.jobs ?? []).sort((a, b) => b.matchScore - a.matchScore);
 
-    return NextResponse.json({ jobs });
+    const allJobs: JobResult[] = (parsed.jobs ?? []).map((j) => {
+      const links = buildApplyLinks(j.title, j.company, j.location);
+      return { ...j, applyUrl: links[0].url, applyLinks: links };
+    });
+
+    // Only show 50%+ match jobs, sorted best first
+    const filtered = allJobs
+      .filter((j) => j.matchScore >= 50)
+      .sort((a, b) => b.matchScore - a.matchScore);
+
+    return NextResponse.json({ jobs: filtered, total: allJobs.length });
   } catch (err) {
     console.error("Job search error:", err);
     return NextResponse.json({ error: "Could not fetch jobs right now. Please try again." }, { status: 502 });

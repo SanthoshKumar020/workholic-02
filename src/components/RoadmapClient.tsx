@@ -81,7 +81,8 @@ export function RoadmapClient({
   const [warning, setWarning] = useState<string | null>(null);
   const [roadmap, setRoadmap] = useState<RoadmapRow | null>(null);
   const [limitReached, setLimitReached] = useState(false);
-  const exhausted = !isPro && freeUsed >= freeLimit;
+  const [usedCount, setUsedCount] = useState(freeUsed);
+  const exhausted = !isPro && usedCount >= freeLimit;
 
   async function generate(overrideTopic?: string) {
     const trimmed = (overrideTopic ?? topic).trim();
@@ -107,6 +108,7 @@ export function RoadmapClient({
       if (!res.ok || !data.roadmap) throw new Error(data.error ?? "Roadmap generation failed.");
       if (data.warning) setWarning(data.warning);
       setRoadmap(data.roadmap);
+      setUsedCount(c => c + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not generate roadmap. Please try again.");
     } finally {
@@ -143,7 +145,7 @@ export function RoadmapClient({
   return (
     <div className="space-y-6">
       {!isPro && (
-        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="roadmap" />
+        <PlanUsageBadge used={usedCount} limit={freeLimit} feature="roadmap" />
       )}
       {limitReached && <UpgradeWall limit={freeLimit} feature="roadmap" />}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">

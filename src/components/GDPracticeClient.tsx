@@ -66,7 +66,8 @@ export function GDPracticeClient({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [limitReached, setLimitReached] = useState(false);
-  const exhausted = !isPro && freeUsed >= freeLimit;
+  const [usedCount, setUsedCount] = useState(freeUsed);
+  const exhausted = !isPro && usedCount >= freeLimit;
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -112,6 +113,7 @@ export function GDPracticeClient({
       if (res.status === 403 && d.error === "free_limit_reached") { setLimitReached(true); return; }
       if (!res.ok) throw new Error(d.error);
       setTopic(d);
+      setUsedCount(c => c + 1);
       setTranscript("");
       setInterimTranscript("");
       setElapsed(0);
@@ -220,7 +222,7 @@ export function GDPracticeClient({
   if (phase === "setup") return (
     <div className="space-y-5">
       {!isPro && (
-        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="GD practice" />
+        <PlanUsageBadge used={usedCount} limit={freeLimit} feature="GD practice" />
       )}
       {limitReached && <UpgradeWall limit={freeLimit} feature="GD practice" />}
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

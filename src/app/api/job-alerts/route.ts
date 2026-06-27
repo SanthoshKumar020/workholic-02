@@ -46,9 +46,13 @@ export async function POST(request: Request) {
     role?: string;
     frequency?: "daily" | "weekly";
     enabled?: boolean;
+    send_time?: string; // "HH:MM" IST
   };
 
-  // Upsert the latest preference row for this user.
+  // Validate send_time format (HH:MM)
+  const rawTime = (body.send_time ?? "09:00").trim();
+  const send_time = /^\d{2}:\d{2}$/.test(rawTime) ? rawTime : "09:00";
+
   const { data: existing } = await supabase
     .from("job_alerts")
     .select("id")
@@ -63,6 +67,7 @@ export async function POST(request: Request) {
     role: body.role ?? null,
     frequency: body.frequency === "weekly" ? "weekly" : "daily",
     enabled: !!body.enabled,
+    send_time,
   };
 
   const query = existing
@@ -72,14 +77,14 @@ export async function POST(request: Request) {
   const { data, error } = await query.select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Confirm the preference change by email (best-effort).
+  // Confirm the preference by email (best-effort)
   if (user.email && payload.enabled) {
     await sendEmail({
       to: user.email,
       subject: "Your HYRISE job alerts are on",
-      html: `<p>You're set to receive <strong>${payload.frequency}</strong> job alerts${
+      html: `<p>You'll receive <strong>daily</strong> job alerts${
         payload.role ? ` for <strong>${payload.role}</strong>` : ""
-      }. You can change this anytime from the Jobs page.</p>`,
+      } at <strong>${send_time} IST</strong>. You can change this anytime from the Jobs page.</p>`,
     });
   }
 

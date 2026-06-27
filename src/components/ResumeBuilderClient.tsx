@@ -175,6 +175,7 @@ export function ResumeBuilderClient({
   resumesUsed?: number; freeLimit?: number;
 }) {
   const [mode, setMode] = useState<Mode>("form");
+  const [resumeUsedCount, setResumeUsedCount] = useState(resumesUsed);
 
   // Contact
   const [name, setName] = useState(defaultName);
@@ -412,6 +413,7 @@ export function ResumeBuilderClient({
       }
       if (!res.ok) throw new Error(data?.error || "Enhancement failed.");
       setResult(data as EnhanceResponse);
+      setResumeUsedCount(c => c + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -512,11 +514,11 @@ export function ResumeBuilderClient({
 
       {/* Usage badge for free users */}
       {!isPro && (
-        <div className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${resumesUsed >= freeLimit ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-800"}`}>
+        <div className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${resumeUsedCount >= freeLimit ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-800"}`}>
           <span>
-            {resumesUsed >= freeLimit
+            {resumeUsedCount >= freeLimit
               ? "You've used all 5 free enhancements."
-              : `Free plan: ${resumesUsed} / ${freeLimit} resume enhancements used.`}
+              : `Free plan: ${resumeUsedCount} / ${freeLimit} resume enhancements used.`}
           </span>
           <a href="/billing" className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition">
             Upgrade to Pro
@@ -1145,7 +1147,7 @@ export function ResumeBuilderClient({
             <>
               {error && <Alert tone="error">{error}</Alert>}
               <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5">
-                <Button size="lg" onClick={handleSubmit} loading={loading} disabled={!isPro && resumesUsed >= freeLimit}>
+                <Button size="lg" onClick={handleSubmit} loading={loading} disabled={!isPro && resumeUsedCount >= freeLimit}>
                   {loading ? "Enhancing with AI…" : "Enhance with AI"}
                 </Button>
                 {loading && <span className="text-sm text-slate-500">Analysing and rewriting your resume — takes ~20 seconds.</span>}

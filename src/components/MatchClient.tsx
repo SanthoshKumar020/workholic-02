@@ -29,8 +29,9 @@ export function MatchClient({
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
+  const [usedCount, setUsedCount] = useState(freeUsed);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const exhausted = !isPro && freeUsed >= freeLimit;
+  const exhausted = !isPro && usedCount >= freeLimit;
 
   async function parseFile(file: File) {
     if (!["pdf", "docx", "txt"].includes(file.name.split(".").pop()?.toLowerCase() ?? "")) {
@@ -86,6 +87,7 @@ export function MatchClient({
       }
       if (!res.ok) throw new Error(data.error || "Analysis failed.");
       setResult(data);
+      setUsedCount(c => c + 1);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Analysis failed.");
     } finally {
@@ -96,7 +98,7 @@ export function MatchClient({
   return (
     <div className="space-y-6">
       {!isPro && (
-        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="job match" />
+        <PlanUsageBadge used={usedCount} limit={freeLimit} feature="job match" />
       )}
       {limitReached && <UpgradeWall limit={freeLimit} feature="job match" />}
       <form onSubmit={handleAnalyze} className="grid gap-5 md:grid-cols-2">

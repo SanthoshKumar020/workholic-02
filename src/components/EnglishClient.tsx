@@ -43,7 +43,8 @@ export function EnglishClient({
   const [quiz, setQuiz] = useState<QuizState | null>(null);
   const [loadingQuiz, setLoadingQuiz] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
-  const exhausted = !isPro && freeUsed >= freeLimit;
+  const [usedCount, setUsedCount] = useState(freeUsed);
+  const exhausted = !isPro && usedCount >= freeLimit;
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -83,6 +84,7 @@ export function EnglishClient({
       const data = await res.json();
       if (res.status === 403 && data.error === "free_limit_reached") { setLimitReached(true); return; }
       setLesson(data.lesson || null);
+      setUsedCount(c => c + 1);
     } catch {
       setLesson(null);
     } finally {
@@ -102,6 +104,7 @@ export function EnglishClient({
       if (res.status === 403 && data.error === "free_limit_reached") { setLimitReached(true); return; }
       const q: EnglishQuizQuestion[] = Array.isArray(data.quiz?.questions) ? data.quiz.questions : [];
       setQuiz({ questions: q, answers: {}, submitted: false });
+      setUsedCount(c => c + 1);
     } catch {
       setQuiz(null);
     } finally {
@@ -138,7 +141,7 @@ export function EnglishClient({
   return (
     <div className="space-y-6">
       {!isPro && (
-        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="english learning" />
+        <PlanUsageBadge used={usedCount} limit={freeLimit} feature="english learning" />
       )}
       {limitReached && <UpgradeWall limit={freeLimit} feature="english learning" />}
       {/* Level + Topic selectors */}

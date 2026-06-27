@@ -48,7 +48,8 @@ export function OutreachClient({
   const [loading, setLoading] = useState<TemplateType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [limitReached, setLimitReached] = useState(false);
-  const exhausted = !isPro && freeUsed >= freeLimit;
+  const [usedCount, setUsedCount] = useState(freeUsed);
+  const exhausted = !isPro && usedCount >= freeLimit;
 
   async function generate(action: TemplateType) {
     if (!targetCompany.trim() || !targetRole.trim()) return;
@@ -64,6 +65,7 @@ export function OutreachClient({
       if (res.status === 403 && d.error === "free_limit_reached") { setLimitReached(true); return; }
       if (!res.ok) throw new Error(d.error);
       setResults((prev) => ({ ...prev, [action]: d }));
+      setUsedCount(c => c + 1);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Generation failed.");
     } finally {
@@ -76,7 +78,7 @@ export function OutreachClient({
   return (
     <div className="space-y-5">
       {!isPro && (
-        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="outreach" />
+        <PlanUsageBadge used={usedCount} limit={freeLimit} feature="outreach" />
       )}
       {limitReached && <UpgradeWall limit={freeLimit} feature="outreach" />}
       {/* Form */}

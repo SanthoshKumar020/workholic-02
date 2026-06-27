@@ -45,6 +45,7 @@ export interface JobAlert {
   role: string | null;
   frequency: "daily" | "weekly";
   enabled: boolean;
+  send_time: string; // "HH:MM" IST, e.g. "09:00"
   created_at: string;
 }
 

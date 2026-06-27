@@ -41,6 +41,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url("/mentor",            0.7, "weekly"),
     url("/communication",     0.7, "weekly"),
     url("/billing",           0.6, "monthly"),
+    url("/about",             0.7, "monthly"),
+    url("/contact",           0.6, "monthly"),
+    url("/privacy",           0.5, "monthly"),
+    url("/terms",             0.5, "monthly"),
+    url("/refund",            0.5, "monthly"),
   ];
 
   // ── Aptitude topics ───────────────────────────────────────────────────────

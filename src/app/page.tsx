@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { AtsChecker } from "@/components/AtsChecker";
 import { PricingSection } from "@/components/PricingSection";
 import { Testimonials } from "@/components/Testimonials";
+import { EmailCapture } from "@/components/EmailCapture";
 import { createClient } from "@/lib/supabase/server";
 
 const FEATURES = [
@@ -150,6 +151,8 @@ export default async function LandingPage() {
       </section>
 
       <Testimonials />
+
+      <EmailCapture />
 
       <PricingSection isLoggedIn={!!user} />
 

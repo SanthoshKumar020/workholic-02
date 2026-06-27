@@ -15,6 +15,12 @@ const ACCOUNT_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
 ];
 
+const COMPANY_LINKS = [
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+  { href: "/refund", label: "Refund Policy" },
+];
+
 const LEGAL_LINKS = [
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
@@ -93,6 +99,24 @@ export function Footer() {
             </div>
 
             <div>
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+                Company
+              </h3>
+              <ul className="space-y-3">
+                {COMPANY_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-6">
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
                 Legal
               </h3>

@@ -199,39 +199,74 @@ export function AtsChecker() {
         </div>
       ) : (
         <div className="animate-fade-in space-y-5">
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
+          {/* Score + headline */}
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <AtsScoreRing score={result.atsScore ?? 0} />
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-slate-900">Your ATS score</h3>
-              <p className="text-sm text-slate-500">
-                Here are the top things to improve. Sign up free to apply AI enhancements and export
-                a polished PDF.
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-400">
+                Your ATS Score
+              </p>
+              <h3 className="mt-1 text-lg font-bold text-slate-900 leading-tight">
+                {tips.length > 0
+                  ? `We found ${tips.length} issue${tips.length !== 1 ? "s" : ""} holding your resume back`
+                  : "Your resume looks solid!"}
+              </h3>
+              <p className="mt-1 text-sm text-slate-500">
+                {(result.atsScore ?? 0) < 60
+                  ? "Most ATS systems would filter this out before a human sees it."
+                  : (result.atsScore ?? 0) < 80
+                  ? "Good start — a few targeted fixes could push you into the top 20%."
+                  : "Strong score. AI enhancement can take you to the next level."}
               </p>
             </div>
           </div>
 
+          {/* Issues list */}
           {tips.length > 0 && (
-            <ul className="space-y-2">
-              {tips.slice(0, 5).map((tip, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500" />
-                  {tip}
-                </li>
-              ))}
-            </ul>
+            <div className="rounded-xl border border-red-100 bg-red-50 p-4">
+              <p className="mb-2.5 text-xs font-bold uppercase tracking-widest text-red-600">
+                Issues to fix
+              </p>
+              <ul className="space-y-2">
+                {tips.slice(0, 5).map((tip, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
+
+          {/* Conversion CTA */}
+          <div className="rounded-xl border border-brand-100 bg-brand-50 p-4">
+            <p className="text-sm font-bold text-brand-800">
+              Fix {tips.length > 0 ? `all ${Math.min(tips.length, 5)}` : "these"} issues with AI — free
+            </p>
+            <p className="mt-1 text-xs text-slate-600">
+              Sign up free → paste your job description → AI rewrites your resume to match. ATS score
+              typically jumps 20–40 points.
+            </p>
+          </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               href="/signup"
-              className="flex-1 rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-brand-700"
+              className="flex-1 rounded-xl bg-brand-gradient px-4 py-3 text-center text-sm font-bold text-white shadow-sm transition hover:opacity-90"
             >
-              Enhance &amp; export — free
+              Fix with AI — sign up free →
             </Link>
             <Button variant="secondary" onClick={reset}>
               Check another
             </Button>
           </div>
+
+          <p className="text-center text-[11px] text-slate-400">
+            No card required · Takes 60 seconds · Already have an account?{" "}
+            <Link href="/login" className="font-semibold text-brand-600 hover:underline">
+              Log in
+            </Link>
+          </p>
         </div>
       )}
     </div>

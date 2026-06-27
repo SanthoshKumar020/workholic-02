@@ -680,7 +680,8 @@ export function InterviewClient({
   const [report, setReport] = useState<Report | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [limitReached, setLimitReached] = useState(false);
-  const exhausted = !isPro && freeUsed >= freeLimit;
+  const [usedCount, setUsedCount] = useState(freeUsed);
+  const exhausted = !isPro && usedCount >= freeLimit;
 
   async function handleStart(cfg: { role: string; company: string; interviewType: string; level: string; count: number }) {
     setError(null);
@@ -700,6 +701,7 @@ export function InterviewClient({
       }
       if (!res.ok) throw new Error(data.error);
       setQuestions(data.questions ?? []);
+      setUsedCount(c => c + 1);
       setPhase("interviewing");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load questions.");
@@ -737,7 +739,7 @@ export function InterviewClient({
   if (phase === "setup") return (
     <div className="space-y-4">
       {!isPro && (
-        <PlanUsageBadge used={freeUsed} limit={freeLimit} feature="mock interview" />
+        <PlanUsageBadge used={usedCount} limit={freeLimit} feature="mock interview" />
       )}
       {(exhausted || limitReached) && <UpgradeWall limit={freeLimit} feature="mock interview" />}
       {error && <p className="rounded-xl bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">{error}</p>}

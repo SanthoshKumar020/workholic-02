@@ -2,13 +2,18 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { RoadmapsListClient } from "@/components/RoadmapsListClient";
+import { ProHistoryGate } from "@/components/ui/ProHistoryGate";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentProfile, isPro } from "@/lib/plan";
 import type { RoadmapRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function RoadmapsPage() {
   const supabase = createClient();
+  const profile = await getCurrentProfile();
+  const pro = isPro(profile?.plan);
+
   const { data } = await supabase
     .from("roadmaps")
     .select("*")
@@ -45,7 +50,14 @@ export default async function RoadmapsPage() {
         </div>
 
         <div className="mx-auto max-w-5xl px-4 py-10">
-          <RoadmapsListClient initialRoadmaps={roadmaps} />
+          {pro ? (
+            <RoadmapsListClient initialRoadmaps={roadmaps} />
+          ) : (
+            <ProHistoryGate
+              title="Saved roadmaps are a Pro feature"
+              blurb="Generate a roadmap anytime on the free plan. Upgrade to Pro to save your roadmaps, track progress across sessions, and revisit them here."
+            />
+          )}
         </div>
       </main>
       <Footer />

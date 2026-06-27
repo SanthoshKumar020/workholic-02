@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { isUserPro } from "@/lib/plan";
 import type { RoadmapContent } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -72,6 +73,16 @@ export async function DELETE(_request: Request, { params }: Ctx) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+  // Managing saved roadmaps (incl. deletion) is a Pro-only feature.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("id", user.id)
+    .single();
+  if (!isUserPro(profile?.plan, user.email)) {
+    return NextResponse.json({ error: "Managing saved roadmaps is a Pro feature." }, { status: 403 });
+  }
 
   const { error } = await supabase
     .from("roadmaps")

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DashboardClient } from "@/components/DashboardClient";
+import { ProHistoryGate } from "@/components/ui/ProHistoryGate";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile, isPro } from "@/lib/plan";
 import { StreakWidget } from "@/components/StreakWidget";
@@ -123,7 +124,14 @@ export default async function DashboardPage() {
 
         {/* Resumes section */}
         <h2 className="mb-4 mt-10 text-lg font-semibold text-slate-900">Your resumes</h2>
-        <DashboardClient resumes={resumes} isPro={pro} />
+        {pro ? (
+          <DashboardClient resumes={resumes} isPro={pro} />
+        ) : (
+          <ProHistoryGate
+            title="Resume history is a Pro feature"
+            blurb="Your enhanced resumes are saved securely. Upgrade to Pro to view, manage, and re-download your full resume history anytime."
+          />
+        )}
       </main>
       <Footer />
     </>

@@ -428,6 +428,29 @@ export function ResumeBuilderClient({
       <div className="space-y-8">
         {result.warning && <Alert tone="warning">{result.warning}</Alert>}
 
+        {/* Live usage indicator for free users */}
+        {!isPro && (
+          <div
+            className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${
+              resumeUsedCount >= freeLimit
+                ? "border-red-200 bg-red-50 text-red-700"
+                : "border-amber-200 bg-amber-50 text-amber-800"
+            }`}
+          >
+            <span>
+              {resumeUsedCount >= freeLimit
+                ? `You've used all ${freeLimit} free enhancements.`
+                : `Free plan: ${resumeUsedCount} / ${freeLimit} enhancements used · ${freeLimit - resumeUsedCount} left`}
+            </span>
+            <a
+              href="/billing"
+              className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-700"
+            >
+              Upgrade to Pro
+            </a>
+          </div>
+        )}
+
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6">
             <AtsScoreRing score={result.atsScore ?? 0} />

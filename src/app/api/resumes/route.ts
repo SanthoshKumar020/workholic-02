@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { templatesForPlan } from "@/lib/plan";
+import { templatesForPlan, isUserPro } from "@/lib/plan";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +29,19 @@ export async function DELETE(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Deleting a generated resume is a Pro-only action — free-plan resumes are permanent.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("id", user.id)
+    .single();
+  if (!isUserPro(profile?.plan, user.email)) {
+    return NextResponse.json(
+      { error: "Deleting resumes is a Pro feature." },
+      { status: 403 }
+    );
+  }
 
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");

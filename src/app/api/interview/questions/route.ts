@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeJson } from "@/lib/json-utils";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,6 +23,9 @@ export async function POST(request: Request) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "interview-questions");
+  if (!allowed) return limitReachedResponse();
 
   const body = await request.json().catch(() => ({}));
   const role = (body.role || "Software Engineer").trim();
@@ -81,6 +85,7 @@ Questions must be specific to the role and level. No generic filler. A ${level} 
     const match = text.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("No JSON");
     const result = JSON.parse(sanitizeJson(match[0]));
+    await recordUsage(supabase, user.id, "interview-questions");
     return NextResponse.json({ questions: result.questions ?? [] });
   } catch (err) {
     console.error("[interview/questions]", err);

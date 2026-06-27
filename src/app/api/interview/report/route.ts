@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeJson } from "@/lib/json-utils";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,6 +10,9 @@ export async function POST(request: Request) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "interview-report");
+  if (!allowed) return limitReachedResponse();
 
   const body = await request.json().catch(() => ({}));
   const { role, company, interviewType, level, answers } = body as {
@@ -96,6 +100,7 @@ Return ONLY valid JSON:
       feedback: { overallScore: report.overallScore, grade: report.grade },
     }).select().single();
 
+    await recordUsage(supabase, user.id, "interview-report");
     return NextResponse.json({ report });
   } catch (err) {
     console.error("[interview/report]", err);

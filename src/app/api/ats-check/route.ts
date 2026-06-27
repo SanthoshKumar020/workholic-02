@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 import { callGroq } from "@/lib/groq";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "Please log in to use ATS Check." }, { status: 401 });
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "ats-check");
+  if (!allowed) return limitReachedResponse();
+
   let body: { resumeText?: string };
   try {
     body = await request.json();
@@ -34,6 +42,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
+  await recordUsage(supabase, user.id, "ats-check");
   return NextResponse.json({
     atsScore: typeof result?.atsScore === "number" ? Math.round(Math.min(100, Math.max(0, result.atsScore))) : 50,
     improvements: Array.isArray(result?.improvements) ? result.improvements.slice(0, 5) : [],

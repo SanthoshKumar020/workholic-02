@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroq, callGroqText } from "@/lib/groq";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,6 +12,9 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "english");
+  if (!allowed) return limitReachedResponse();
 
   let body: { mode?: string; level?: string; topic?: string; userMessage?: string; history?: Array<{role: string; content: string}> };
   try {
@@ -34,6 +38,7 @@ export async function POST(request: Request) {
         content: `Level: ${level}. Topic: ${topic}. Create a focused lesson with 3-4 key points and 3 practical examples.`,
       },
     ]).catch(() => ({ title: "", content: "", examples: [], keyPoints: [] }));
+    await recordUsage(supabase, user.id, "english");
     return NextResponse.json({ lesson: result });
   }
 
@@ -48,6 +53,7 @@ export async function POST(request: Request) {
         content: `Level: ${level}. Topic: ${topic}.`,
       },
     ]).catch(() => ({ questions: [] }));
+    await recordUsage(supabase, user.id, "english");
     return NextResponse.json({ quiz: result });
   }
 
@@ -65,6 +71,7 @@ export async function POST(request: Request) {
       { role: "user", content: userMessage },
     ]).catch(() => "I'm here to help you practice English! What would you like to talk about?");
 
+    await recordUsage(supabase, user.id, "english");
     return NextResponse.json({ reply });
   }
 

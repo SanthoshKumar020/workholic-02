@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroq } from "@/lib/groq";
 import type { InterviewFeedback } from "@/lib/types";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,6 +13,9 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "interview-feedback");
+  if (!allowed) return limitReachedResponse();
 
   let body: { question?: string; answer?: string; type?: "behavioral" | "technical" };
   try {
@@ -44,6 +48,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
+  await recordUsage(supabase, user.id, "interview-feedback");
   return NextResponse.json({
     score: typeof result.score === "number" ? Math.round(Math.min(100, Math.max(0, result.score))) : 50,
     feedback: result.feedback || "",

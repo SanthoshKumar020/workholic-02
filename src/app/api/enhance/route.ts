@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroq } from "@/lib/groq";
 import { FREE_TEMPLATE_ID, isPro, isSuperAdmin } from "@/lib/plan";
-
-export const FREE_ENHANCE_LIMIT = 5;
+import { FREE_ENHANCE_LIMIT } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

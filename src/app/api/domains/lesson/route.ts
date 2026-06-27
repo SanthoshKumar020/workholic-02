@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getDomainTopic } from "@/lib/domains/catalog";
 import { sanitizeJson } from "@/lib/json-utils";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,6 +21,8 @@ export async function POST(request: Request) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Please log in." }, { status: 401 });
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "domains");
+  if (!allowed) return limitReachedResponse();
 
   const body = await request.json().catch(() => ({}));
   const mode: Mode = ["kid", "beginner", "interview"].includes(body.mode) ? body.mode : "beginner";
@@ -75,6 +78,7 @@ Rules: diagram nodes MUST be in left-to-right flow order with mostly linear edge
     if (!match) throw new Error("No JSON");
     const lesson = JSON.parse(sanitizeJson(match[0]));
     if (!Array.isArray(lesson.quiz)) lesson.quiz = [];
+    await recordUsage(supabase, user.id, "domains");
     return NextResponse.json({ lesson });
   } catch (err) {
     console.error("[domains/lesson]", err);

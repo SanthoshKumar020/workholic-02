@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 import { callGroq } from "@/lib/groq";
 import type { MatchResult } from "@/lib/types";
 
@@ -11,6 +12,9 @@ export async function POST(request: Request) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "Please log in to use Match." }, { status: 401 });
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "match");
+  if (!allowed) return limitReachedResponse();
 
   let body: { resumeText?: string; jobDescription?: string };
   try {
@@ -48,6 +52,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
+  await recordUsage(supabase, user.id, "match");
   return NextResponse.json({
     matchScore: typeof result.matchScore === "number" ? Math.round(Math.min(100, Math.max(0, result.matchScore))) : 0,
     matchedKeywords: Array.isArray(result.matchedKeywords) ? result.matchedKeywords : [],

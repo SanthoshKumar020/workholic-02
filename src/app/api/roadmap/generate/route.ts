@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 import { callGroq } from "@/lib/groq";
 import type { RoadmapContent, RoadmapStep } from "@/lib/types";
 
@@ -55,6 +56,8 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "roadmap");
+  if (!allowed) return limitReachedResponse();
 
   let body: { topic?: string; lang?: string };
   try {
@@ -112,5 +115,6 @@ export async function POST(request: Request) {
     );
   }
 
+  await recordUsage(supabase, user.id, "roadmap");
   return NextResponse.json({ roadmap: data });
 }

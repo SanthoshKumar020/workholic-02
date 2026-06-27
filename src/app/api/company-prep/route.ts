@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 import { sanitizeJson } from "@/lib/json-utils";
 
 export const runtime = "nodejs";
@@ -9,6 +10,8 @@ export async function POST(request: Request) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "company-prep");
+  if (!allowed) return limitReachedResponse();
 
   const body = await request.json().catch(() => ({}));
   const { company, level = "SDE II" } = body as { company: string; level?: string };
@@ -79,6 +82,7 @@ Make everything SPECIFIC to ${company} — not generic.`;
     const text = d.choices?.[0]?.message?.content ?? "";
     const match = text.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("No JSON");
+    await recordUsage(supabase, user.id, "company-prep");
     return NextResponse.json(JSON.parse(sanitizeJson(match[0])));
   } catch (err) {
     console.error("[company-prep]", err);

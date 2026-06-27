@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ResumeBuilderClient } from "@/components/ResumeBuilderClient";
 import { getCurrentProfile, isPro, isSuperAdmin } from "@/lib/plan";
-import { FREE_ENHANCE_LIMIT } from "@/app/api/enhance/route";
+import { FREE_ENHANCE_LIMIT } from "@/lib/usage";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";

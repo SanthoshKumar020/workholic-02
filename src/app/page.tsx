@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AtsChecker } from "@/components/AtsChecker";
 import { PricingSection } from "@/components/PricingSection";
+import { Testimonials } from "@/components/Testimonials";
 import { createClient } from "@/lib/supabase/server";
 
 const FEATURES = [
@@ -147,6 +148,8 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
       <PricingSection isLoggedIn={!!user} />
 

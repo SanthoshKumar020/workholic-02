@@ -15,6 +15,11 @@ const ACCOUNT_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
 ];
 
+const LEGAL_LINKS = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Service" },
+];
+
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-slate-200 bg-white">
@@ -29,7 +34,7 @@ export function Footer() {
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
-              AI-powered career platform to help you hire faster and rise higher. Resume enhancement, mock interviews, job matching, and more — free to start.
+              AI-powered career platform to help you land your next job faster. Resume enhancement, mock interviews, job matching, and more — free to start.
             </p>
 
             {/* Company attribution */}
@@ -67,23 +72,43 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Account links */}
-          <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-              Account
-            </h3>
-            <ul className="space-y-3">
-              {ACCOUNT_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-sm text-slate-600 transition hover:text-brand-600"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Account + Legal links */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+                Account
+              </h3>
+              <ul className="space-y-3">
+                {ACCOUNT_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+                Legal
+              </h3>
+              <ul className="space-y-3">
+                {LEGAL_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -97,7 +122,7 @@ export function Footer() {
             reserved.
           </p>
           <p className="text-center">
-            HYRISE helps you elevate your career. Results vary — we do not guarantee job outcomes.
+            HYRISE helps you land your dream job. Results vary — we do not guarantee job outcomes.
           </p>
         </div>
       </div>

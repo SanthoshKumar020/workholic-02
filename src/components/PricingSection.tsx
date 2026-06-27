@@ -4,15 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 
 const FREE_FEATURES = [
-  "1 free ATS score check",
+  "5 free AI uses (resume, match, interview…)",
   "AI resume enhancement",
-  "1 clean template",
+  "ATS score checker",
+  "1 clean resume template",
   "Export to PDF",
   "Save to dashboard",
 ];
 
 const PRO_FEATURES = [
-  "Unlimited ATS checks & enhancements",
+  "Unlimited AI uses across all tools",
   "All premium resume templates",
   "AI Career Mentor + weekly plans",
   "Voice mock interview + report card",
@@ -20,6 +21,7 @@ const PRO_FEATURES = [
   "Job search + daily email alerts",
   "LinkedIn & Naukri profile optimizer",
   "Save unlimited resumes",
+  "GD practice & English learning",
 ];
 
 export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
@@ -46,30 +48,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
           </p>
         </div>
 
-        {/* Not logged in — lock gate */}
-        {!isLoggedIn && (
-          <div className="mx-auto mt-12 max-w-md rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-50">
-              <svg className="h-7 w-7 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h3 className="mt-4 text-lg font-bold text-slate-900">Sign in to view pricing</h3>
-            <p className="mt-2 text-sm text-slate-500">Create a free account or log in to see our plans and upgrade to Pro.</p>
-            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
-              <Link href="/signup" className="rounded-xl bg-brand-gradient px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90">
-                Create free account
-              </Link>
-              <Link href="/login" className="rounded-xl border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                Log in
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {/* Logged in — show plans */}
-        {isLoggedIn && (<>
-        {/* Toggle */}
+        {/* Billing toggle — visible to everyone */}
         <div className="mt-8 flex justify-center">
           <div className="inline-flex items-center rounded-2xl border border-slate-200 bg-slate-50 p-1 gap-1">
             <button
@@ -100,7 +79,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
           </div>
         </div>
 
-        {/* Cards */}
+        {/* Plan cards — visible to everyone */}
         <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
 
           {/* Free plan */}
@@ -132,7 +111,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
               href="/signup"
               className="mt-8 block rounded-xl border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
             >
-              Get started free
+              Create free account
             </Link>
           </div>
 
@@ -181,11 +160,19 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             </ul>
 
             <Link
-              href="/billing"
+              href={isLoggedIn ? "/billing" : "/signup"}
               className="mt-8 block rounded-xl bg-brand-gradient px-4 py-3 text-center text-sm font-semibold text-white shadow-sm transition hover:opacity-90 hover:shadow-glow-sm"
             >
-              {billing === "monthly" ? "Upgrade to Pro — ₹30/mo" : "Upgrade to Pro — ₹311/yr"}
+              {isLoggedIn
+                ? (billing === "monthly" ? "Upgrade to Pro — ₹30/mo" : "Upgrade to Pro — ₹311/yr")
+                : "Get started — it&apos;s free"}
             </Link>
+
+            {!isLoggedIn && (
+              <p className="mt-3 text-center text-xs text-slate-400">
+                Create a free account first · upgrade to Pro anytime
+              </p>
+            )}
           </div>
         </div>
 
@@ -194,7 +181,6 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
           <span className="font-semibold text-slate-500">Santo Square Automation</span>. We help
           you improve your resume — we do not guarantee interviews, offers, or employment outcomes.
         </p>
-        </>)}
       </div>
     </section>
   );

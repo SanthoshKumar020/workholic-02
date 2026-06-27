@@ -3,6 +3,8 @@ import { APTITUDE_CATEGORIES } from "@/lib/aptitude-topics";
 import { DOMAINS } from "@/lib/domains/catalog";
 import { ISLANDS } from "@/lib/dsa/curriculum";
 
+export const dynamic = "force-dynamic";
+
 const BASE_URL = "https://hyrise.swache.in";
 
 function url(path: string, priority: number, changefreq: "daily" | "weekly" | "monthly"): MetadataRoute.Sitemap[number] {

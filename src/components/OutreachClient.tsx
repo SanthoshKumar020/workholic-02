@@ -30,7 +30,7 @@ function CopyBtn({ text }: { text: string }) {
 
 export function OutreachClient({
   defaultName, defaultRole,
-  freeUsed = 0, freeLimit = 5, isPro = false,
+  freeUsed = 0, freeLimit = 3, isPro = false,
 }: {
   defaultName: string; defaultRole: string;
   freeUsed?: number; freeLimit?: number; isPro?: boolean;

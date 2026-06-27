@@ -11,7 +11,7 @@ export function DomainsHubClient({
   progress,
   pro,
   freeUsed = 0,
-  freeLimit = 5,
+  freeLimit = 3,
   isPro = false,
 }: {
   progress: Record<string, number>;

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 const FREE_FEATURES = [
-  "5 free AI uses per tool",
+  "3 free AI uses per tool",
   "ATS score checker",
   "AI resume enhancement",
   "1 resume template",
@@ -31,16 +31,16 @@ const PRO_ANNUAL_FEATURES = [
 
 const COMPARE_ROWS: { feature: string; free: string | boolean; pro: boolean }[] = [
   { feature: "ATS score checker",            free: "1 check",      pro: true },
-  { feature: "AI resume enhancement",        free: "5 uses",       pro: true },
+  { feature: "AI resume enhancement",        free: "3 uses",       pro: true },
   { feature: "Resume templates",             free: "1 template",   pro: true },
   { feature: "PDF export",                   free: true,           pro: true },
-  { feature: "Job Match Analyzer",           free: "5 uses",       pro: true },
-  { feature: "Mock Interview + report card", free: "5 sessions",   pro: true },
-  { feature: "Learning roadmaps",            free: "5 uses",       pro: true },
-  { feature: "Aptitude prep",                free: "5 uses",       pro: true },
-  { feature: "Outreach generator",           free: "5 uses",       pro: true },
-  { feature: "GD practice",                  free: "5 uses",       pro: true },
-  { feature: "English learning",             free: "5 uses",       pro: true },
+  { feature: "Job Match Analyzer",           free: "3 uses",       pro: true },
+  { feature: "Mock Interview + report card", free: "3 sessions",   pro: true },
+  { feature: "Learning roadmaps",            free: "3 uses",       pro: true },
+  { feature: "Aptitude prep",                free: "3 uses",       pro: true },
+  { feature: "Outreach generator",           free: "3 uses",       pro: true },
+  { feature: "GD practice",                  free: "3 uses",       pro: true },
+  { feature: "English learning",             free: "3 uses",       pro: true },
   { feature: "AI Career Mentor",             free: false,          pro: true },
   { feature: "Salary coach",                 free: false,          pro: true },
   { feature: "Job search + email alerts",    free: false,          pro: true },

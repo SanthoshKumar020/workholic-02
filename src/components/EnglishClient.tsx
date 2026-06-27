@@ -27,7 +27,7 @@ interface QuizState {
 
 export function EnglishClient({
   plan, preferredLanguage: _lang,
-  freeUsed = 0, freeLimit = 5, isPro = false,
+  freeUsed = 0, freeLimit = 3, isPro = false,
 }: {
   plan: string; preferredLanguage: string;
   freeUsed?: number; freeLimit?: number; isPro?: boolean;

@@ -50,7 +50,7 @@ function ScoreBar({ label, score, feedback }: { label: string; score: number; fe
 }
 
 export function GDPracticeClient({
-  freeUsed = 0, freeLimit = 5, isPro = false,
+  freeUsed = 0, freeLimit = 3, isPro = false,
 }: {
   freeUsed?: number; freeLimit?: number; isPro?: boolean;
 } = {}) {

@@ -12,7 +12,7 @@ import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 export function MatchClient({
   plan,
   freeUsed = 0,
-  freeLimit = 5,
+  freeLimit = 3,
   isPro = false,
 }: {
   plan: string;

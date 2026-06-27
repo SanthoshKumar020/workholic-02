@@ -669,7 +669,7 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
 
 export function InterviewClient({
   plan, targetRole, sessionsToday,
-  freeUsed = 0, freeLimit = 5, isPro = false,
+  freeUsed = 0, freeLimit = 3, isPro = false,
 }: {
   plan: string; targetRole: string; sessionsToday: number;
   freeUsed?: number; freeLimit?: number; isPro?: boolean;

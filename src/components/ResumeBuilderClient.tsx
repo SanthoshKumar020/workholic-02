@@ -169,7 +169,7 @@ function SectionHeader({
 
 // ── Main component ────────────────────────────────────────────────────────────
 export function ResumeBuilderClient({
-  isPro, defaultName, defaultEmail, resumesUsed = 0, freeLimit = 5,
+  isPro, defaultName, defaultEmail, resumesUsed = 0, freeLimit = 3,
 }: {
   isPro: boolean; defaultName: string; defaultEmail: string;
   resumesUsed?: number; freeLimit?: number;
@@ -517,7 +517,7 @@ export function ResumeBuilderClient({
         <div className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${resumeUsedCount >= freeLimit ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-800"}`}>
           <span>
             {resumeUsedCount >= freeLimit
-              ? "You've used all 5 free enhancements."
+              ? `You've used all ${freeLimit} free enhancements.`
               : `Free plan: ${resumeUsedCount} / ${freeLimit} resume enhancements used.`}
           </span>
           <a href="/billing" className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition">

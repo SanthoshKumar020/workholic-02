@@ -1,8 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isPro, isSuperAdmin } from "@/lib/plan";
 
-export const FREE_FEATURE_LIMIT = 5;
-export const FREE_ENHANCE_LIMIT = 5;
+export const FREE_FEATURE_LIMIT = 3;
+export const FREE_ENHANCE_LIMIT = 3;
 
 export type FeatureKey =
   | "enhance"

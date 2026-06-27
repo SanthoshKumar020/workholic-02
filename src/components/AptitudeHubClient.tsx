@@ -15,7 +15,7 @@ interface Props {
   isPro?: boolean;
 }
 
-export function AptitudeHubClient({ categories, freeUsed = 0, freeLimit = 5, isPro = false }: Props) {
+export function AptitudeHubClient({ categories, freeUsed = 0, freeLimit = 3, isPro = false }: Props) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 

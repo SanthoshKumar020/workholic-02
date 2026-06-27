@@ -169,9 +169,10 @@ function SectionHeader({
 
 // ── Main component ────────────────────────────────────────────────────────────
 export function ResumeBuilderClient({
-  isPro, defaultName, defaultEmail,
+  isPro, defaultName, defaultEmail, resumesUsed = 0, freeLimit = 5,
 }: {
   isPro: boolean; defaultName: string; defaultEmail: string;
+  resumesUsed?: number; freeLimit?: number;
 }) {
   const [mode, setMode] = useState<Mode>("form");
 
@@ -405,6 +406,10 @@ export function ResumeBuilderClient({
         body: JSON.stringify({ name, email, targetRole, resumeText, title: targetRole ? `${targetRole} resume` : undefined }),
       });
       const data = await res.json();
+      if (res.status === 403 && data?.error === "free_limit_reached") {
+        setError("free_limit_reached");
+        return;
+      }
       if (!res.ok) throw new Error(data?.error || "Enhancement failed.");
       setResult(data as EnhanceResponse);
     } catch (err) {
@@ -505,6 +510,20 @@ export function ResumeBuilderClient({
         </button>
       </div>
 
+      {/* Usage badge for free users */}
+      {!isPro && (
+        <div className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${resumesUsed >= freeLimit ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-800"}`}>
+          <span>
+            {resumesUsed >= freeLimit
+              ? "You've used all 5 free enhancements."
+              : `Free plan: ${resumesUsed} / ${freeLimit} resume enhancements used.`}
+          </span>
+          <a href="/billing" className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition">
+            Upgrade to Pro
+          </a>
+        </div>
+      )}
+
       {/* ── UPLOAD MODE ── */}
       {mode === "upload" && (
         <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6">
@@ -567,10 +586,22 @@ export function ResumeBuilderClient({
             />
           )}
 
-          {error && <Alert tone="error">{error}</Alert>}
-          <Button size="lg" onClick={handleSubmit} loading={loading} disabled={uploading || !uploadedText || !name.trim()}>
-            Enhance with AI
-          </Button>
+          {error === "free_limit_reached" ? (
+            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-center">
+              <p className="text-sm font-semibold text-red-700">You&apos;ve used all {freeLimit} free enhancements.</p>
+              <p className="mt-1 text-xs text-red-600">Upgrade to Pro for unlimited resume enhancements.</p>
+              <a href="/billing" className="mt-3 inline-block rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition">
+                Upgrade to Pro →
+              </a>
+            </div>
+          ) : (
+            <>
+              {error && <Alert tone="error">{error}</Alert>}
+              <Button size="lg" onClick={handleSubmit} loading={loading} disabled={uploading || !uploadedText || !name.trim() || (!isPro && resumesUsed >= freeLimit)}>
+                Enhance with AI
+              </Button>
+            </>
+          )}
         </div>
       )}
 
@@ -1102,14 +1133,25 @@ export function ResumeBuilderClient({
             </div>
           )}
 
-          {error && <Alert tone="error">{error}</Alert>}
-
-          <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5">
-            <Button size="lg" onClick={handleSubmit} loading={loading}>
-              {loading ? "Enhancing with AI…" : "Enhance with AI"}
-            </Button>
-            {loading && <span className="text-sm text-slate-500">Analysing and rewriting your resume — takes ~20 seconds.</span>}
-          </div>
+          {error === "free_limit_reached" ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-center">
+              <p className="text-sm font-semibold text-red-700">You&apos;ve used all {freeLimit} free enhancements.</p>
+              <p className="mt-1 text-xs text-red-600">Upgrade to Pro for unlimited resume enhancements.</p>
+              <a href="/billing" className="mt-3 inline-block rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition">
+                Upgrade to Pro →
+              </a>
+            </div>
+          ) : (
+            <>
+              {error && <Alert tone="error">{error}</Alert>}
+              <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+                <Button size="lg" onClick={handleSubmit} loading={loading} disabled={!isPro && resumesUsed >= freeLimit}>
+                  {loading ? "Enhancing with AI…" : "Enhance with AI"}
+                </Button>
+                {loading && <span className="text-sm text-slate-500">Analysing and rewriting your resume — takes ~20 seconds.</span>}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

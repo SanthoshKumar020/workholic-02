@@ -1,7 +1,8 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ResumeBuilderClient } from "@/components/ResumeBuilderClient";
-import { getCurrentProfile, isPro } from "@/lib/plan";
+import { getCurrentProfile, isPro, isSuperAdmin } from "@/lib/plan";
+import { FREE_ENHANCE_LIMIT } from "@/app/api/enhance/route";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,17 @@ export default async function BuilderPage() {
     data: { user },
   } = await supabase.auth.getUser();
   const profile = await getCurrentProfile();
+
+  const proUser = isPro(profile?.plan) || isSuperAdmin(user?.email);
+
+  let resumesUsed = 0;
+  if (!proUser && user) {
+    const { count } = await supabase
+      .from("resumes")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id);
+    resumesUsed = count ?? 0;
+  }
 
   return (
     <>
@@ -25,9 +37,11 @@ export default async function BuilderPage() {
           </p>
         </div>
         <ResumeBuilderClient
-          isPro={isPro(profile?.plan)}
+          isPro={proUser}
           defaultName=""
           defaultEmail={user?.email ?? ""}
+          resumesUsed={resumesUsed}
+          freeLimit={FREE_ENHANCE_LIMIT}
         />
       </main>
       <Footer />

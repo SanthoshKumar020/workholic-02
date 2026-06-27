@@ -76,6 +76,35 @@ export async function checkResumeLimit(
   return { allowed: used < FREE_ENHANCE_LIMIT, used };
 }
 
+/**
+ * Roadmap limit, counted DIRECTLY from the `roadmaps` table.
+ * Same model as resumes: free users can't delete roadmaps, so the saved count
+ * only grows and is the permanent source of truth. Pro / super-admin unlimited.
+ */
+export async function checkRoadmapLimit(
+  supabase: SupabaseClient,
+  userId: string,
+  userEmail: string | null | undefined
+): Promise<{ allowed: boolean; used: number }> {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("id", userId)
+    .single();
+
+  if (isPro(profile?.plan) || isSuperAdmin(userEmail)) {
+    return { allowed: true, used: 0 };
+  }
+
+  const { count } = await supabase
+    .from("roadmaps")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId);
+
+  const used = count ?? 0;
+  return { allowed: used < FREE_FEATURE_LIMIT, used };
+}
+
 /** Insert a usage record after a successful AI call. */
 export async function recordUsage(
   supabase: SupabaseClient,

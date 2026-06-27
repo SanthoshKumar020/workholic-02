@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
+import { checkRoadmapLimit, limitReachedResponse } from "@/lib/usage";
 import { callGroq } from "@/lib/groq";
 import type { RoadmapContent, RoadmapStep } from "@/lib/types";
 
@@ -56,7 +56,8 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "roadmap");
+  // Limit counted directly from saved roadmaps (free users can't delete them).
+  const { allowed } = await checkRoadmapLimit(supabase, user.id, user.email);
   if (!allowed) return limitReachedResponse();
 
   let body: { topic?: string; lang?: string };
@@ -115,6 +116,5 @@ export async function POST(request: Request) {
     );
   }
 
-  await recordUsage(supabase, user.id, "roadmap");
   return NextResponse.json({ roadmap: data });
 }

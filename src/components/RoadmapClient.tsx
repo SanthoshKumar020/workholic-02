@@ -108,7 +108,9 @@ export function RoadmapClient({
       if (!res.ok || !data.roadmap) throw new Error(data.error ?? "Roadmap generation failed.");
       if (data.warning) setWarning(data.warning);
       setRoadmap(data.roadmap);
-      setUsedCount(c => c + 1);
+      // Only count it when the roadmap was actually saved (limit counts the
+      // roadmaps table, so an unsaved one must not inflate the count).
+      if (data.roadmap.id) setUsedCount(c => c + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not generate roadmap. Please try again.");
     } finally {

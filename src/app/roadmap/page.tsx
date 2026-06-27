@@ -26,13 +26,13 @@ export default async function RoadmapPage({ searchParams }: Props) {
   }
 
   const proUser = profile ? isUserPro(profile.plan, profile.email) : false;
+  // Count the free-plan usage directly from saved roadmaps (permanent source of truth).
   let freeUsed = 0;
   if (!proUser && profile) {
     const { count } = await supabase
-      .from("feature_usage")
+      .from("roadmaps")
       .select("id", { count: "exact", head: true })
-      .eq("user_id", profile.id)
-      .eq("feature", "roadmap");
+      .eq("user_id", profile.id);
     freeUsed = count ?? 0;
   }
 

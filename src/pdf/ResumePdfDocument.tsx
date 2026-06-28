@@ -238,7 +238,7 @@ function ExecutiveTemplate({ data }: { data: ResumePdfData }) {
         <View style={s.divider} />
 
         {sections.map((sec, si) => (
-          <View key={si} style={s.section} wrap={false}>
+          <View key={si} style={s.section} minPresenceAhead={50}>
             <Text style={s.sectionTitle}>{sec.heading}</Text>
             <View style={s.sectionUnderline} />
 
@@ -306,7 +306,7 @@ function MinimalTemplate({ data }: { data: ResumePdfData }) {
         <View style={s.divider} />
 
         {sections.map((sec, si) => (
-          <View key={si} style={s.sectionRow} wrap={false}>
+          <View key={si} style={s.sectionRow} minPresenceAhead={50}>
             <Text style={s.sectionLabel}>{sec.heading}</Text>
             <View style={s.sectionContent}>
               {sec.isSkills ? (
@@ -404,7 +404,7 @@ function SidebarTemplate({ data, accent }: { data: ResumePdfData; accent: string
         {/* Main */}
         <View style={s.main}>
           {mainSections.map((sec, si) => (
-            <View key={si} style={s.section} wrap={false}>
+            <View key={si} style={s.section} minPresenceAhead={50}>
               <Text style={s.mainHeading}>{sec.heading}</Text>
               <View style={s.mainUnderline} />
               {sec.entries.length > 0 ? (
@@ -472,7 +472,7 @@ function CorporateTemplate({ data }: { data: ResumePdfData }) {
         <View style={s.bottomLine} />
 
         {sections.map((sec, si) => (
-          <View key={si} style={s.section} wrap={false}>
+          <View key={si} style={s.section} minPresenceAhead={50}>
             <Text style={s.sectionTitle}>{sec.heading}</Text>
             <View style={s.sectionBar} />
             {sec.isSkills ? (
@@ -545,7 +545,7 @@ function ImpactTemplate({ data }: { data: ResumePdfData }) {
 
         <View style={s.body}>
           {sections.map((sec, si) => (
-            <View key={si} style={s.section} wrap={false}>
+            <View key={si} style={s.section} minPresenceAhead={50}>
               <Text style={s.sectionTitle}>{sec.heading}</Text>
               <View style={s.sectionLine} />
               {sec.isSkills ? (
@@ -626,7 +626,7 @@ function ClassicTemplate({ data }: { data: ResumePdfData }) {
         <View style={s.dblRule2} />
 
         {sections.map((sec, si) => (
-          <View key={si} style={s.section} wrap={false}>
+          <View key={si} style={s.section} minPresenceAhead={50}>
             {/* Section heading: bold centered text with underline only */}
             <Text style={s.secHeading}>{sec.heading}</Text>
             <View style={s.secUnderline} />

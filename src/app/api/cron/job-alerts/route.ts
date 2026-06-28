@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { careerLink } from "@/lib/jobs/careerLinks";
 import { Resend } from "resend";
@@ -129,7 +130,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!process.env.RESEND_API_KEY || !groqKey) {
     return NextResponse.json({ error: "Email or AI not configured." }, { status: 500 });
   }

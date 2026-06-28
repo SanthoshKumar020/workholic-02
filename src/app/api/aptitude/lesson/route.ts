@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { sanitizeJson } from "@/lib/json-utils";
 import { createClient } from "@/lib/supabase/server";
 import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
   const topicTitle = (body.topicTitle || "").trim();
   if (!topicTitle) return NextResponse.json({ error: "Topic is required." }, { status: 400 });
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   const prompt = `You are the world's best aptitude and maths teacher. Your style is warm, fun, and crystal clear — even a 5-year-old should understand the first explanation.

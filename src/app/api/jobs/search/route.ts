@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { isSuperAdmin, isPro } from "@/lib/plan";
 import { careerLink } from "@/lib/jobs/careerLinks";
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Role is required." }, { status: 400 });
   }
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) {
     return NextResponse.json({ error: "AI job search is not configured." }, { status: 503 });
   }

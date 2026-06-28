@@ -1,11 +1,11 @@
 import { sanitizeJson } from "@/lib/json-utils";
+import { getGroqKey, hasGroqKey } from "@/lib/groq";
 
 export async function generateFollowUp(app: {
   company: string; role: string; applied_date: string;
   contact_name?: string; notes?: string;
 }) {
-  const groqKey = process.env.GROQ_API_KEY;
-  if (!groqKey) return null;
+  if (!hasGroqKey()) return null;
 
   const days = Math.floor((Date.now() - new Date(app.applied_date).getTime()) / 86400000);
 
@@ -25,7 +25,7 @@ Return ONLY valid JSON:
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${getGroqKey()}` },
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
       messages: [{ role: "user", content: prompt }],

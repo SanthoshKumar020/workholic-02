@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { isUserPro } from "@/lib/plan";
 import { sanitizeJson } from "@/lib/json-utils";
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => ({}));
   const { target_role, resume_text, context_summary } = body;
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   const prompt = `You are an expert career coach. Generate a personalized weekly action plan.

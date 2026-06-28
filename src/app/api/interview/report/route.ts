@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeJson } from "@/lib/json-utils";
 import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
 
   if (!answers?.length) return NextResponse.json({ error: "No answers provided." }, { status: 400 });
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   const answersBlock = answers.map((a, i) =>

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeJson } from "@/lib/json-utils";
 
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
 
   if (!company || !role) return NextResponse.json({ error: "Company and role are required." }, { status: 400 });
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   const days = applied_date
@@ -39,7 +40,7 @@ Return ONLY valid JSON (no markdown, no code fences):
   try {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey}` },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [{ role: "user", content: prompt }],

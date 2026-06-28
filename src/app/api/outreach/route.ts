@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
 import { sanitizeJson } from "@/lib/json-utils";
@@ -96,7 +97,7 @@ Return ONLY valid JSON (use \\n for paragraph breaks):
   try {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getGroqKey()}` },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [{ role: "user", content: prompt }],

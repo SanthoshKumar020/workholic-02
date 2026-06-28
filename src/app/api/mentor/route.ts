@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { isUserPro } from "@/lib/plan";
 
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
   const userMessage = (body.message ?? "").trim();
   if (!userMessage) return NextResponse.json({ error: "Message is required." }, { status: 400 });
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   // Fetch memory + recent messages

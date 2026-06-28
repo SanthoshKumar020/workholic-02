@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { getDomainTopic } from "@/lib/domains/catalog";
 import { sanitizeJson } from "@/lib/json-utils";
@@ -51,7 +52,7 @@ Rules: diagram nodes MUST be in left-to-right flow order with mostly linear edge
   async function call(retry = false): Promise<Response> {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getGroqKey()}` },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [{ role: "system", content: system }, { role: "user", content: prompt }],

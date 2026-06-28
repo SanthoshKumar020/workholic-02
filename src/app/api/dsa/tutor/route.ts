@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { sanitizeJson } from "@/lib/json-utils";
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
   async function call(retrying = false): Promise<Response> {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getGroqKey()}` },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [

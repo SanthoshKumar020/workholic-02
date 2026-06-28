@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGroqKey } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { isUserPro } from "@/lib/plan";
 import { sanitizeJson } from "@/lib/json-utils";
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please upload your resume first." }, { status: 400 });
   }
 
-  const groqKey = process.env.GROQ_API_KEY;
+  const groqKey = getGroqKey();
   if (!groqKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   const linkedinPrompt = `You are an expert LinkedIn profile writer. A user has uploaded their resume and wants you to generate the exact copy-paste content for every section of their LinkedIn profile.

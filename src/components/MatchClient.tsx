@@ -8,6 +8,8 @@ import { Lock, Upload, FileText, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import type { MatchResult } from "@/lib/types";
 import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
+import { shareText, SITE_URL } from "@/lib/share";
 
 export function MatchClient({
   plan,
@@ -177,6 +179,13 @@ export function MatchClient({
             <div className="flex flex-col items-center">
               <AtsScoreRing score={result.matchScore} size={120} />
               <p className="mt-2 text-sm font-medium text-slate-600">Match Score</p>
+              <WhatsAppShareButton
+                text={shareText.match(result.matchScore)}
+                url={SITE_URL}
+                size="sm"
+                label="Share"
+                className="mt-3"
+              />
             </div>
 
             <div className="flex-1 space-y-4">

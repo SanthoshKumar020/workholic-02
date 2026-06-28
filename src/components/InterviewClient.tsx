@@ -9,6 +9,8 @@ import {
   Loader2, Building2, User, Timer,
 } from "lucide-react";
 import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
+import { shareText, SITE_URL } from "@/lib/share";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -658,9 +660,15 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
         </div>
       </div>
 
-      <Button onClick={onRetry} variant="outline" className="w-full">
-        <RotateCcw className="h-4 w-4" /> Start Another Interview
-      </Button>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Button onClick={onRetry} variant="outline" className="flex-1">
+          <RotateCcw className="h-4 w-4" /> Start Another Interview
+        </Button>
+        <WhatsAppShareButton
+          text={shareText.interview(report.overallScore, report.grade)}
+          url={SITE_URL}
+        />
+      </div>
     </div>
   );
 }

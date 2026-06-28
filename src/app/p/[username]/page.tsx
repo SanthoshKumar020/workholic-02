@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Globe, Link2, ExternalLink, Award, CheckCircle } from "lucide-react";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
+import { shareText, SITE_URL } from "@/lib/share";
 
 export const dynamic = "force-dynamic";
 
@@ -126,6 +128,15 @@ export default async function PublicProfilePage({ params }: Props) {
                         <span className="rounded-full bg-green-50 border border-green-200 px-2 py-0.5 text-[10px] font-bold text-green-700 flex items-center gap-1">
                           <CheckCircle className="h-3 w-3" /> Verified
                         </span>
+                      </div>
+                      <div className="mt-3 border-t border-slate-100 pt-3">
+                        <WhatsAppShareButton
+                          text={shareText.certificate(cert.title)}
+                          url={`${SITE_URL}/p/${params.username}`}
+                          size="sm"
+                          label="Share on WhatsApp"
+                          className="w-full"
+                        />
                       </div>
                     </div>
                   </div>

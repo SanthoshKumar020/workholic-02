@@ -8,6 +8,12 @@ const PRODUCT_LINKS = [
   { href: "/jobs", label: "Job Alerts (Pro)" },
 ];
 
+const RESOURCE_LINKS = [
+  { href: "/blog", label: "Career Blog" },
+  { href: "/resume-checker", label: "Resume Checker by Role" },
+  { href: "/interview-questions", label: "Interview Questions by Role" },
+];
+
 const ACCOUNT_LINKS = [
   { href: "/signup", label: "Create account" },
   { href: "/login", label: "Log in" },
@@ -59,23 +65,43 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Product links */}
-          <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-              Product
-            </h3>
-            <ul className="space-y-3">
-              {PRODUCT_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-sm text-slate-600 transition hover:text-brand-600"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Product + Resources links */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+                Product
+              </h3>
+              <ul className="space-y-3">
+                {PRODUCT_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+                Resources
+              </h3>
+              <ul className="space-y-3">
+                {RESOURCE_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Account + Legal links */}

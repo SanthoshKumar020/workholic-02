@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(Get-Content \"d:\\\\resume-maker\\\\src\\\\components\\\\InterviewClient.tsx\")",
-      "Bash(Select-Object -First 50)"
+      "Bash(Select-Object -First 50)",
+      "PowerShell(Copy-Item \"C:\\\\Users\\\\santh\\\\Downloads\\\\119523.png\" \"d:\\\\resume-maker\\\\public\\\\logo.png\")",
+      "PowerShell(Copy-Item \"C:\\\\Users\\\\santh\\\\Downloads\\\\Untitled design.png\" \"d:\\\\resume-maker\\\\public\\\\logo.png\" -Force)",
+      "Read(//c/Users/santh/**)",
+      "PowerShell(npx tsc --noEmit 2>&1)",
+      "PowerShell(npx tsc --noEmit; \"EXIT=$LASTEXITCODE\")",
+      "PowerShell(npx next lint --dir src/components/dsa --dir src/lib/dsa --dir src/app/dsa --dir src/app/api/dsa 2>&1 | Select-Object -First 80; \"EXIT=$LASTEXITCODE\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\santh\\Downloads"

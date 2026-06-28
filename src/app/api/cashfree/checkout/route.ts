@@ -57,8 +57,31 @@ export async function POST(request: Request) {
     if (!sessionId) throw new Error("No session ID returned");
     return NextResponse.json({ payment_session_id: sessionId });
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : "Failed to create order.";
-    console.error("[cashfree] create order error", err);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    // The Cashfree SDK is axios-based: the useful reason is in err.response.data,
+    // not err.message (which is just "Request failed with status code 401").
+    const ax = err as {
+      response?: { status?: number; data?: { message?: string; code?: string; type?: string } };
+      message?: string;
+    };
+    const cashfreeStatus = ax?.response?.status;
+    const cashfreeData = ax?.response?.data;
+    const reason = cashfreeData?.message || ax?.message || "Failed to create order.";
+
+    console.error("[cashfree] create order error", {
+      status: cashfreeStatus,
+      code: cashfreeData?.code,
+      type: cashfreeData?.type,
+      message: cashfreeData?.message,
+      env: process.env.NEXT_PUBLIC_CASHFREE_ENV,
+    });
+
+    // 401/403 from Cashfree means credentials/permissions — surface it clearly.
+    if (cashfreeStatus === 401 || cashfreeStatus === 403) {
+      return NextResponse.json(
+        { error: `Cashfree rejected the request (${cashfreeStatus}): ${reason}. Check API keys, environment, and account activation.` },
+        { status: 502 }
+      );
+    }
+    return NextResponse.json({ error: reason }, { status: 502 });
   }
 }

@@ -58,8 +58,6 @@ const WORK_MODE_COLORS: Record<WorkMode, string> = {
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-interface ApplyLink { platform: string; url: string; }
-
 interface JobResult {
   title: string;
   company: string;
@@ -70,7 +68,7 @@ interface JobResult {
   requirements: string[];
   postedAt: string;
   applyUrl: string;
-  applyLinks: ApplyLink[];
+  applySite: string;
   matchScore: number;
 }
 
@@ -87,13 +85,6 @@ function workModeBadgeClass(wm: string) {
   if (wm === "Hybrid") return "bg-blue-100 text-blue-700";
   if (wm === "On-site") return "bg-orange-100 text-orange-700";
   return "bg-slate-100 text-slate-700";
-}
-
-function platformButtonClass(platform: string) {
-  if (platform === "LinkedIn") return "bg-[#0077b5] hover:bg-[#005f91] text-white";
-  if (platform === "Naukri")   return "bg-[#4a90d9] hover:bg-[#3178c6] text-white";
-  if (platform === "Indeed")   return "bg-[#2164f3] hover:bg-[#1a52d0] text-white";
-  return "bg-brand-600 hover:bg-brand-700 text-white";
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -573,20 +564,17 @@ export function JobsClient() {
                     </div>
                   )}
 
-                  {/* Apply buttons — one per platform */}
+                  {/* Apply on the company's official careers site */}
                   <div className="flex flex-wrap gap-2">
-                    {(job.applyLinks?.length ? job.applyLinks : [{ platform: "LinkedIn", url: job.applyUrl }]).map((link) => (
-                      <a
-                        key={link.platform}
-                        href={link.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${platformButtonClass(link.platform)}`}
-                      >
-                        Apply on {link.platform}
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    ))}
+                    <a
+                      href={job.applyUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-700"
+                    >
+                      Apply on {job.applySite}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
                   </div>
                 </div>
               ))}

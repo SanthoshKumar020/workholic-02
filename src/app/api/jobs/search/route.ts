@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isSuperAdmin, isPro } from "@/lib/plan";
+import { careerLink } from "@/lib/jobs/careerLinks";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,47 +16,12 @@ interface JobListing {
   requirements: string[];
   postedAt: string;
   matchScore: number;
-}
-
-export interface ApplyLink {
-  platform: string;
-  url: string;
+  careerUrl?: string;
 }
 
 export interface JobResult extends JobListing {
-  applyUrl: string;        // primary (LinkedIn)
-  applyLinks: ApplyLink[]; // all platforms
-}
-
-/** Build direct job-board search links specific to company + role + location. */
-function buildApplyLinks(title: string, company: string, location: string): ApplyLink[] {
-  const q = encodeURIComponent(`${title} ${company}`);
-  const loc = encodeURIComponent(location);
-  const isIndia =
-    /india/i.test(location) ||
-    /bangalore|mumbai|delhi|hyderabad|chennai|pune|noida|gurgaon|kolkata|kochi|ahmedabad|jaipur|indore/i.test(location);
-
-  const links: ApplyLink[] = [
-    {
-      platform: "LinkedIn",
-      url: `https://www.linkedin.com/jobs/search/?keywords=${q}&location=${loc}&f_TPR=r604800&sortBy=DD`,
-    },
-    {
-      platform: "Indeed",
-      url: `https://www.indeed.com/jobs?q=${q}&l=${loc}&sort=date`,
-    },
-  ];
-
-  if (isIndia) {
-    const city = location.split(",")[0].trim().toLowerCase().replace(/\s+/g, "-");
-    const roleSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
-    links.splice(1, 0, {
-      platform: "Naukri",
-      url: `https://www.naukri.com/${roleSlug}-jobs-in-${city}?src=jobsearchDesk&nignbevent_src=jobsearchDeskGNB`,
-    });
-  }
-
-  return links;
+  applyUrl: string;   // company's official careers page
+  applySite: string;  // button label, e.g. "Amazon Careers"
 }
 
 export async function POST(request: Request) {
@@ -124,7 +90,7 @@ Rules:
 - postedAt: "X days/hours ago"
 - requirements: 4–6 specific technical skills required for the job
 - matchScore: integer, be realistic — vary scores widely based on fit
-- Do NOT include an applyUrl field
+- careerUrl: the company's OFFICIAL careers/jobs page URL (e.g. careers.google.com, amazon.jobs, careers.swiggy.com). NEVER use LinkedIn, Naukri, Indeed, Glassdoor or any job aggregator. If unsure of the exact careers URL, omit the field.
 
 Respond with ONLY valid JSON:
 {
@@ -138,7 +104,8 @@ Respond with ONLY valid JSON:
       "description": "2–3 sentence job description",
       "requirements": ["string", "string", "string", "string"],
       "postedAt": "string",
-      "matchScore": number
+      "matchScore": number,
+      "careerUrl": "string"
     }
   ]
 }`;
@@ -170,8 +137,8 @@ Respond with ONLY valid JSON:
     const parsed = JSON.parse(jsonMatch[0]) as { jobs: JobListing[] };
 
     const allJobs: JobResult[] = (parsed.jobs ?? []).map((j) => {
-      const links = buildApplyLinks(j.title, j.company, j.location);
-      return { ...j, applyUrl: links[0].url, applyLinks: links };
+      const link = careerLink(j.company, j.title, j.careerUrl);
+      return { ...j, applyUrl: link.url, applySite: link.label };
     });
 
     // Only show 50%+ match jobs, sorted best first

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { careerLink } from "@/lib/jobs/careerLinks";
 import { Resend } from "resend";
 
 export const runtime = "nodejs";
@@ -14,6 +15,7 @@ interface JobListing {
   description: string;
   postedAt: string;
   applyUrl: string;
+  applySite: string;
 }
 
 /** Current IST hour as "HH:00" string. */
@@ -22,16 +24,6 @@ function currentISTHour(): string {
   const istOffsetMs = (5 * 60 + 30) * 60 * 1000;
   const istDate = new Date(utcMs + istOffsetMs);
   return `${String(istDate.getUTCHours()).padStart(2, "0")}:00`;
-}
-
-function buildLinkedInUrl(role: string, location: string): string {
-  return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(role)}&location=${encodeURIComponent(location || "India")}&f_TPR=r86400&sortBy=DD`;
-}
-
-function buildNaukriUrl(role: string, location: string): string {
-  const roleSlug = role.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
-  const city = (location.split(",")[0] || "india").trim().toLowerCase().replace(/\s+/g, "-");
-  return `https://www.naukri.com/${roleSlug}-jobs-in-${city}`;
 }
 
 /** Use Groq to generate 8 jobs for an alert. */
@@ -74,14 +66,10 @@ Return ONLY valid JSON:
   if (!match) throw new Error("No JSON");
   const parsed = JSON.parse(match[0]) as { jobs: Array<{ title: string; company: string; location: string; workMode: string; salary: string; description: string; postedAt: string }> };
 
-  const isIndia = /india|bangalore|mumbai|delhi|hyderabad|chennai|pune/i.test(location);
-
-  return (parsed.jobs ?? []).map((j) => ({
-    ...j,
-    applyUrl: isIndia
-      ? buildNaukriUrl(j.title, j.location)
-      : buildLinkedInUrl(j.title, j.location),
-  }));
+  return (parsed.jobs ?? []).map((j) => {
+    const link = careerLink(j.company, j.title);
+    return { ...j, applyUrl: link.url, applySite: link.label };
+  });
 }
 
 function buildEmailHtml(

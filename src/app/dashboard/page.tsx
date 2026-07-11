@@ -61,24 +61,31 @@ export default async function DashboardPage() {
       <Navbar />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
         {/* Header */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">
-              Welcome back{profile?.target_role ? `, future ${profile.target_role}` : ""}!
-            </h1>
-            <p className="mt-1 text-slate-600">
-              {pro ? "✨ Pro plan" : "Free plan"} · {resumes.length} {resumes.length === 1 ? "resume" : "resumes"} · {sessionCount ?? 0} interview sessions
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            {!pro && (
-              <Link href="/billing" className="rounded-xl border border-brand-600 px-4 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50 transition">
-                Upgrade to Pro
+        <div className="mb-8 overflow-hidden rounded-3xl bg-brand-gradient p-7 text-white shadow-md sm:p-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-bold sm:text-3xl">
+                  Welcome back{profile?.target_role ? `, future ${profile.target_role}` : ""}!
+                </h1>
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${pro ? "bg-white/20 text-white" : "bg-black/20 text-white/90"}`}>
+                  {pro ? "PRO" : "FREE"}
+                </span>
+              </div>
+              <p className="mt-1.5 text-sm text-white/80">
+                {resumes.length} {resumes.length === 1 ? "resume" : "resumes"} · {sessionCount ?? 0} interview sessions · Powered by Swache Technologies
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              {!pro && (
+                <Link href="/billing" className="rounded-xl bg-white/95 px-4 py-2 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-white">
+                  Upgrade to Pro
+                </Link>
+              )}
+              <Link href="/builder" className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50">
+                + New resume
               </Link>
-            )}
-            <Link href="/builder" className="rounded-xl bg-brand-gradient px-4 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90 transition">
-              + New resume
-            </Link>
+            </div>
           </div>
         </div>
 

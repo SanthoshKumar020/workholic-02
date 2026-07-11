@@ -55,6 +55,14 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
+  /* Soft brand aurora on light surfaces for depth */
+  body {
+    background-image:
+      radial-gradient(60rem 60rem at 110% -10%, rgba(124, 58, 237, 0.06), transparent 60%),
+      radial-gradient(50rem 50rem at -10% 0%, rgba(79, 70, 229, 0.06), transparent 55%);
+    background-attachment: fixed;
+  }
+
   html.dark,
   html.dark body {
     @apply bg-slate-950 text-slate-100;

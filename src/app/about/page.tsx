@@ -45,7 +45,7 @@ export default function AboutPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">The team</h2>
             <p className="mt-3">
-              HYRISE is built by <strong>Santo Square Automation</strong>, a software product
+              HYRISE is built by <strong>Swache Technologies (OPC) Private Limited</strong>, a software product
               company based in India. We build tools that make complex workflows simple and
               accessible — HYRISE is our flagship product for job seekers.
             </p>
@@ -68,8 +68,8 @@ export default function AboutPage() {
             </p>
             <p className="mt-2">
               Email:{" "}
-              <a href="mailto:support@swache.in" className="font-semibold text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="font-semibold text-brand-600 hover:underline">
+                admin@swache.in
               </a>
             </p>
             <p className="mt-1">Or use the{" "}

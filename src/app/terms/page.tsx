@@ -26,7 +26,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">1. Acceptance of terms</h2>
             <p className="mt-2">
-              By creating an account or using HYRISE (operated by <strong>Santo Square Automation</strong>,
+              By creating an account or using HYRISE (operated by <strong>Swache Technologies (OPC) Private Limited</strong>,
               accessible at <strong>hyrise.swache.in</strong>), you agree to these Terms of Service.
               If you do not agree, do not use the platform.
             </p>
@@ -100,8 +100,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">8. Intellectual property</h2>
             <p className="mt-2">
-              The HYRISE name, logo, platform design, and proprietary code are owned by Santo Square
-              Automation. You may not copy, reproduce, or distribute them without written permission.
+              The HYRISE name, logo, platform design, and proprietary code are owned by Swache Technologies (OPC) Private Limited. You may not copy, reproduce, or distribute them without written permission.
             </p>
           </section>
 
@@ -116,7 +115,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">10. Limitation of liability</h2>
             <p className="mt-2">
-              To the maximum extent permitted by law, Santo Square Automation is not liable for any
+              To the maximum extent permitted by law, Swache Technologies (OPC) Private Limited is not liable for any
               indirect, incidental, or consequential damages arising from your use of HYRISE. Our total
               liability to you in any month shall not exceed the amount you paid us in that month.
             </p>
@@ -126,16 +125,21 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold text-slate-900">11. Governing law</h2>
             <p className="mt-2">
               These terms are governed by the laws of India. Any disputes shall be resolved in the
-              courts of jurisdiction applicable to Santo Square Automation&apos;s registered address.
+              courts of jurisdiction applicable to Swache Technologies (OPC) Private Limited&apos;s registered address.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-bold text-slate-900">12. Contact</h2>
             <p className="mt-2">
+              Swache Technologies (OPC) Private Limited{" "}
+              <br />
+              Corporate Address: L 303, Rohan Upavan, Kyalasanahalli, Kothanur,
+              Bangalore North, Karnataka 560077{" "}
+              <br />
               Questions about these terms? Email us at{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>.
             </p>
           </section>

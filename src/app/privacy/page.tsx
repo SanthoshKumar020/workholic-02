@@ -26,11 +26,11 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">1. Who we are</h2>
             <p className="mt-2">
-              HYRISE is an AI-powered career platform operated by <strong>Santo Square Automation</strong>,
+              HYRISE is an AI-powered career platform operated by <strong>Swache Technologies (OPC) Private Limited</strong>,
               India. Our website is <strong>hyrise.swache.in</strong>. If you have questions about this
               policy, contact us at{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>.
             </p>
           </section>
@@ -80,8 +80,8 @@ export default function PrivacyPage() {
               Your account data and saved resumes are retained as long as your account is active.
               You can delete your account and all associated data at any time from your account settings,
               or by emailing us at{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>. We will process deletion requests within 30 days.
             </p>
           </section>
@@ -99,8 +99,8 @@ export default function PrivacyPage() {
             <p className="mt-2">
               You have the right to access, correct, or delete your personal data. To exercise
               these rights, email us at{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>. We aim to respond within 14 business days.
             </p>
           </section>
@@ -111,8 +111,8 @@ export default function PrivacyPage() {
               We use industry-standard security measures including encrypted connections (HTTPS),
               hashed passwords, and row-level security on our database. No system is 100% secure —
               if you discover a vulnerability, please disclose it responsibly to{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>.
             </p>
           </section>
@@ -128,9 +128,13 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">10. Contact</h2>
             <p className="mt-2">
-              Santo Square Automation, India.{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              Swache Technologies (OPC) Private Limited{" "}
+              <br />
+              Corporate Address: L 303, Rohan Upavan, Kyalasanahalli, Kothanur,
+              Bangalore North, Karnataka 560077{" "}
+              <br />
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>
             </p>
           </section>

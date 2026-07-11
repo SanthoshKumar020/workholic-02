@@ -201,7 +201,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         <p className="mx-auto mt-10 max-w-xl text-center text-xs text-slate-400">
           HYRISE by{" "}
-          <span className="font-semibold text-slate-500">Santo Square Automation</span>. We help
+          <span className="font-semibold text-slate-500">Swache Technologies (OPC) Private Limited</span>. We help
           you improve your resume — we do not guarantee interviews, offers, or employment outcomes.
         </p>
       </div>

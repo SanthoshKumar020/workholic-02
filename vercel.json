@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/job-alerts",
       "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cron/marketing-report",
+      "schedule": "0 9 * * 1"
     }
   ],
   "headers": [

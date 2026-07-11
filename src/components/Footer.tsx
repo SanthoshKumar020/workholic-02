@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { SOCIAL_LINKS, SOCIAL_META, type SocialKey } from "@/lib/social";
 
 const PRODUCT_LINKS = [
   { href: "/#ats", label: "Free ATS Checker" },
@@ -49,6 +50,25 @@ export function Footer() {
               AI-powered career platform to help you land your next job faster. Resume enhancement, mock interviews, job matching, and more — free to start.
             </p>
 
+            {/* Social links */}
+            <div className="mt-5 flex items-center gap-3">
+              {(Object.keys(SOCIAL_LINKS) as SocialKey[])
+                .filter((k) => SOCIAL_LINKS[k])
+                .map((k) => (
+                  <a
+                    key={k}
+                    href={SOCIAL_LINKS[k]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={SOCIAL_META[k].label}
+                    title={SOCIAL_META[k].label}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600"
+                  >
+                    <span className="text-xs font-bold uppercase">{k[0]}</span>
+                  </a>
+                ))}
+            </div>
+
             {/* Company attribution */}
             <div className="mt-6 inline-flex items-center gap-2 rounded-xl border border-brand-100 bg-brand-50 px-4 py-2.5">
               <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-gradient">
@@ -60,7 +80,7 @@ export function Footer() {
                 <p className="text-[10px] font-medium uppercase tracking-widest text-brand-500">
                   A product by
                 </p>
-                <p className="text-sm font-bold text-brand-800">Santo Square Automation</p>
+                <p className="text-sm font-bold text-brand-800">Swache Technologies (OPC) Private Limited</p>
               </div>
             </div>
           </div>
@@ -168,11 +188,14 @@ export function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-slate-400 sm:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="font-medium text-slate-500">Santo Square Automation</span>. All rights
+            <span className="font-medium text-slate-500">Swache Technologies (OPC) Private Limited</span>. All rights
             reserved.
           </p>
           <p className="text-center">
-            HYRISE helps you land your dream job. Results vary — we do not guarantee job outcomes.
+            Regd. office: L 303, Rohan Upavan, Kyalasanahalli, Kothanur, Bangalore North, Karnataka 560077 ·{" "}
+            <a href="mailto:admin@swache.in" className="text-slate-500 hover:text-brand-600 hover:underline">
+              admin@swache.in
+            </a>
           </p>
         </div>
       </div>

@@ -28,8 +28,8 @@ export default function RefundPage() {
             <p className="mt-2">
               We want you to be happy with HYRISE. If something went wrong with your subscription
               or payment, contact us at{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>{" "}
               and we will make it right.
             </p>
@@ -70,8 +70,8 @@ export default function RefundPage() {
             <ol className="mt-2 list-decimal space-y-1.5 pl-5">
               <li>
                 Email{" "}
-                <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                  support@swache.in
+                <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                  admin@swache.in
                 </a>{" "}
                 with the subject line <strong>&ldquo;Refund Request&rdquo;</strong>.
               </li>
@@ -95,9 +95,13 @@ export default function RefundPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">Contact</h2>
             <p className="mt-2">
-              Santo Square Automation, India.{" "}
-              <a href="mailto:support@swache.in" className="text-brand-600 hover:underline">
-                support@swache.in
+              Swache Technologies (OPC) Private Limited{" "}
+              <br />
+              Corporate Address: L 303, Rohan Upavan, Kyalasanahalli, Kothanur,
+              Bangalore North, Karnataka 560077{" "}
+              <br />
+              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
+                admin@swache.in
               </a>
             </p>
           </section>

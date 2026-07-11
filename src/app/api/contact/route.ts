@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
   if (error) {
     console.error("[contact]", error.message);
-    return NextResponse.json({ error: "Failed to send message. Please email us directly at support@swache.in" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send message. Please email us directly at admin@swache.in" }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

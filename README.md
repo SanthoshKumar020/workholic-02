@@ -1,3 +1,4 @@
+
 # ResumeBoost
 
 AI-powered resume enhancement, free ATS scoring, clean PDF templates, job alerts, and Stripe subscriptions. Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Supabase**, **Stripe**, **Resend**, and your **n8n** automation webhooks.
@@ -32,20 +33,20 @@ cp .env.local.example .env.local
 
 Fill in `.env.local`:
 
-| Variable | Where to get it |
-| --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → API → Project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Project Settings → API → `anon` public key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → `service_role` key (**server only**) |
-| `NEXT_PUBLIC_N8N_ENHANCE_WEBHOOK_URL` | Your n8n "enhance/ATS" workflow Production webhook URL |
-| `NEXT_PUBLIC_N8N_JOBSEARCH_WEBHOOK_URL` | Your n8n "job search" workflow Production webhook URL |
-| `STRIPE_SECRET_KEY` | Stripe → Developers → API keys → Secret key |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe → Developers → API keys → Publishable key |
-| `STRIPE_PRICE_ID` | Stripe → Products → your Pro price → Price ID (`price_…`) |
-| `STRIPE_WEBHOOK_SECRET` | From the Stripe webhook you create in step 4 (`whsec_…`) |
-| `RESEND_API_KEY` | Resend → API Keys |
-| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` locally; your Vercel URL in prod |
-| `EMAIL_FROM` | A verified Resend sender, e.g. `ResumeBoost <noreply@yourdomain.com>` |
+| Variable                                  | Where to get it                                                                    |
+| ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`              | Supabase → Project Settings → API → Project URL                                 |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY`         | Supabase → Project Settings → API →`anon` public key                          |
+| `SUPABASE_SERVICE_ROLE_KEY`             | Supabase → Project Settings → API →`service_role` key (**server only**) |
+| `NEXT_PUBLIC_N8N_ENHANCE_WEBHOOK_URL`   | Your n8n "enhance/ATS" workflow Production webhook URL                             |
+| `NEXT_PUBLIC_N8N_JOBSEARCH_WEBHOOK_URL` | Your n8n "job search" workflow Production webhook URL                              |
+| `STRIPE_SECRET_KEY`                     | Stripe → Developers → API keys → Secret key                                     |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`    | Stripe → Developers → API keys → Publishable key                                |
+| `STRIPE_PRICE_ID`                       | Stripe → Products → your Pro price → Price ID (`price_…`)                    |
+| `STRIPE_WEBHOOK_SECRET`                 | From the Stripe webhook you create in step 4 (`whsec_…`)                        |
+| `RESEND_API_KEY`                        | Resend → API Keys                                                                 |
+| `NEXT_PUBLIC_SITE_URL`                  | `http://localhost:3000` locally; your Vercel URL in prod                         |
+| `EMAIL_FROM`                            | A verified Resend sender, e.g.`ResumeBoost <noreply@yourdomain.com>`             |
 
 ## 3. Set up Supabase
 
@@ -77,7 +78,9 @@ stripe trigger checkout.session.completed
 ```
 
 ## 5. Run locally
+
 ![1780903592642]
+
 ```bash
 npm run dev
 # http://localhost:3000
@@ -153,3 +156,4 @@ middleware.ts  # session refresh + protected-route redirects
 - All Stripe secret-key calls and plan updates happen in server route handlers.
 - **RLS** ensures every user can read/write only their own rows.
 - The Stripe webhook verifies signatures with `STRIPE_WEBHOOK_SECRET` before mutating any plan.
+

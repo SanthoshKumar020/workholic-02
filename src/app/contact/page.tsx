@@ -23,8 +23,8 @@ export default function ContactPage() {
           </p>
           <p className="mt-2 text-sm text-slate-500">
             Prefer email?{" "}
-            <a href="mailto:support@swache.in" className="font-semibold text-brand-600 hover:underline">
-              support@swache.in
+            <a href="mailto:admin@swache.in" className="font-semibold text-brand-600 hover:underline">
+              admin@swache.in
             </a>
           </p>
         </div>

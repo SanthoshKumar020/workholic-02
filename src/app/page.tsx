@@ -5,7 +5,50 @@ import { AtsChecker } from "@/components/AtsChecker";
 import { PricingSection } from "@/components/PricingSection";
 import { Testimonials } from "@/components/Testimonials";
 import { EmailCapture } from "@/components/EmailCapture";
+import { TrackedLink } from "@/components/TrackedLink";
 import { createClient } from "@/lib/supabase/server";
+
+/**
+ * FAQ content. Rendered visibly AND as FAQPage structured data — Google shows
+ * these as expandable rich results, which is free SERP real estate and one of
+ * the cheapest ways to lift click-through on a brand-new domain.
+ */
+const FAQS = [
+  {
+    q: "Is the ATS resume checker really free?",
+    a: "Yes. You can check your resume's ATS score without creating an account — upload a PDF, DOCX, or TXT and get a score in about 20 seconds. A free account unlocks the full list of fixes plus the AI resume rewriter.",
+  },
+  {
+    q: "What is an ATS score and why does it matter?",
+    a: "An Applicant Tracking System is the software most companies use to filter resumes before a recruiter sees them. Your ATS score estimates how well your resume survives that filter — based on keyword coverage, section headings, formatting, contact details, action verbs, and quantified achievements.",
+  },
+  {
+    q: "Do you store or sell my resume?",
+    a: "Your resume text is sent to our server, analysed, and returned. We do not sell your data or share it with advertisers. If you create an account, your saved resumes are stored privately under your login and you can delete them at any time.",
+  },
+  {
+    q: "How much does HYRISE Pro cost?",
+    a: "Pro is ₹30 per month or ₹311 per year. It removes the usage limits on every AI tool and unlocks the premium resume templates, career mentor, job alerts, and the salary negotiation coach. The free plan stays free forever.",
+  },
+  {
+    q: "Will this guarantee me a job?",
+    a: "No, and be sceptical of any tool that claims otherwise. HYRISE improves how your resume is written and parsed, and helps you prepare for interviews. Hiring decisions are still made by people.",
+  },
+  {
+    q: "Which file formats can I upload?",
+    a: "PDF, DOCX, and TXT, up to 5 MB. Text is extracted in your browser before it is analysed. If your file is a scanned image, paste the text instead.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
 
 const FEATURES = [
   { icon: "📄", title: "AI Resume Enhancement", desc: "Rewrite bullet points, add strong action verbs, quantify impact — all with Groq AI." },
@@ -20,10 +63,10 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { value: "Free", label: "ATS score check" },
-  { value: "Groq AI", label: "Powered by" },
-  { value: "9+", label: "Career tools" },
-  { value: "PDF", label: "Instant export" },
+  { value: "Free", label: "No signup to try" },
+  { value: "20s", label: "To your score" },
+  { value: "25+", label: "Career tools" },
+  { value: "₹30", label: "Pro, per month" },
 ];
 
 export default async function LandingPage() {
@@ -44,29 +87,32 @@ export default async function LandingPage() {
             </div>
 
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.15] tracking-tight text-slate-900 sm:text-5xl xl:text-6xl">
-              Your complete{" "}
-              <span className="text-gradient">AI career platform</span>{" "}
+              Check your resume&apos;s{" "}
+              <span className="text-gradient">ATS score</span>{" "}
               <br className="hidden sm:block" />
-              in one place.
+              free — no signup.
             </h1>
 
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
-              Resume enhancement, ATS scoring, mock interviews, job matching, learning roadmaps,
-              cover letters, and more — all powered by AI, free to start.
+              Most resumes are rejected by software before a human reads them. Upload yours and see
+              exactly what an ATS sees — in 20 seconds. Then fix it with AI resume rewriting, mock
+              interviews, job matching, and 25+ other career tools.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/signup"
+              <TrackedLink
+                href="#ats"
+                event="signup_cta_clicked"
+                source="hero_primary"
                 className="rounded-xl bg-brand-gradient px-7 py-3.5 text-center text-base font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-glow-sm"
               >
-                Start free — no card needed
-              </Link>
+                Check my resume — free ↓
+              </TrackedLink>
               <Link
-                href="#ats"
+                href="#pricing"
                 className="rounded-xl border border-slate-300 bg-white px-7 py-3.5 text-center text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50"
               >
-                Try the ATS checker
+                See what&apos;s included
               </Link>
             </div>
 
@@ -124,9 +170,14 @@ export default async function LandingPage() {
                 Powered by Groq AI (llama-3.3-70b) running entirely server-side. No data sent to third-party automation tools.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/signup" className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow transition hover:bg-brand-50">
+                <TrackedLink
+                  href="/signup"
+                  event="signup_cta_clicked"
+                  source="highlight_strip"
+                  className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow transition hover:bg-brand-50"
+                >
                   Start free
-                </Link>
+                </TrackedLink>
                 <Link href="/#pricing" className="rounded-xl border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
                   See pricing
                 </Link>
@@ -156,6 +207,37 @@ export default async function LandingPage() {
 
       <PricingSection isLoggedIn={!!user} />
 
+      {/* ── FAQ (visible + FAQPage schema for rich results) ───── */}
+      <section className="mx-auto max-w-3xl px-4 pb-16">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+            FAQ
+          </span>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+            Questions people ask before trying it
+          </h2>
+        </div>
+
+        <div className="mt-10 space-y-3">
+          {FAQS.map((f) => (
+            <details
+              key={f.q}
+              className="group rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition open:shadow-md"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-900">
+                {f.q}
+                <span className="shrink-0 text-brand-500 transition group-open:rotate-45">+</span>
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {/* ── Final CTA ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-4 pb-24">
         <div className="relative overflow-hidden rounded-3xl border border-brand-100 bg-white px-8 py-16 text-center shadow-sm">
@@ -171,9 +253,14 @@ export default async function LandingPage() {
             Free forever to start. Pro is just ₹30/month — less than a cup of chai.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <Link href="/signup" className="rounded-xl bg-brand-gradient px-8 py-3.5 text-base font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-glow-sm">
+            <TrackedLink
+              href="/signup"
+              event="signup_cta_clicked"
+              source="footer_cta"
+              className="rounded-xl bg-brand-gradient px-8 py-3.5 text-base font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-glow-sm"
+            >
               Create free account
-            </Link>
+            </TrackedLink>
             <Link href="/#ats" className="rounded-xl border border-slate-300 px-8 py-3.5 text-base font-semibold text-slate-800 transition hover:bg-slate-50">
               Try ATS checker first
             </Link>

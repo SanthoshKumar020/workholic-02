@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/analytics";
 
 export function EmailCapture() {
   const [email, setEmail] = useState("");
@@ -26,6 +27,7 @@ export function EmailCapture() {
         throw new Error(d?.error || "Something went wrong.");
       }
       setStatus("done");
+      track("email_captured", { source: "landing_newsletter" });
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong.");
       setStatus("error");

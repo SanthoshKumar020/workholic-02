@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { CareerChatWrapper } from "@/components/CareerChatWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Analytics } from "@/components/Analytics";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://hyrise.swache.in";
 const SITE_NAME = "HYRISE";
@@ -88,11 +89,11 @@ const jsonLd = {
       priceCurrency: "INR",
     },
   ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.8",
-    ratingCount: "1240",
-  },
+  // NOTE: an `aggregateRating` was removed here. It claimed 1,240 ratings that
+  // don't exist. Google's structured-data policy treats unverifiable review
+  // markup as spam and it can trigger a manual action on the whole domain —
+  // a real risk for a site that is trying to rank. Add it back only when the
+  // ratings come from actual, on-page, user-submitted reviews.
   publisher: {
     "@type": "Organization",
     name: "Swache Technologies (OPC) Private Limited",
@@ -130,6 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster position="bottom-right" richColors />
           <CareerChatWrapper />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

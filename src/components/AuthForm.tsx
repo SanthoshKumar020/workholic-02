@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
+import { track } from "@/lib/analytics";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const supabase = createClient();
@@ -36,6 +37,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           },
         });
         if (error) throw error;
+        track("signup_completed", { method: "email" });
         setMessage(
           "Account created. If email confirmation is enabled, check your inbox to verify, then log in."
         );
@@ -58,6 +60,10 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   async function handleGoogle() {
     setError(null);
     setOauthLoading(true);
+    track(mode === "signup" ? "signup_completed" : "signup_cta_clicked", {
+      method: "google",
+      source: "auth_form",
+    });
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",

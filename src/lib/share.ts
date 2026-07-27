@@ -11,6 +11,23 @@ export function whatsappShareUrl(text: string, url?: string): string {
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
+/**
+ * Append UTM parameters so shared links are attributable in analytics.
+ * Without this, every WhatsApp-forwarded link lands in "direct traffic" and
+ * you can never tell whether the sharing loop is actually working.
+ */
+export function withUtm(url: string, source: string, medium = "share", campaign?: string): string {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("utm_source", source);
+    u.searchParams.set("utm_medium", medium);
+    if (campaign) u.searchParams.set("utm_campaign", campaign);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 /** Generic share text builders for common result types. */
 export const shareText = {
   ats: (score: number) =>

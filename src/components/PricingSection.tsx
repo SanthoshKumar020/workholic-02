@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { track } from "@/lib/analytics";
 
 const FREE_FEATURES = [
   "3 free AI uses per tool",
@@ -30,7 +32,7 @@ const PRO_ANNUAL_FEATURES = [
 ];
 
 const COMPARE_ROWS: { feature: string; free: string | boolean; pro: boolean }[] = [
-  { feature: "ATS score checker",            free: "1 check",      pro: true },
+  { feature: "ATS score checker",            free: "3 checks",     pro: true },
   { feature: "AI resume enhancement",        free: "3 uses",       pro: true },
   { feature: "Resume templates",             free: "1 template",   pro: true },
   { feature: "PDF export",                   free: true,           pro: true },
@@ -52,9 +54,28 @@ const COMPARE_ROWS: { feature: string; free: string | boolean; pro: boolean }[] 
 
 export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
   const proHref = isLoggedIn ? "/billing" : "/signup";
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Fire `pricing_viewed` once, when the section actually scrolls into view.
+  // "How many visitors even reach pricing?" is the first question you'll ask.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          track("pricing_viewed", { loggedIn: isLoggedIn });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isLoggedIn]);
 
   return (
-    <section id="pricing" className="relative overflow-hidden py-24">
+    <section ref={sectionRef} id="pricing" className="relative overflow-hidden py-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute left-1/4 top-0 h-80 w-80 rounded-full bg-brand-100/50 blur-3xl" />
         <div className="absolute right-1/4 bottom-0 h-80 w-80 rounded-full bg-violet-100/40 blur-3xl" />
@@ -95,6 +116,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             </ul>
             <Link
               href="/signup"
+              onClick={() => track("signup_cta_clicked", { source: "pricing_free" })}
               className="mt-7 block rounded-xl border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
             >
               Create free account
@@ -125,6 +147,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             </ul>
             <Link
               href={proHref}
+              onClick={() => track("upgrade_clicked", { plan: "pro_monthly", loggedIn: isLoggedIn })}
               className="mt-7 block rounded-xl bg-brand-gradient px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
             >
               {isLoggedIn ? "Upgrade to Pro — ₹30/mo" : "Get Pro — ₹30/mo"}
@@ -155,6 +178,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             </ul>
             <Link
               href={proHref}
+              onClick={() => track("upgrade_clicked", { plan: "pro_annual", loggedIn: isLoggedIn })}
               className="mt-7 block rounded-xl border-2 border-violet-500 bg-white px-4 py-2.5 text-center text-sm font-semibold text-violet-700 transition hover:bg-violet-50"
             >
               {isLoggedIn ? "Upgrade — ₹311/yr" : "Get Annual — ₹311/yr"}

@@ -13,7 +13,14 @@ import {
   ExtractionError,
   ACCEPTED_RESUME_TYPES,
 } from "@/lib/extractText";
+import { track } from "@/lib/analytics";
 import type { EnhanceResult } from "@/lib/types";
+
+type AtsResult = EnhanceResult & {
+  /** Number of additional fixes withheld behind the free-signup wall. */
+  lockedCount?: number;
+  anonymous?: boolean;
+};
 
 /**
  * Free, no-login ATS Score Checker (lead magnet).
@@ -30,7 +37,7 @@ export function AtsChecker() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<EnhanceResult | null>(null);
+  const [result, setResult] = useState<AtsResult | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,6 +54,7 @@ export function AtsChecker() {
         );
       }
       setResumeText(text);
+      track("ats_resume_uploaded", { ext: file.name.split(".").pop()?.toLowerCase() });
     } catch (err) {
       setResumeText("");
       setFileName(null);
@@ -67,6 +75,7 @@ export function AtsChecker() {
       return;
     }
     setLoading(true);
+    track("ats_check_started", { mode: pasteMode ? "paste" : "upload" });
     try {
       const res = await fetch("/api/ats-check", {
         method: "POST",
@@ -74,10 +83,18 @@ export function AtsChecker() {
         body: JSON.stringify({ resumeText }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Something went wrong.");
-      setResult(data as EnhanceResult);
+      if (!res.ok) {
+        throw new Error(data?.message || data?.error || "Something went wrong.");
+      }
+      setResult(data as AtsResult);
+      track("ats_check_completed", {
+        score: (data as AtsResult).atsScore ?? 0,
+        anonymous: Boolean((data as AtsResult).anonymous),
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(msg);
+      track("ats_check_failed", { reason: msg.slice(0, 80) });
     } finally {
       setLoading(false);
     }
@@ -92,6 +109,8 @@ export function AtsChecker() {
   }
 
   const tips = result?.improvements ?? result?.tips ?? [];
+  const lockedCount = result?.lockedCount ?? 0;
+  const totalIssues = tips.length + lockedCount;
   const ready = resumeText.trim().length >= 50;
 
   return (
@@ -209,8 +228,8 @@ export function AtsChecker() {
                 Your ATS Score
               </p>
               <h3 className="mt-1 text-lg font-bold text-slate-900 leading-tight">
-                {tips.length > 0
-                  ? `We found ${tips.length} issue${tips.length !== 1 ? "s" : ""} holding your resume back`
+                {totalIssues > 0
+                  ? `We found ${totalIssues} issue${totalIssues !== 1 ? "s" : ""} holding your resume back`
                   : "Your resume looks solid!"}
               </h3>
               <p className="mt-1 text-sm text-slate-500">
@@ -237,13 +256,34 @@ export function AtsChecker() {
                   </li>
                 ))}
               </ul>
+
+              {/* Locked fixes — the reason to create an account */}
+              {lockedCount > 0 && (
+                <div className="relative mt-3 overflow-hidden rounded-lg border border-red-200 bg-white/70 p-3">
+                  <ul className="space-y-2 select-none blur-[5px]" aria-hidden="true">
+                    {Array.from({ length: lockedCount }).map((_, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
+                        <span className="h-3 flex-1 rounded bg-slate-300" />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/40">
+                    <span className="rounded-full bg-slate-900/85 px-3 py-1 text-xs font-semibold text-white">
+                      🔒 {lockedCount} more fix{lockedCount !== 1 ? "es" : ""} — unlock free
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           {/* Conversion CTA */}
           <div className="rounded-xl border border-brand-100 bg-brand-50 p-4">
             <p className="text-sm font-bold text-brand-800">
-              Fix {tips.length > 0 ? `all ${Math.min(tips.length, 5)}` : "these"} issues with AI — free
+              {lockedCount > 0
+                ? `See all ${totalIssues} fixes and rewrite your resume — free`
+                : `Fix ${totalIssues > 0 ? `all ${totalIssues}` : "these"} issues with AI — free`}
             </p>
             <p className="mt-1 text-xs text-slate-600">
               Sign up free → paste your job description → AI rewrites your resume to match. ATS score
@@ -254,9 +294,16 @@ export function AtsChecker() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               href="/signup"
+              onClick={() =>
+                track("signup_cta_clicked", {
+                  source: "ats_result",
+                  score: result.atsScore ?? 0,
+                  locked: lockedCount,
+                })
+              }
               className="flex-1 rounded-xl bg-brand-gradient px-4 py-3 text-center text-sm font-bold text-white shadow-sm transition hover:opacity-90"
             >
-              Fix with AI — sign up free →
+              {lockedCount > 0 ? "Unlock all fixes — sign up free →" : "Fix with AI — sign up free →"}
             </Link>
             <Button variant="secondary" onClick={reset}>
               Check another
@@ -270,6 +317,7 @@ export function AtsChecker() {
               text={shareText.ats(result.atsScore ?? 0)}
               url={SITE_URL}
               size="sm"
+              source="ats_result"
             />
           </div>
 

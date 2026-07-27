@@ -1,6 +1,7 @@
 "use client";
 
-import { whatsappShareUrl, SITE_URL } from "@/lib/share";
+import { whatsappShareUrl, SITE_URL, withUtm } from "@/lib/share";
+import { track } from "@/lib/analytics";
 
 /** Official WhatsApp glyph (lucide has no brand icon for it). */
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -21,14 +22,19 @@ export function WhatsAppShareButton({
   label = "Share on WhatsApp",
   size = "md",
   className = "",
+  source = "unknown",
 }: {
   text: string;
   url?: string;
   label?: string;
   size?: "sm" | "md";
   className?: string;
+  /** Where the share happened, e.g. "ats_result" — used for attribution. */
+  source?: string;
 }) {
-  const href = whatsappShareUrl(text, url);
+  // Tag the shared link so WhatsApp traffic shows up as its own channel in
+  // analytics instead of being lumped into "direct".
+  const href = whatsappShareUrl(text, withUtm(url, "whatsapp", "share", source));
   const sizing = size === "sm" ? "px-3 py-1.5 text-xs gap-1.5" : "px-4 py-2.5 text-sm gap-2";
   const icon = size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4";
 
@@ -37,6 +43,7 @@ export function WhatsAppShareButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => track("share_clicked", { channel: "whatsapp", source })}
       className={`inline-flex items-center justify-center rounded-xl bg-[#25D366] font-semibold text-white shadow-sm transition hover:bg-[#1da851] active:scale-[0.98] ${sizing} ${className}`}
     >
       <WhatsAppIcon className={icon} />

@@ -27,7 +27,9 @@ export type AnalyticsEvent =
   | "upgrade_clicked"
   | "checkout_started"
   // ── Loops ───────────────────────────────────────────────────────────────
+  | "share_link_created"
   | "share_clicked"
+  | "share_page_cta_clicked"
   | "email_captured";
 
 type Props = Record<string, string | number | boolean | undefined>;

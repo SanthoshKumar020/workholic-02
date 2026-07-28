@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Textarea";
 import { Alert } from "@/components/ui/Alert";
 import { AtsScoreRing } from "@/components/AtsScoreRing";
-import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
-import { shareText, SITE_URL } from "@/lib/share";
+import { ShareScoreCard } from "@/components/ShareScoreCard";
 import {
   extractResumeText,
   ExtractionError,
@@ -310,13 +309,12 @@ export function AtsChecker() {
             </Button>
           </div>
 
-          {/* Share — India shares on WhatsApp */}
-          <div className="flex items-center justify-center gap-2 border-t border-slate-100 pt-4">
-            <span className="text-xs text-slate-400">Proud of your score?</span>
-            <WhatsAppShareButton
-              text={shareText.ats(result.atsScore ?? 0)}
-              url={SITE_URL}
-              size="sm"
+          {/* Share loop — a forwardable image beats a bare link in WhatsApp */}
+          <div className="border-t border-slate-100 pt-4">
+            <ShareScoreCard
+              score={result.atsScore ?? 0}
+              visibleTips={tips}
+              lockedCount={lockedCount}
               source="ats_result"
             />
           </div>

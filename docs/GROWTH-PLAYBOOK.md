@@ -25,6 +25,18 @@ and 20% on product**. Reverse that ratio only after a channel starts working.
 | Shared WhatsApp links had no UTM tags | All viral traffic looked like "direct" — the loop was unmeasurable | ✅ Fixed |
 | No FAQ schema | Missing free SERP real estate | ✅ Added FAQPage structured data + visible FAQ |
 
+### Shipped since: the share loop
+
+| Feature | What it does |
+| --- | --- |
+| `/api/og/score` | Dynamic 1200×630 score card PNG (score ring, verdict, issue count, your URL) |
+| `/s/<id>` | Public share page with a rich WhatsApp/LinkedIn preview and a "check yours free" CTA. `noindex, follow` so thin pages don't dilute the domain |
+| `/api/share` | Creates the share record. Service-role writes only, rate-limited, **stores no resume text** |
+| `ShareScoreCard` | Post-result block: live preview of the card, WhatsApp share, copy link, download image |
+
+**Setup required:** run `supabase/migrations/009_shared_scans.sql` in the
+Supabase SQL editor before deploying, or `/api/share` will 500.
+
 ### Do this before anything else (30 minutes)
 
 1. Create a **Google Analytics 4** property → put the `G-XXXXXXXXXX` ID in
@@ -194,12 +206,12 @@ are what get your SEO out of the credibility gap.
 
 Ranked by impact per hour of work.
 
-1. **Shareable score image card.** Generate a PNG of the ATS result (Next.js
-   `ImageResponse` — you already use it for `opengraph-image.tsx`). One image
-   per score. This is what makes the WhatsApp loop actually work.
-2. **Public result pages.** Give every scan a URL like `/s/<id>` showing the
-   score and blurred fixes. Shareable *and* indexable — every share becomes a
-   backlink.
+1. ~~**Shareable score image card.**~~ ✅ **Shipped** — `/api/og/score` renders a
+   1200×630 PNG with the score ring, verdict, and your URL. Users can download
+   it or forward it; it's also the OG image for share pages.
+2. ~~**Public result pages.**~~ ✅ **Shipped** — every scan can become `/s/<id>`
+   with a rich WhatsApp/LinkedIn preview and a "check yours free" CTA.
+   Requires running `supabase/migrations/009_shared_scans.sql`.
 3. **Referral unlock.** "Invite 2 friends → 1 month of Pro free." Cheap for you
    (your marginal cost is Groq tokens), and it turns your only asset — users —
    into distribution.

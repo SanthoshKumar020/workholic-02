@@ -1,16 +1,25 @@
 // ── HYRISE social presence ─────────────────────────────────────────────────
-// Fill these in with your REAL handles. They're used in the footer and in
-// generated share URLs. Leave a value blank ("") to hide that icon.
+// Each icon appears in the footer ONLY when its env var is set. That default
+// is deliberate: these previously fell back to guessed handles
+// (linkedin.com/company/hyrise, x.com/hyrise, …). If an account doesn't exist,
+// a visitor clicking it lands on a 404 — or on a stranger's profile with your
+// brand name. An absent icon costs nothing; a dead one costs trust.
 //
-// Tip: set these via env vars (NEXT_PUBLIC_*) so you can change them without
-// a code edit. Falls back to the hardcoded defaults below.
+// Set these in Vercel → Settings → Environment Variables as you create each
+// account, then redeploy. No code change needed.
+//
+//   NEXT_PUBLIC_SOCIAL_LINKEDIN=https://www.linkedin.com/company/your-page
+//   NEXT_PUBLIC_SOCIAL_TWITTER=https://x.com/yourhandle
+//   NEXT_PUBLIC_SOCIAL_INSTAGRAM=https://www.instagram.com/yourhandle
+//   NEXT_PUBLIC_SOCIAL_YOUTUBE=https://www.youtube.com/@yourchannel
+//   NEXT_PUBLIC_SOCIAL_WHATSAPP=https://wa.me/919999999999
 
 export const SOCIAL_LINKS = {
-  linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || "https://www.linkedin.com/company/hyrise",
-  twitter: process.env.NEXT_PUBLIC_SOCIAL_TWITTER || "https://x.com/hyrise",
-  instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || "https://www.instagram.com/hyrise.careers",
-  youtube: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE || "https://www.youtube.com/@hyrise",
-  whatsapp: process.env.NEXT_PUBLIC_SOCIAL_WHATSAPP || "", // e.g. "https://wa.me/919999999999"
+  linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || "",
+  twitter: process.env.NEXT_PUBLIC_SOCIAL_TWITTER || "",
+  instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || "",
+  youtube: process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE || "",
+  whatsapp: process.env.NEXT_PUBLIC_SOCIAL_WHATSAPP || "",
 } as const;
 
 export type SocialKey = keyof typeof SOCIAL_LINKS;

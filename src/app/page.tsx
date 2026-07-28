@@ -50,22 +50,73 @@ const faqJsonLd = {
   })),
 };
 
-const FEATURES = [
-  { icon: "📄", title: "AI Resume Enhancement", desc: "Rewrite bullet points, add strong action verbs, quantify impact — all with Groq AI." },
-  { icon: "🎯", title: "Job Match Analyzer", desc: "Paste a job description and see your keyword match score instantly." },
-  { icon: "🗺️", title: "Learning Roadmaps", desc: "6–10 step career plans with YouTube videos and course links per step." },
-  { icon: "🎤", title: "Mock Interview Coach", desc: "AI-generated questions + STAR-based feedback. Type or use voice." },
-  { icon: "✉️", title: "Cover Letter Generator", desc: "Tailored to every job in seconds. Tone selection included." },
-  { icon: "💬", title: "Communication Coach", desc: "Analyze and rewrite emails, Slack messages, and presentations." },
-  { icon: "🔍", title: "Remote Job Search", desc: "Search Remotive jobs + daily email alerts. No more manual searching." },
-  { icon: "🎓", title: "English Learning", desc: "Lessons, quizzes, and AI conversation practice for professionals." },
-  { icon: "🏆", title: "Certificates", desc: "Complete a roadmap and download a shareable PDF certificate." },
+/**
+ * The tool catalogue, grouped so the breadth reads as "one platform" rather
+ * than an intimidating wall of 25 cards. Each entry links to the live page —
+ * a feature you can't click is just a claim.
+ */
+const FEATURE_GROUPS = [
+  {
+    label: "Resume",
+    icon: "📄",
+    accent: "from-brand-500 to-violet-500",
+    blurb: "Get past the filter, then past the recruiter.",
+    tools: [
+      { name: "ATS score checker", href: "/#ats", desc: "Free, no signup" },
+      { name: "AI resume rewriter", href: "/builder", desc: "Stronger verbs, quantified impact" },
+      { name: "Job match analyzer", href: "/match", desc: "Score your resume against a JD" },
+      { name: "Resume tailoring", href: "/tailor", desc: "One resume per application" },
+      { name: "Recruiter scan", href: "/recruiter-scan", desc: "The 6-second skim test" },
+      { name: "Cover letters", href: "/cover-letter", desc: "Tailored, with tone control" },
+    ],
+  },
+  {
+    label: "Interview",
+    icon: "🎤",
+    accent: "from-violet-500 to-fuchsia-500",
+    blurb: "Practise until the real one feels easy.",
+    tools: [
+      { name: "Mock interview coach", href: "/interview", desc: "Voice or text, STAR feedback" },
+      { name: "Company prep", href: "/company-prep", desc: "TCS, Infosys, Amazon and more" },
+      { name: "Group discussion practice", href: "/gd", desc: "Campus placement rounds" },
+      { name: "Salary negotiation coach", href: "/salary", desc: "Know your number" },
+      { name: "Communication coach", href: "/communication", desc: "Emails that get replies" },
+    ],
+  },
+  {
+    label: "Skills",
+    icon: "🧠",
+    accent: "from-emerald-500 to-teal-500",
+    blurb: "Close the gap the job description exposed.",
+    tools: [
+      { name: "DSA practice", href: "/dsa", desc: "Visualised, with a code runner" },
+      { name: "Aptitude prep", href: "/aptitude", desc: "Placement test topics" },
+      { name: "Domain roadmaps", href: "/domains", desc: "Structured, step by step" },
+      { name: "English learning", href: "/english", desc: "For non-native speakers" },
+      { name: "Learning roadmaps", href: "/roadmap", desc: "With free video for each step" },
+    ],
+  },
+  {
+    label: "Job hunt",
+    icon: "🎯",
+    accent: "from-amber-500 to-orange-500",
+    blurb: "Stay organised while you apply.",
+    tools: [
+      { name: "Job search + alerts", href: "/jobs", desc: "Daily email, no manual scrolling" },
+      { name: "Application tracker", href: "/tracker", desc: "Follow-ups you won't forget" },
+      { name: "Cold outreach writer", href: "/outreach", desc: "Messages recruiters open" },
+      { name: "LinkedIn / Naukri optimizer", href: "/profile-optimizer", desc: "Get found, not filtered" },
+      { name: "AI career mentor", href: "/mentor", desc: "A weekly plan, not vibes" },
+    ],
+  },
 ];
+
+const TOOL_COUNT = FEATURE_GROUPS.reduce((n, g) => n + g.tools.length, 0);
 
 const STATS = [
   { value: "Free", label: "No signup to try" },
   { value: "20s", label: "To your score" },
-  { value: "25+", label: "Career tools" },
+  { value: String(TOOL_COUNT), label: "Career tools" },
   { value: "₹30", label: "Pro, per month" },
 ];
 
@@ -96,7 +147,7 @@ export default async function LandingPage() {
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
               Most resumes are rejected by software before a human reads them. Upload yours and see
               exactly what an ATS sees — in 20 seconds. Then fix it with AI resume rewriting, mock
-              interviews, job matching, and 25+ other career tools.
+              interviews, job matching, and {TOOL_COUNT - 3} more career tools.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -139,20 +190,53 @@ export default async function LandingPage() {
             Everything you need
           </span>
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
-            9 career tools in one platform
+            {TOOL_COUNT} career tools in one platform
           </h2>
-          <p className="mt-3 text-slate-500">From resume to interview-ready — all AI-powered, all in one place.</p>
+          <p className="mt-3 text-slate-500">
+            From the first draft of your resume to the salary conversation — all in one login.
+          </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((f) => (
+        <div className="grid gap-5 md:grid-cols-2">
+          {FEATURE_GROUPS.map((group) => (
             <div
-              key={f.title}
-              className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              key={group.label}
+              className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
             >
-              <span className="text-3xl">{f.icon}</span>
-              <h3 className="mt-3 font-bold text-slate-900">{f.title}</h3>
-              <p className="mt-1.5 text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+              <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-5">
+                <span
+                  className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${group.accent} text-xl shadow-sm`}
+                >
+                  {group.icon}
+                </span>
+                <div>
+                  <h3 className="font-bold text-slate-900">{group.label}</h3>
+                  <p className="text-xs text-slate-500">{group.blurb}</p>
+                </div>
+                <span className="ml-auto rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-500">
+                  {group.tools.length}
+                </span>
+              </div>
+
+              <ul className="flex-1 divide-y divide-slate-50">
+                {group.tools.map((tool) => (
+                  <li key={tool.name}>
+                    <Link
+                      href={tool.href}
+                      className="group/item flex items-center gap-3 px-6 py-3 transition hover:bg-brand-50/50"
+                    >
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-300 transition group-hover/item:bg-brand-500" />
+                      <span className="text-sm font-semibold text-slate-800">{tool.name}</span>
+                      <span className="ml-auto hidden text-xs text-slate-400 sm:block">
+                        {tool.desc}
+                      </span>
+                      <span className="text-brand-400 opacity-0 transition group-hover/item:opacity-100">
+                        →
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>

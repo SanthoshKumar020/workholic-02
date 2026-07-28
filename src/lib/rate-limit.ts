@@ -20,12 +20,19 @@ type Bucket = { count: number; resetAt: number };
 
 const hits = new Map<string, Bucket>();
 
-/** Drop expired buckets so the map can't grow without bound. */
+/**
+ * Drop expired buckets so the map can't grow without bound.
+ *
+ * Uses `forEach` rather than `for...of` deliberately: this project's tsconfig
+ * has no `target`, so it compiles as ES5, where iterating a Map requires the
+ * `downlevelIteration` flag. Deleting the current entry inside `Map.forEach`
+ * is well-defined and safe.
+ */
 function sweep(now: number) {
   if (hits.size < 5_000) return;
-  for (const [key, bucket] of hits) {
+  hits.forEach((bucket, key) => {
     if (bucket.resetAt <= now) hits.delete(key);
-  }
+  });
 }
 
 export type RateLimitResult = {

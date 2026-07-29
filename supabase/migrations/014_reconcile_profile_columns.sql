@@ -94,6 +94,18 @@ begin
   end loop;
 end $$;
 
+-- ── 3. Reload the PostgREST schema cache ─────────────────────────────────────
+-- Adding a column in Postgres is not enough: the API layer (PostgREST, which
+-- is what supabase-js talks to) serves from a cached copy of the schema. Until
+-- that cache reloads, writes to a brand-new column fail with
+--
+--     PGRST204: Could not find the 'preferred_language' column of 'profiles'
+--               in the schema cache
+--
+-- even though the column now exists. Supabase reloads eventually, but not
+-- immediately — so ask for it explicitly.
+notify pgrst, 'reload schema';
+
 -- ── Verify ───────────────────────────────────────────────────────────────────
 -- 1. Nothing missing — expect zero rows:
 --

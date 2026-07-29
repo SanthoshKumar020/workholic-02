@@ -70,25 +70,26 @@ export function OnboardingClient({ profile }: { profile: Profile }) {
     setSaving(true);
     setError("");
     try {
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-      const { error: err } = await supabase
-        .from("profiles")
-        .update({ target_role: targetRole.trim() || null, preferred_language: language })
-        .eq("id", profile.id);
-      if (err) throw err;
+      // Goes through /api/onboarding rather than writing to Supabase directly.
+      // A direct browser write surfaced raw PostgREST errors (PGRST204,
+      // "permission denied for table profiles") to the user and lost BOTH
+      // fields if either column was unavailable. The route saves each field
+      // independently and returns something a human can act on.
+      const res = await fetch("/api/onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetRole, language }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "Could not save your preferences.");
       setStep(2);
     } catch (e) {
-      // Raw Postgres text ("permission denied for table profiles") means
-      // nothing to a job seeker. Translate the one failure mode that is our
-      // fault, and never dead-end them — onboarding is optional, so let them
-      // continue into the product either way.
+      // Never dead-end someone here. Onboarding is a nice-to-have; being stuck
+      // on it before ever seeing the product is not.
       const raw = e instanceof Error ? e.message : "";
-      const isPermission = /permission denied|not authorized|row-level security/i.test(raw);
       setError(
-        isPermission
-          ? "We couldn't save your preferences just now — that's on us, not you. You can continue and set this later in Settings."
-          : "Couldn't save that. Check your connection and try again — or continue and set it later in Settings."
+        raw ||
+          "Couldn't save that. Check your connection and try again — or continue and set it later in Settings."
       );
       console.error("[onboarding] profile save failed:", raw);
     } finally {

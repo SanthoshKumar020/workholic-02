@@ -109,5 +109,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not join right now. Please try again." }, { status: 500 });
   }
 
+  // Grant Pro immediately.
+  //
+  // The `has_active_institution()` SQL function was the intended mechanism,
+  // but nothing ever called it — roughly 30 places check `profiles.plan`
+  // through isUserPro(), which is synchronous and can't do a membership
+  // lookup. Rather than thread an async check through all of them (and risk
+  // missing one, which would silently paywall a paying college's students),
+  // membership writes the plan directly. /api/cron/institution-sync reconciles
+  // daily and revokes it when the contract lapses.
+  await admin.from("profiles").update({ plan: "pro" }).eq("id", user.id);
+
   return NextResponse.json({ ok: true, institution: institution.name });
 }

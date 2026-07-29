@@ -176,6 +176,24 @@ export default async function DashboardPage() {
           />
         )}
 
+        {/* Students of a partner college redeem their code here. Without a
+            visible entry point the whole institution feature is invisible —
+            a TPO shares a link, but anyone who loses it has no way back in. */}
+        {!pro && (
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+            <p className="text-sm text-slate-600">
+              <span className="font-semibold text-slate-800">Is your college a HYRISE partner?</span>{" "}
+              Enter your placement cell&apos;s code to unlock everything free.
+            </p>
+            <Link
+              href="/join"
+              className="shrink-0 rounded-xl border border-brand-300 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"
+            >
+              Enter college code
+            </Link>
+          </div>
+        )}
+
         {/* Proof of improvement — shown to free users too, deliberately.
             This is the evidence that the product works; hiding it behind Pro
             hid the exact thing that justifies paying for Pro. */}

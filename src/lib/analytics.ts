@@ -32,7 +32,9 @@ export type AnalyticsEvent =
   | "share_page_cta_clicked"
   | "email_captured"
   // ── Affiliate ───────────────────────────────────────────────────────────
-  | "affiliate_clicked";
+  | "affiliate_clicked"
+  // ── Institutions (B2B) ──────────────────────────────────────────────────
+  | "institution_joined";
 
 type Props = Record<string, string | number | boolean | undefined>;
 

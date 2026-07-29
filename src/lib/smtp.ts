@@ -16,21 +16,48 @@ import nodemailer, { type Transporter } from "nodemailer";
  *
  * So: Resend for machine mail, SMTP for human mail.
  *
- * ── Credentials ─────────────────────────────────────────────────────────────
- * Set these in .env.local (and in Vercel if the app ever needs them). Nobody
- * should ever paste an SMTP password into a chat window — put it straight in
- * the env file yourself.
+ * ── Free ways to get an SMTP server ─────────────────────────────────────────
+ * SMTP is a protocol, not a paid product. The only question is whether your
+ * provider exposes it. Checked July 2026 — verify before relying on any of it,
+ * free tiers move constantly.
  *
- *   SMTP_HOST      smtp.gmail.com | smtp.zoho.in | mail.yourhost.com
+ * 1. RESEND (you already have this — zero new signups)
+ *      SMTP_HOST=smtp.resend.com
+ *      SMTP_PORT=587
+ *      SMTP_USER=resend            ← literally the word "resend"
+ *      SMTP_PASS=<your RESEND_API_KEY>
+ *    Free tier ~3,000 emails/month. Requires swache.in verified in Resend
+ *    (DNS only, no cost) before you can send from an @swache.in address.
+ *
+ * 2. YOUR EXISTING HOSTING — if swache.in email runs on cPanel or similar,
+ *    SMTP is already included at no extra cost. Usually mail.swache.in:587.
+ *    Check before signing up for anything.
+ *
+ * 3. BREVO — 300 emails/day free forever, SMTP relay included, no card.
+ *    smtp-relay.brevo.com:587. Good if you want outreach kept entirely
+ *    separate from the product's transactional mail.
+ *
+ * 4. ZOHO MAIL — note the free plan NO LONGER includes SMTP/IMAP; it now
+ *    needs Mail Lite (~$1/user/month). Still the cheapest real mailbox.
+ *
+ * A relay (1 and 3) is not the same as a real mailbox (2 and 4) for cold
+ * outreach: a mailbox carries human sending history that a relay doesn't. For
+ * twenty emails with SPF/DKIM passing, a relay is fine. At scale, a real
+ * mailbox wins.
+ *
+ * ── Credentials ─────────────────────────────────────────────────────────────
+ * Put these in .env.local yourself. Never paste an SMTP password or API key
+ * into a chat window.
+ *
+ *   SMTP_HOST      see options above
  *   SMTP_PORT      587 (STARTTLS, usual) or 465 (implicit TLS)
- *   SMTP_USER      admin@swache.in
- *   SMTP_PASS      an APP PASSWORD, never your account login password
+ *   SMTP_USER      admin@swache.in, or "resend" if using Resend's relay
+ *   SMTP_PASS      an APP PASSWORD or API key — never an account login password
  *   SMTP_FROM      "Santhosh Kumar <admin@swache.in>"
  *
- * Google Workspace: 2-Step Verification must be on, then create an App
+ * Google Workspace (paid): enable 2-Step Verification, then create an App
  * Password at myaccount.google.com/apppasswords. Your normal password will
  * not work and should never be used here.
- * Zoho: Security → App Passwords, host smtp.zoho.in, port 465.
  */
 
 export type SmtpConfig = {

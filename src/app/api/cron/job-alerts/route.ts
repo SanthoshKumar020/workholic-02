@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { getGroqKey } from "@/lib/groq";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { careerLink } from "@/lib/jobs/careerLinks";
 import { Resend } from "resend";
 
 export const runtime = "nodejs";
@@ -27,50 +25,86 @@ function currentISTHour(): string {
   return `${String(istDate.getUTCHours()).padStart(2, "0")}:00`;
 }
 
-/** Use Groq to generate 8 jobs for an alert. */
-async function fetchJobsViaGroq(role: string, keywords: string, location: string, groqKey: string): Promise<JobListing[]> {
-  const prompt = `Generate 8 realistic job listings for this search:
-- Role: ${role || keywords || "Software Engineer"}
-- Location: ${location || "India"}
+/**
+ * Fetch REAL job listings from Remotive.
+ *
+ * ── Why this replaced the previous implementation ───────────────────────────
+ * This function used to ask Groq to "Generate 8 realistic job listings" and
+ * email the result to users as their daily job alert. Those roles did not
+ * exist. The companies were real, the openings were invented, and the "Apply
+ * now" button pointed at a careers-page search that would return nothing.
+ *
+ * For someone job hunting — who may act on this within minutes, and who is
+ * already dealing with rejection — that is the single most damaging thing this
+ * product could send. The first time someone realises the listings are
+ * fabricated, everything else we tell them (their ATS score, their interview
+ * feedback) becomes suspect too.
+ *
+ * Remotive is the same free source /api/jobs already uses. If it is
+ * unavailable we send NOTHING rather than falling back to generated content.
+ */
+interface RemotiveJob {
+  title: string;
+  company_name: string;
+  candidate_required_location?: string;
+  job_type?: string;
+  url: string;
+  salary?: string;
+  publication_date?: string;
+  description?: string;
+}
 
-Return ONLY valid JSON:
-{
-  "jobs": [
-    {
-      "title": "string",
-      "company": "string",
-      "location": "string",
-      "workMode": "Remote|Hybrid|On-site",
-      "salary": "string",
-      "description": "1-2 sentence description",
-      "postedAt": "X days ago"
-    }
-  ]
-}`;
+/** Strip HTML and clamp Remotive's description down to a short summary. */
+function summarise(html: string | undefined, max = 160): string {
+  if (!html) return "";
+  const text = html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text.length > max ? `${text.slice(0, max).trimEnd()}…` : text;
+}
 
-  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey}` },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.6,
-      max_tokens: 2000,
-    }),
-    signal: AbortSignal.timeout(30000),
+function relativeDate(iso: string | undefined): string {
+  if (!iso) return "Recently posted";
+  const then = new Date(iso).getTime();
+  if (!Number.isFinite(then)) return "Recently posted";
+  const days = Math.floor((Date.now() - then) / 86_400_000);
+  if (days <= 0) return "Posted today";
+  if (days === 1) return "Posted yesterday";
+  return `Posted ${days} days ago`;
+}
+
+async function fetchRealJobs(role: string, keywords: string, limit = 8): Promise<JobListing[]> {
+  const url = new URL("https://remotive.com/api/remote-jobs");
+  const search = (keywords || role).trim();
+  if (search) url.searchParams.set("search", search);
+  url.searchParams.set("limit", String(limit));
+
+  const res = await fetch(url.toString(), {
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(20000),
   });
+  if (!res.ok) throw new Error(`Remotive ${res.status}`);
 
-  if (!res.ok) throw new Error(`Groq ${res.status}`);
-  const data = await res.json();
-  const text: string = data.choices?.[0]?.message?.content ?? "";
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error("No JSON");
-  const parsed = JSON.parse(match[0]) as { jobs: Array<{ title: string; company: string; location: string; workMode: string; salary: string; description: string; postedAt: string }> };
+  const data = (await res.json()) as { jobs?: RemotiveJob[] };
 
-  return (parsed.jobs ?? []).map((j) => {
-    const link = careerLink(j.company, j.title);
-    return { ...j, applyUrl: link.url, applySite: link.label };
-  });
+  return (data.jobs ?? []).slice(0, limit).map((j) => ({
+    title: j.title,
+    company: j.company_name,
+    location: j.candidate_required_location || "Remote",
+    workMode: "Remote",
+    salary: j.salary || "",
+    description: summarise(j.description),
+    postedAt: relativeDate(j.publication_date),
+    // Link straight to the real posting. `careerLink` was only needed when the
+    // listings were invented and had no genuine URL to point at.
+    applyUrl: j.url,
+    applySite: "Remotive",
+  }));
 }
 
 function buildEmailHtml(
@@ -130,9 +164,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const groqKey = getGroqKey();
-  if (!process.env.RESEND_API_KEY || !groqKey) {
-    return NextResponse.json({ error: "Email or AI not configured." }, { status: 500 });
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: "Email not configured." }, { status: 500 });
   }
 
   const supabase = createAdminClient();
@@ -158,21 +191,31 @@ export async function GET(request: Request) {
   const errors: string[] = [];
 
   for (const alert of alerts) {
-    if (!alert.email) continue;
     try {
-      const jobs = await fetchJobsViaGroq(
-        alert.role ?? "",
-        alert.keywords ?? "",
-        "", // job_alerts has no location column — Groq defaults to India
-        groqKey,
-      );
+      // Resolve the recipient from the PROFILE, not from the alert row.
+      // `job_alerts.email` is writable by the user under a row-level-only RLS
+      // policy, so a user could point their alert at any address and have us
+      // deliver HYRISE-branded mail there daily.
+      const { data: owner } = await supabase
+        .from("profiles")
+        .select("email")
+        .eq("id", alert.user_id)
+        .single();
+
+      const recipient = owner?.email;
+      if (!recipient) continue;
+
+      const jobs = await fetchRealJobs(alert.role ?? "", alert.keywords ?? "");
+
+      // Send nothing rather than something invented. An empty inbox is a much
+      // smaller cost than a fabricated listing someone acts on.
       if (jobs.length === 0) continue;
 
       const html = buildEmailHtml(jobs, alert.role ?? alert.keywords ?? "", appUrl, istHour);
 
       await resend.emails.send({
         from: "HYRISE Jobs <jobs@hyrise.swache.in>",
-        to: alert.email,
+        to: recipient,
         subject: `🔍 ${jobs.length} ${alert.role || "job"} listings — your ${istHour} IST alert`,
         html,
       });

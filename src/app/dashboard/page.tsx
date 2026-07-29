@@ -6,6 +6,7 @@ import { ProHistoryGate } from "@/components/ui/ProHistoryGate";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile, isPro } from "@/lib/plan";
 import { StreakWidget } from "@/components/StreakWidget";
+import { ScoreTrend } from "@/components/ScoreTrend";
 import type { Resume } from "@/lib/types";
 import {
   FileText, Briefcase, Map, Mic, MessageSquare, BookOpen, Search, Lock, Sparkles, Brain, Bot, DollarSign,
@@ -174,6 +175,17 @@ export default async function DashboardPage() {
             plan={profile.plan}
           />
         )}
+
+        {/* Proof of improvement — shown to free users too, deliberately.
+            This is the evidence that the product works; hiding it behind Pro
+            hid the exact thing that justifies paying for Pro. */}
+        <div className="mt-8">
+          <ScoreTrend
+            points={resumes
+              .filter((r) => typeof r.ats_score === "number")
+              .map((r) => ({ score: r.ats_score as number, at: r.created_at }))}
+          />
+        </div>
 
         {/* Next action — the one thing worth doing today */}
         <section className="mt-8 overflow-hidden rounded-2xl border border-brand-100 bg-white shadow-sm">

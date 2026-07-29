@@ -167,7 +167,9 @@ export default async function LandingPage() {
               </Link>
             </div>
 
-            <div className="mt-10 grid grid-cols-4 gap-3 border-t border-slate-200 pt-8">
+            {/* 4 columns at 320px gave each stat ~65px — the labels wrapped to
+                three lines. Two-up on phones, four-up from `sm`. */}
+            <div className="mt-10 grid grid-cols-2 gap-3 border-t border-slate-200 pt-8 sm:grid-cols-4">
               {STATS.map((s) => (
                 <div key={s.label} className="text-center">
                   <p className="text-xl font-extrabold text-brand-600">{s.value}</p>

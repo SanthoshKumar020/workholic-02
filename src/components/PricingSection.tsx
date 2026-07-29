@@ -193,7 +193,9 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
           </h3>
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             {/* Table header */}
-            <div className="grid grid-cols-3 border-b border-slate-100 bg-slate-50 px-5 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+            {/* Equal thirds gave the feature name the same width as a tick.
+                Weighted columns keep the label readable at 320px. */}
+            <div className="grid grid-cols-[1.6fr_1fr_1fr] border-b border-slate-100 bg-slate-50 px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 sm:px-5 sm:text-xs">
               <span>Feature</span>
               <span className="text-center">Free</span>
               <span className="text-center text-brand-600">Pro</span>
@@ -201,11 +203,11 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             {COMPARE_ROWS.map((row, i) => (
               <div
                 key={row.feature}
-                className={`grid grid-cols-3 items-center px-5 py-3.5 text-sm ${
+                className={`grid grid-cols-[1.6fr_1fr_1fr] items-center px-4 py-3.5 text-sm sm:px-5 ${
                   i % 2 === 0 ? "bg-white" : "bg-slate-50/50"
                 }`}
               >
-                <span className="font-medium text-slate-700">{row.feature}</span>
+                <span className="pr-2 font-medium text-slate-700">{row.feature}</span>
                 <span className="text-center">
                   {row.free === false ? (
                     <span className="text-slate-300">—</span>

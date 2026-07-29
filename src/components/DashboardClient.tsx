@@ -101,30 +101,33 @@ export function DashboardClient({
                 />
 
                 {/* Delete button / inline confirm */}
+                {/* Tap targets here were 28px and 20px — unusable on a phone.
+                    Everything below is at least 36–40px. */}
                 {!confirming ? (
                   <button
                     type="button"
                     onClick={() => setConfirmId(r.id)}
-                    className="rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+                    aria-label={`Delete ${r.title}`}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                     title="Delete resume"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
                 ) : (
-                  <div className="flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5">
+                  <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5">
                     <span className="text-xs font-medium text-red-700">Delete?</span>
                     <button
                       type="button"
                       onClick={() => handleDelete(r.id)}
                       disabled={deleting}
-                      className="rounded-md bg-red-600 px-2 py-0.5 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-60"
+                      className="rounded-md bg-red-600 px-3 py-2 text-xs font-semibold text-white hover:bg-red-700 disabled:opacity-60"
                     >
                       {deleting ? "…" : "Yes"}
                     </button>
                     <button
                       type="button"
                       onClick={() => setConfirmId(null)}
-                      className="rounded-md px-2 py-0.5 text-xs font-semibold text-slate-600 hover:bg-slate-200"
+                      className="rounded-md px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200"
                     >
                       Cancel
                     </button>

@@ -18,17 +18,36 @@ const buttonVariants = cva(
         danger:
           "bg-red-600 text-white shadow-sm hover:bg-red-700 active:scale-[0.98]",
         pro: "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md hover:opacity-90 active:scale-[0.98]",
+        /**
+         * Segmented / filter pill. Style the selected state with
+         * `aria-pressed={true}` rather than a conditional className — that
+         * keeps the toggle accessible to screen readers, which a styled <div>
+         * or a bare className swap does not.
+         *
+         * There were ~12 hand-rolled versions of this control across the tool
+         * pages, all slightly different sizes. Use this instead.
+         */
+        chip: [
+          "border border-slate-200 bg-white font-medium text-slate-600",
+          "hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700",
+          "aria-pressed:border-brand-500 aria-pressed:bg-brand-50 aria-pressed:text-brand-700",
+          "aria-pressed:font-semibold active:scale-[0.98]",
+        ].join(" "),
         // Legacy aliases
         primary:
           "bg-brand-gradient text-white shadow-md hover:opacity-90 hover:shadow-glow-sm active:scale-[0.98]",
       },
       size: {
-        sm: "h-8 rounded-lg px-3 text-xs",
+        // `sm` was h-8 (32px), below the ~40px minimum comfortable tap target
+        // on a phone. Most of this app's users are on mobile.
+        sm: "h-9 rounded-lg px-3 text-xs",
         md: "h-10 px-4 py-2",
         default: "h-10 px-4 py-2",
         lg: "h-12 rounded-xl px-6 text-base",
         xl: "h-14 rounded-xl px-8 text-base",
         icon: "h-10 w-10",
+        /** Square icon-only button that still meets the tap-target minimum. */
+        iconSm: "h-10 w-10 rounded-lg",
       },
     },
     defaultVariants: {

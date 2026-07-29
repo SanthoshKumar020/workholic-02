@@ -30,3 +30,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Outreach data — contains named contact details for real people (TPOs).
+# This repo is pushed to a public GitHub remote; committing personal data
+# here would publish it. Keep the trackers local.
+/outreach/

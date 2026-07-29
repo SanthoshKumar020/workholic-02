@@ -191,11 +191,23 @@ export function Footer() {
             <span className="font-medium text-slate-500">Swache Technologies (OPC) Private Limited</span>. All rights
             reserved.
           </p>
+          {/* CIN display is a statutory requirement for an Indian company
+              under s.12(3)(c) of the Companies Act 2013, not an optional
+              trust signal — and a TPO evaluating you for a college contract
+              will look for it. Set NEXT_PUBLIC_COMPANY_CIN (and GSTIN once
+              registered) in Vercel; both are public information, so they are
+              safe as NEXT_PUBLIC_ vars. */}
           <p className="text-center">
             Regd. office: L 303, Rohan Upavan, Kyalasanahalli, Kothanur, Bangalore North, Karnataka 560077 ·{" "}
             <a href="mailto:admin@swache.in" className="text-slate-500 hover:text-brand-600 hover:underline">
               admin@swache.in
             </a>
+            {process.env.NEXT_PUBLIC_COMPANY_CIN && (
+              <> · CIN: {process.env.NEXT_PUBLIC_COMPANY_CIN}</>
+            )}
+            {process.env.NEXT_PUBLIC_COMPANY_GSTIN && (
+              <> · GSTIN: {process.env.NEXT_PUBLIC_COMPANY_GSTIN}</>
+            )}
           </p>
         </div>
       </div>

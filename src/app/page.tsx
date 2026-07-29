@@ -23,8 +23,12 @@ const FAQS = [
     a: "An Applicant Tracking System is the software most companies use to filter resumes before a recruiter sees them. Your ATS score estimates how well your resume survives that filter — based on keyword coverage, section headings, formatting, contact details, action verbs, and quantified achievements.",
   },
   {
-    q: "Do you store or sell my resume?",
-    a: "Your resume text is sent to our server, analysed, and returned. We do not sell your data or share it with advertisers. If you create an account, your saved resumes are stored privately under your login and you can delete them at any time.",
+    // One clear story. The old wording ("sent to our server") sat next to a
+    // separate claim that text is extracted in your browser, and a
+    // privacy-conscious reader reads that as a contradiction. Both are true —
+    // extraction is client-side, analysis is server-side — so say it in order.
+    q: "What happens to my resume file?",
+    a: "Your file never leaves your device. The text is extracted in your browser, and only that text is sent to our server to be analysed, then returned to you. If you are not logged in we do not store it at all — it exists only for the length of the request. If you have an account, saved resumes are private to your login and you can delete them at any time. The analysis runs on Groq, which processes outside India; we never sell your data or share it with advertisers or course partners.",
   },
   {
     q: "How much does HYRISE Pro cost?",
@@ -36,7 +40,7 @@ const FAQS = [
   },
   {
     q: "Which file formats can I upload?",
-    a: "PDF, DOCX, and TXT, up to 5 MB. Text is extracted in your browser before it is analysed. If your file is a scanned image, paste the text instead.",
+    a: "PDF, DOCX, and TXT, up to 5 MB. If your file is a scanned image rather than real text, nothing can be extracted from it — paste your resume text instead.",
   },
 ];
 
@@ -113,11 +117,19 @@ const FEATURE_GROUPS = [
 
 const TOOL_COUNT = FEATURE_GROUPS.reduce((n, g) => n + g.tools.length, 0);
 
+/**
+ * Kept to three, and every one is about what the visitor gets rather than
+ * about us. The old bar led with the tool count, which reinforced exactly the
+ * "generic AI bundle" impression the headline is trying to avoid, and with the
+ * price, which is not a benefit.
+ *
+ * Replace these with outcome numbers ("resumes analysed", "average score
+ * improvement") the moment you have real ones — and only real ones.
+ */
 const STATS = [
-  { value: "Free", label: "No signup to try" },
-  { value: "20s", label: "To your score" },
-  { value: String(TOOL_COUNT), label: "Career tools" },
-  { value: "₹30", label: "Pro, per month" },
+  { value: "No signup", label: "to get your score" },
+  { value: "~20s", label: "from upload to result" },
+  { value: "PDF · DOCX", label: "up to 5 MB" },
 ];
 
 export default async function LandingPage() {
@@ -144,27 +156,28 @@ export default async function LandingPage() {
               free — no signup.
             </h1>
 
+            {/* One promise. The previous version spent the headline focusing on
+                the ATS checker, then immediately defocused with "and N more
+                career tools" — which reads as a generic AI bundle, the
+                category with the least trust. The other tools are a reward for
+                signing up, not a pitch to a stranger. */}
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
-              Most resumes are rejected by software before a human reads them. Upload yours and see
-              exactly what an ATS sees — in 20 seconds. Then fix it with AI resume rewriting, mock
-              interviews, job matching, and {TOOL_COUNT - 3} more career tools.
+              Most resumes are rejected by software before a human ever reads them. Upload yours and
+              see exactly what an applicant tracking system sees — in about 20 seconds, with no
+              account and no card.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            {/* One CTA. The second button sent people to pricing before they'd
+                experienced any value, which is the worst possible order. */}
+            <div className="mt-8">
               <TrackedLink
                 href="#ats"
                 event="signup_cta_clicked"
                 source="hero_primary"
-                className="rounded-xl bg-brand-gradient px-7 py-3.5 text-center text-base font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-glow-sm"
+                className="inline-block rounded-xl bg-brand-gradient px-8 py-4 text-center text-base font-semibold text-white shadow-md transition hover:opacity-90 hover:shadow-glow-sm"
               >
                 Check my resume — free ↓
               </TrackedLink>
-              <Link
-                href="#pricing"
-                className="rounded-xl border border-slate-300 bg-white px-7 py-3.5 text-center text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50"
-              >
-                See what&apos;s included
-              </Link>
             </div>
 
             {/* 4 columns at 320px gave each stat ~65px — the labels wrapped to
@@ -182,6 +195,92 @@ export default async function LandingPage() {
           <div id="ats" className="scroll-mt-24 animate-slide-up">
             <AtsChecker />
           </div>
+        </div>
+      </section>
+
+      {/* ── Feature highlight strip ───────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-4 pb-16">
+        <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-violet-600 px-8 py-12 md:px-14">
+          <div className="grid items-center gap-10 md:grid-cols-2">
+            <div>
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                Your resume — polished, ATS-optimised, and ready.
+              </h2>
+              <p className="mt-3 text-brand-100">
+                Powered by Groq AI (llama-3.3-70b) running entirely server-side. No data sent to third-party automation tools.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <TrackedLink
+                  href="/signup"
+                  event="signup_cta_clicked"
+                  source="highlight_strip"
+                  className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow transition hover:bg-brand-50"
+                >
+                  Start free
+                </TrackedLink>
+                <Link href="/#pricing" className="rounded-xl border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                  See pricing
+                </Link>
+              </div>
+            </div>
+
+            {/* "↑ 34 pts" was here. It read as an average score improvement
+                and we have no data behind it — the same invented social proof
+                we removed from the testimonials section two screens below, so
+                it made the page argue with itself. Every value here is now
+                something verifiably true about the product. Put a real
+                improvement figure back only when you can state the sample. */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: "To your score", value: "~20s" },
+                { label: "PDF export", value: "< 1 min" },
+                { label: "Signup to try", value: "None" },
+                { label: "Built in", value: "India 🇮🇳" },
+              ].map((b) => (
+                <div key={b.label} className="flex flex-col items-center justify-center rounded-2xl bg-white/10 py-5 text-center backdrop-blur-sm">
+                  <span className="text-2xl font-extrabold text-white">{b.value}</span>
+                  <span className="mt-1 text-xs font-medium text-brand-100">{b.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Testimonials />
+
+      <EmailCapture />
+
+      <PricingSection isLoggedIn={!!user} />
+
+      {/* ── FAQ (visible + FAQPage schema for rich results) ───── */}
+      <section className="mx-auto max-w-3xl px-4 pb-16">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+            FAQ
+          </span>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+            Questions people ask before trying it
+          </h2>
+        </div>
+
+        <div className="mt-10 space-y-3">
+          {FAQS.map((f) => (
+            <details
+              key={f.q}
+              className="group rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition open:shadow-md"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-900">
+                {f.q}
+                <span className="shrink-0 text-brand-500 transition group-open:rotate-45">+</span>
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
 
@@ -240,86 +339,6 @@ export default async function LandingPage() {
                 ))}
               </ul>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Feature highlight strip ───────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-4 pb-16">
-        <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-violet-600 px-8 py-12 md:px-14">
-          <div className="grid items-center gap-10 md:grid-cols-2">
-            <div>
-              <h2 className="text-2xl font-bold text-white sm:text-3xl">
-                Your resume — polished, ATS-optimised, and ready.
-              </h2>
-              <p className="mt-3 text-brand-100">
-                Powered by Groq AI (llama-3.3-70b) running entirely server-side. No data sent to third-party automation tools.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <TrackedLink
-                  href="/signup"
-                  event="signup_cta_clicked"
-                  source="highlight_strip"
-                  className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow transition hover:bg-brand-50"
-                >
-                  Start free
-                </TrackedLink>
-                <Link href="/#pricing" className="rounded-xl border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
-                  See pricing
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { label: "ATS Score", value: "↑ 34 pts" },
-                { label: "PDF ready", value: "< 1 min" },
-                { label: "AI model", value: "Groq LLM" },
-                { label: "Pro plan", value: "₹30/mo" },
-              ].map((b) => (
-                <div key={b.label} className="flex flex-col items-center justify-center rounded-2xl bg-white/10 py-5 text-center backdrop-blur-sm">
-                  <span className="text-2xl font-extrabold text-white">{b.value}</span>
-                  <span className="mt-1 text-xs font-medium text-brand-100">{b.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Testimonials />
-
-      <EmailCapture />
-
-      <PricingSection isLoggedIn={!!user} />
-
-      {/* ── FAQ (visible + FAQPage schema for rich results) ───── */}
-      <section className="mx-auto max-w-3xl px-4 pb-16">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-            FAQ
-          </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
-            Questions people ask before trying it
-          </h2>
-        </div>
-
-        <div className="mt-10 space-y-3">
-          {FAQS.map((f) => (
-            <details
-              key={f.q}
-              className="group rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition open:shadow-md"
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-900">
-                {f.q}
-                <span className="shrink-0 text-brand-500 transition group-open:rotate-45">+</span>
-              </summary>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">{f.a}</p>
-            </details>
           ))}
         </div>
       </section>

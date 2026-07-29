@@ -19,18 +19,10 @@ export const metadata: Metadata = {
   },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
-  keywords: [
-    "ATS score checker",
-    "resume builder India",
-    "AI resume builder",
-    "free resume check",
-    "mock interview practice",
-    "job match analyzer",
-    "career roadmap",
-    "cover letter generator",
-    "resume optimization",
-    "job seeker tools India",
-  ],
+  // NOTE: the `keywords` meta tag was removed. Google has ignored it since
+  // 2009 and Bing treats it as a spam signal, so it did nothing here except
+  // date the site to anyone technical viewing source. Keywords belong in the
+  // H1, the body copy and the URL — all of which this site already does.
   authors: [{ name: "Swache Technologies (OPC) Private Limited" }],
   creator: "Swache Technologies (OPC) Private Limited",
   category: "careers",

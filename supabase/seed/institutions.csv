@@ -1,0 +1,5 @@
+name,slug,contact_email,join_code,seat_limit,expires_at
+HYRISE Pilot College,hyrise-pilot,admin@swache.in,PILOT-2026,50,2027-07-31 00:00:00+05:30
+RV College of Engineering,rvce,tpo@example-rvce.ac.in,RVCE-2026,600,2027-06-30 00:00:00+05:30
+BNM Institute of Technology,bnmit,tpo@example-bnmit.in,BNMIT-2026,480,2027-06-30 00:00:00+05:30
+CMR Institute of Technology,cmrit,tpo@example-cmrit.ac.in,CMRIT-2026,540,2027-06-30 00:00:00+05:30

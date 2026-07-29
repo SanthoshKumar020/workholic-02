@@ -505,7 +505,9 @@ function RolePlayTab({ initRole }: { initRole: string }) {
         </button>
       </div>
 
-      <div className="flex flex-col" style={{ height: "460px" }}>
+      {/* Viewport-relative rather than a fixed 460px, which overflowed short
+          and landscape screens. `dvh` accounts for mobile browser chrome. */}
+      <div className="flex min-h-[300px] flex-col" style={{ height: "min(460px, 65dvh)" }}>
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>

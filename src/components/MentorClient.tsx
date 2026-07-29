@@ -250,9 +250,13 @@ export function MentorClient({ initialMemory, initialMessages, profileName, prof
           ))}
         </div>
 
-        {/* Chat tab */}
+        {/* Chat tab.
+            Height was a fixed 520px, which overflowed phones in landscape and
+            other short viewports. It now scales with the viewport within
+            sensible bounds; `dvh` accounts for mobile browser chrome that
+            `vh` ignores. */}
         {tab === "chat" && (
-          <div className="flex flex-col" style={{ height: "520px" }}>
+          <div className="flex min-h-[320px] flex-col" style={{ height: "min(520px, 70dvh)" }}>
             <div className="flex-1 overflow-y-auto space-y-4 p-5">
               {messages.length === 0 && (
                 <div className="flex flex-col items-center gap-3 py-16 text-center">

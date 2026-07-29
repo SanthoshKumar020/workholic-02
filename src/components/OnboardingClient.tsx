@@ -79,7 +79,18 @@ export function OnboardingClient({ profile }: { profile: Profile }) {
       if (err) throw err;
       setStep(2);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to save. Please try again.");
+      // Raw Postgres text ("permission denied for table profiles") means
+      // nothing to a job seeker. Translate the one failure mode that is our
+      // fault, and never dead-end them — onboarding is optional, so let them
+      // continue into the product either way.
+      const raw = e instanceof Error ? e.message : "";
+      const isPermission = /permission denied|not authorized|row-level security/i.test(raw);
+      setError(
+        isPermission
+          ? "We couldn't save your preferences just now — that's on us, not you. You can continue and set this later in Settings."
+          : "Couldn't save that. Check your connection and try again — or continue and set it later in Settings."
+      );
+      console.error("[onboarding] profile save failed:", raw);
     } finally {
       setSaving(false);
     }
@@ -131,7 +142,20 @@ export function OnboardingClient({ profile }: { profile: Profile }) {
               </div>
             </div>
 
-            {error && <p className="text-sm text-red-600">{error}</p>}
+            {error && (
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <p className="text-sm text-amber-800">{error}</p>
+                {/* An escape hatch. Onboarding is a nice-to-have; being stuck
+                    on it before ever seeing the product is not. */}
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  className="mt-2 text-sm font-semibold text-brand-600 underline underline-offset-2 hover:text-brand-700"
+                >
+                  Continue anyway →
+                </button>
+              </div>
+            )}
 
             <Button type="submit" loading={saving} className="w-full" size="lg">
               Continue →

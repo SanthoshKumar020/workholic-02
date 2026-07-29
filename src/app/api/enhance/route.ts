@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroq } from "@/lib/groq";
-import { FREE_TEMPLATE_ID, isPro, isSuperAdmin } from "@/lib/plan";
+import { FREE_TEMPLATE_ID, isPro, isSuperAdmin, awardXp } from "@/lib/plan";
 import { checkResumeLimit, limitReachedResponse } from "@/lib/usage";
 
 export const runtime = "nodejs";
@@ -91,12 +91,12 @@ export async function POST(request: Request) {
     .select()
     .single();
 
-  // Award XP for enhancement
-  await supabase
-    .from("profiles")
-    .update({ xp: ((profile as { xp?: number })?.xp ?? 0) + 10, last_active: new Date().toISOString() })
-    .eq("id", user.id)
-    .then(() => null, () => null);
+  // Award XP for enhancement.
+  // This used to be a raw profiles update that moved `last_active` forward
+  // without advancing `streak` — so enhancing a resume every single day kept
+  // resetting the clock while the streak never grew. Always go through
+  // awardXp, which is the one place that owns xp/streak/last_active.
+  await awardXp(user.id, 10).catch(() => null);
 
   if (saveError) {
     return NextResponse.json(

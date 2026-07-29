@@ -90,22 +90,91 @@ export function templatesForPlan(plan: Plan | string | null | undefined): string
   return isPro(plan) ? ALL_TEMPLATE_IDS : FREE_TEMPLATE_IDS;
 }
 
-export async function awardXp(userId: string, amount: number): Promise<void> {
+/**
+ * The user's local calendar day, as YYYY-MM-DD.
+ *
+ * Streaks must be counted in calendar days, not 24-hour blocks. The old code
+ * used `Math.floor(msElapsed / 86400000)`, which meant practising at 9am
+ * Monday and 8am Tuesday produced `daysSince === 0` — two consecutive days of
+ * real use that never incremented the streak. Users experience "days" as
+ * dates on a calendar, not as elapsed milliseconds.
+ *
+ * Fixed to IST because that's where essentially all of this audience is; a
+ * UTC boundary would roll the day over at 5:30am local, mid-evening-session.
+ */
+const STREAK_TIMEZONE = "Asia/Kolkata";
+
+function localDayKey(date: Date): string {
+  // en-CA gives ISO-style YYYY-MM-DD.
+  return date.toLocaleDateString("en-CA", { timeZone: STREAK_TIMEZONE });
+}
+
+function daysBetweenKeys(fromKey: string, toKey: string): number {
+  const from = new Date(`${fromKey}T00:00:00Z`).getTime();
+  const to = new Date(`${toKey}T00:00:00Z`).getTime();
+  return Math.round((to - from) / 86_400_000);
+}
+
+/**
+ * One missed day is forgiven.
+ *
+ * A streak should encourage a habit, not punish someone for a bad day — and
+ * this audience is job hunting, which is stressful enough. Missing a single
+ * day keeps the streak alive; missing two starts it over. This is deliberate
+ * and worth stating in the UI so the number stays honest.
+ */
+const STREAK_GRACE_DAYS = 1;
+
+function nextStreak(current: number, lastKey: string | null, todayKey: string): number {
+  if (!lastKey) return 1;
+  const gap = daysBetweenKeys(lastKey, todayKey);
+  if (gap <= 0) return Math.max(current, 1); // already counted today
+  if (gap <= 1 + STREAK_GRACE_DAYS) return current + 1;
+  return 1;
+}
+
+/**
+ * Record activity and optionally award XP. THE single place that touches
+ * `xp`, `streak` and `last_active`.
+ *
+ * Previously three separate implementations existed — this function, a raw
+ * `.update({ xp: xp + 10, last_active })` in both `enhance` and
+ * `cover-letter`, and an `increment_xp` RPC used by `roadmap/generate`. The
+ * raw updates were the damaging ones: they moved `last_active` forward WITHOUT
+ * advancing `streak`, so the two most-used tools in the product quietly
+ * sabotaged the streak they were supposed to build.
+ */
+export async function awardXp(userId: string, amount = 0): Promise<void> {
   const supabase = createClient();
-  const { data: profile } = await supabase.from("profiles").select("xp, streak, last_active").eq("id", userId).single();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("xp, streak, last_active")
+    .eq("id", userId)
+    .single();
   if (!profile) return;
 
   const now = new Date();
-  const lastActive = profile.last_active ? new Date(profile.last_active) : null;
-  const daysSince = lastActive ? Math.floor((now.getTime() - lastActive.getTime()) / 86400000) : 999;
-
-  let newStreak = profile.streak ?? 0;
-  if (daysSince === 1) newStreak += 1;
-  else if (daysSince > 1) newStreak = 1;
-  // Same day: keep streak
+  const todayKey = localDayKey(now);
+  const lastKey = profile.last_active ? localDayKey(new Date(profile.last_active)) : null;
 
   await supabase
     .from("profiles")
-    .update({ xp: (profile.xp ?? 0) + amount, streak: newStreak, last_active: now.toISOString() })
+    .update({
+      xp: (profile.xp ?? 0) + Math.max(0, amount),
+      streak: nextStreak(profile.streak ?? 0, lastKey, todayKey),
+      last_active: now.toISOString(),
+    })
     .eq("id", userId);
+}
+
+/**
+ * Credit a day's activity without XP.
+ *
+ * Most of the app — job search, tracker, mentor, tailor, salary coach,
+ * recruiter scan — awards no XP, so a user could work in HYRISE all day and
+ * get no streak credit at all. Call this from those paths so the streak
+ * reflects genuine use rather than only the handful of gamified surfaces.
+ */
+export async function recordActivity(userId: string): Promise<void> {
+  return awardXp(userId, 0);
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { checkRoadmapLimit, limitReachedResponse } from "@/lib/usage";
+import { awardXp } from "@/lib/plan";
 import { callGroq } from "@/lib/groq";
 import type { RoadmapContent, RoadmapStep } from "@/lib/types";
 
@@ -104,7 +105,9 @@ export async function POST(request: Request) {
     .select()
     .single();
 
-  await supabase.rpc("increment_xp", { user_id: user.id, amount: 15 }).then(() => null, () => null);
+  // Was a third, separate XP implementation (the `increment_xp` RPC in
+  // schema-v2.sql) with its own streak logic. Consolidated onto awardXp.
+  await awardXp(user.id, 15).catch(() => null);
 
   if (dbErr) {
     return NextResponse.json(

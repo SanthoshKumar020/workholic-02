@@ -11,13 +11,28 @@ const XP_LEVELS = [
   { min: 2000, max: Infinity, label: "Legend" },
 ];
 
+/**
+ * Badges are XP milestones, and they now say so.
+ *
+ * They previously carried activity names — "First Resume" at 10 XP,
+ * "Interviewer" at 30, "Letter Writer" at 80 — but were all awarded purely on
+ * total XP. Finishing one DSA island (30+ XP) handed you "First Resume" and
+ * "Interviewer" without ever opening the resume builder. A badge that claims
+ * you did something you didn't is worse than no badge: it tells the user the
+ * progress display is decorative and can be ignored.
+ *
+ * Naming them honestly as milestones keeps them meaningful. Wiring genuine
+ * per-activity achievements needs real per-feature counters (feature_usage
+ * already records them) — worth doing, but not something to fake in the
+ * meantime.
+ */
 const BADGES = [
-  { id: "first_resume", label: "First Resume", icon: "📄", xpRequired: 10 },
-  { id: "first_interview", label: "Interviewer", icon: "🎤", xpRequired: 30 },
-  { id: "roadmap_creator", label: "Roadmap Builder", icon: "🗺️", xpRequired: 50 },
-  { id: "week_streak", label: "7-Day Streak", icon: "🔥", xpRequired: 70, streakRequired: 7 },
-  { id: "cover_letter", label: "Letter Writer", icon: "✉️", xpRequired: 80 },
-  { id: "quiz_master", label: "Quiz Master", icon: "🎓", xpRequired: 100 },
+  { id: "xp_10", label: "First Steps", icon: "🌱", xpRequired: 10 },
+  { id: "xp_30", label: "Getting Going", icon: "⚡", xpRequired: 30 },
+  { id: "xp_50", label: "Halfway Habit", icon: "🎯", xpRequired: 50 },
+  { id: "week_streak", label: "7-Day Streak", icon: "🔥", xpRequired: 0, streakRequired: 7 },
+  { id: "xp_100", label: "Century", icon: "💯", xpRequired: 100 },
+  { id: "xp_250", label: "Serious About This", icon: "🏆", xpRequired: 250 },
 ];
 
 export function StreakWidget({

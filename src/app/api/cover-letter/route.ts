@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { callGroqText } from "@/lib/groq";
-import { isUserPro } from "@/lib/plan";
+import { isUserPro, awardXp } from "@/lib/plan";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,12 +48,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
-  // Award XP
-  await supabase
-    .from("profiles")
-    .update({ xp: ((profile as {xp?: number})?.xp ?? 0) + 10, last_active: new Date().toISOString() })
-    .eq("id", user.id)
-    .then(() => null, () => null);
+  // Award XP via the single owner of xp/streak/last_active. The previous raw
+  // update advanced `last_active` without `streak`, quietly breaking the
+  // streak for anyone who used this tool daily.
+  await awardXp(user.id, 10).catch(() => null);
 
   return NextResponse.json({ coverLetter });
 }

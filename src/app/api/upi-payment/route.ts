@@ -1,16 +1,27 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { makeApproveToken } from "@/lib/upi";
 import { Resend } from "resend";
-import crypto from "crypto";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-function makeApproveToken(requestId: string): string {
-  const secret = process.env.UPI_APPROVE_SECRET ?? "fallback-secret-change-me";
-  return crypto.createHmac("sha256", secret).update(requestId).digest("hex");
+/**
+ * Escape user-controlled values before interpolating them into the admin
+ * email. Without this, a payer could set `fullName` to markup that overlays or
+ * relabels the Approve button and trick the admin into approving a payment
+ * that never happened.
+ */
+function esc(value: unknown): string {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 export async function POST(request: Request) {
@@ -27,8 +38,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "All fields are required." }, { status: 400 });
   }
 
-  // Save payment request to Supabase
-  const { data: paymentReq, error: dbErr } = await supabase
+  // Save the payment request with the SERVICE-ROLE client.
+  //
+  // Migration 010 revokes insert/update/delete on `payment_requests` from the
+  // `authenticated` role — otherwise a user could insert a row and flip its own
+  // status to "approved" straight from the browser. The row is written here
+  // instead, with user_id and user_email taken from the verified session rather
+  // than from the request body.
+  const db = createAdminClient();
+  const { data: paymentReq, error: dbErr } = await db
     .from("payment_requests")
     .insert({
       user_id: user.id,
@@ -47,15 +65,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not save request. Try again." }, { status: 500 });
   }
 
-  const approveToken = makeApproveToken(paymentReq.id);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const approveUrl = `${siteUrl}/api/upi-approve?id=${paymentReq.id}&token=${approveToken}`;
-  const rejectUrl  = `${siteUrl}/api/upi-approve?id=${paymentReq.id}&token=${approveToken}&action=reject`;
+  // Separate tokens per action, so an approve link can't be edited into a
+  // reject. Both links now open a confirmation page rather than acting on GET.
+  let approveUrl: string;
+  let rejectUrl: string;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hyrise.swache.in";
+  try {
+    approveUrl = `${siteUrl}/api/upi-approve?id=${paymentReq.id}&action=approve&token=${makeApproveToken(paymentReq.id, "approve")}`;
+    rejectUrl = `${siteUrl}/api/upi-approve?id=${paymentReq.id}&action=reject&token=${makeApproveToken(paymentReq.id, "reject")}`;
+  } catch {
+    // The payment request is saved; only the admin notification fails.
+    console.error("[upi-payment] UPI_APPROVE_SECRET is not configured");
+    return NextResponse.json(
+      { error: "Payment recorded, but approval could not be requested. Please contact support." },
+      { status: 500 }
+    );
+  }
 
   // Send admin notification email
+  const adminEmail =
+    (process.env.SUPER_ADMIN_EMAILS ?? "").split(",")[0].trim() || "admin@swache.in";
   await resend.emails.send({
     from: process.env.EMAIL_FROM ?? "HYRISE <onboarding@resend.dev>",
-    to: ["kumarsanthosh2743@gmail.com"],
+    to: [adminEmail],
     subject: `💰 New UPI Payment — ${fullName} (${plan})`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
@@ -63,16 +95,15 @@ export async function POST(request: Request) {
         <p style="color:#64748b;margin-top:0">Someone paid for HYRISE Pro. Verify and approve below.</p>
 
         <table style="width:100%;border-collapse:collapse;margin:24px 0;background:#f8fafc;border-radius:12px;overflow:hidden">
-          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Name</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${fullName}</td></tr>
-          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Email</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${user.email}</td></tr>
+          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Name</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${esc(fullName)}</td></tr>
+          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Email</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${esc(user.email)}</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Plan</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${plan === "yearly" ? "Yearly ₹311" : "Monthly ₹30"}</td></tr>
-          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Amount</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">₹${amount}</td></tr>
-          <tr><td style="padding:12px 16px;font-weight:600;color:#475569">Transaction ID</td><td style="padding:12px 16px;color:#1e293b;font-family:monospace;font-size:15px;font-weight:700">${transactionId}</td></tr>
+          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Amount</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">₹${esc(amount)}</td></tr>
+          <tr><td style="padding:12px 16px;font-weight:600;color:#475569">Transaction ID</td><td style="padding:12px 16px;color:#1e293b;font-family:monospace;font-size:15px;font-weight:700">${esc(transactionId)}</td></tr>
         </table>
 
         <p style="color:#64748b;font-size:14px">
-          📱 Verify this transaction ID in your UPI app (PhonePe / GPay / Paytm).<br/>
-          Phone: <strong>6374310315</strong>
+          Verify this transaction ID in your UPI app (PhonePe / GPay / Paytm) before approving.
         </p>
 
         <div style="margin:28px 0;display:flex;gap:12px">

@@ -67,9 +67,15 @@ export async function POST(request: Request) {
     // Remotive unavailable — return empty gracefully
   }
 
-  // Optional email delivery
+  // Optional email delivery.
+  //
+  // The recipient is ALWAYS the authenticated user's own verified address.
+  // This previously honoured `body.email`, which let any caller send
+  // HYRISE-branded mail from our verified Resend domain to an arbitrary
+  // address — a free phishing relay, and a fast way to get the sending domain
+  // blacklisted. Never take a recipient from the request body.
   if (body.sendEmail && jobs.length > 0) {
-    const emailTo = body.email || profile?.email;
+    const emailTo = user.email ?? profile?.email;
     if (emailTo && process.env.RESEND_API_KEY) {
       try {
         const resend = new Resend(process.env.RESEND_API_KEY);

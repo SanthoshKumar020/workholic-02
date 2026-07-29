@@ -1,3 +1,7 @@
+// Reads YOUTUBE_API_KEY. Only imported by /api/videos today; this guard makes
+// a future client-side import fail at build time instead of leaking the key.
+import "server-only";
+
 export interface VideoResult {
   videoId: string;
   title: string;

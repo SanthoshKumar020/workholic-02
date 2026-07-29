@@ -1,3 +1,7 @@
+// Reads GROQ_API_KEY* — a build-time tripwire so this module can never be
+// imported into a client component and ship the keys to the browser.
+import "server-only";
+
 const GROQ_API = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "llama-3.3-70b-versatile";
 

@@ -46,6 +46,20 @@ export async function POST(request: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+
+        // `checkout.session.completed` fires when checkout is *finished*, not
+        // necessarily when money has arrived. Delayed-notification methods
+        // (bank debits, vouchers) complete the session with payment_status
+        // "unpaid" and can still fail afterwards. Granting Pro here would give
+        // away paid access on a payment that never settles — wait for
+        // async_payment_succeeded instead, which this switch also handles.
+        if (session.payment_status !== "paid") {
+          console.info(
+            `[stripe] session ${session.id} completed but payment_status=${session.payment_status}; deferring upgrade`
+          );
+          break;
+        }
+
         const customerId = session.customer as string;
         const userId = (session.metadata?.supabase_user_id as string) || null;
         await setPlanByCustomer(customerId, "pro", userId);
@@ -57,6 +71,16 @@ export async function POST(request: Request) {
             html: `<p>Your upgrade is complete. All templates and job alerts are now unlocked. Head to your dashboard to get started.</p>`,
           });
         }
+        break;
+      }
+
+      // The other half of the payment_status check above: a delayed payment
+      // that eventually settles lands here, and the upgrade happens then.
+      case "checkout.session.async_payment_succeeded": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const customerId = session.customer as string;
+        const userId = (session.metadata?.supabase_user_id as string) || null;
+        await setPlanByCustomer(customerId, "pro", userId);
         break;
       }
 

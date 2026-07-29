@@ -172,12 +172,15 @@ export function AtsChecker() {
                 )}
               </div>
 
+              {/* Measured at 16px tall on the live site — an unusable tap
+                  target on a phone, and it sits in the main conversion flow.
+                  py-2 brings it to ~36px without changing the visual weight. */}
               <p className="text-center text-xs text-slate-500">
                 Prefer to paste?{" "}
                 <button
                   type="button"
                   onClick={() => setPasteMode(true)}
-                  className="font-semibold text-brand-600 hover:text-brand-700"
+                  className="inline-block px-1 py-2 font-semibold text-brand-600 hover:text-brand-700"
                 >
                   Paste resume text instead
                 </button>

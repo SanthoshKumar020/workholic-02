@@ -30,7 +30,9 @@ export type AnalyticsEvent =
   | "share_link_created"
   | "share_clicked"
   | "share_page_cta_clicked"
-  | "email_captured";
+  | "email_captured"
+  // ── Affiliate ───────────────────────────────────────────────────────────
+  | "affiliate_clicked";
 
 type Props = Record<string, string | number | boolean | undefined>;
 

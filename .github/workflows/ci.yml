@@ -1,0 +1,73 @@
+name: CI
+
+# Runs the same checks Vercel runs, but on every push and pull request — so a
+# broken build is caught in about two minutes instead of after a failed
+# deploy. The ES5 `Map` iteration error that broke a recent deploy would have
+# been caught here.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A new push to the same branch cancels the previous run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, lint and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # `next build` evaluates modules, and some of them read env vars at import
+    # time. These are throwaway placeholders that only need to be
+    # well-formed — never put real secrets here. CI does not talk to any of
+    # these services; it only has to compile.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role-key
+      NEXT_PUBLIC_SITE_URL: https://hyrise.swache.in
+      NEXT_PUBLIC_APP_URL: https://hyrise.swache.in
+      GROQ_API_KEY: placeholder
+      RESEND_API_KEY: re_placeholder
+      EMAIL_FROM: HYRISE <noreply@example.com>
+      STRIPE_SECRET_KEY: sk_test_placeholder
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+      STRIPE_WEBHOOK_SECRET: whsec_placeholder
+      STRIPE_PRICE_ID: price_placeholder
+      CASHFREE_APP_ID: placeholder
+      CASHFREE_SECRET_KEY: placeholder
+      NEXT_PUBLIC_CASHFREE_ENV: sandbox
+      UPI_APPROVE_SECRET: placeholder-ci-secret
+      CRON_SECRET: placeholder-ci-secret
+      SUPER_ADMIN_EMAILS: ci@example.com
+      YOUTUBE_API_KEY: placeholder
+      # Keeps build output readable in the Actions log.
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Typecheck first: it's the fastest signal and catches the largest class
+      # of errors. `tsconfig.json` sets no `target`, so this compiles as ES5 —
+      # which is exactly why iterating a Map with for...of fails here.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build

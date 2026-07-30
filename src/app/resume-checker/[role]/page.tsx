@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { SEO_ROLES, getSeoRole } from "@/lib/seo/roles";
 import { roleAtsKeywords, roleResumeTips } from "@/lib/seo/content";
 import { SITE_URL } from "@/lib/share";
+import { COMPANIES } from "@/lib/company-data";
 import { CheckCircle } from "lucide-react";
 
 interface Props {
@@ -63,6 +64,8 @@ export default function ResumeCheckerRolePage({ params }: Props) {
   };
 
   const otherRoles = SEO_ROLES.filter((r) => r.slug !== role.slug && r.category === role.category).slice(0, 6);
+  const FEATURED_COMPANY_IDS = ["tcs", "infosys", "wipro", "accenture", "flipkart", "amazon"];
+  const companies = COMPANIES.filter((c) => FEATURED_COMPANY_IDS.indexOf(c.id) !== -1);
 
   return (
     <>
@@ -149,8 +152,25 @@ export default function ResumeCheckerRolePage({ params }: Props) {
           </div>
         </section>
 
+        <section className="mt-12 border-t border-slate-100 pt-8">
+          <h2 className="mb-1 text-lg font-bold text-slate-900">Company-specific interview questions</h2>
+          <p className="mb-4 text-sm text-slate-500">
+            Applying somewhere specific? See the full process — every round and what it assesses.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {companies.map((c) => (
+              <Link key={c.id} href={`/companies/${c.id}`} className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-brand-300 hover:text-brand-700">
+                {c.name} interview questions
+              </Link>
+            ))}
+            <Link href="/companies" className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-brand-300 hover:text-brand-700">
+              All companies
+            </Link>
+          </div>
+        </section>
+
         {otherRoles.length > 0 && (
-          <section className="mt-12 border-t border-slate-100 pt-8">
+          <section className="mt-10 border-t border-slate-100 pt-8">
             <h2 className="mb-4 text-lg font-bold text-slate-900">Resume checkers for related roles</h2>
             <div className="flex flex-wrap gap-2">
               {otherRoles.map((r) => (

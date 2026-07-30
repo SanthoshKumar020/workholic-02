@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Combobox } from "@/components/ui/Combobox";
 import { ResumeUpload } from "@/components/ui/ResumeUpload";
 import { Copy, Check, FileText, Mail, ArrowRight, RotateCcw } from "lucide-react";
@@ -86,7 +87,7 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
   return (
     <div className="space-y-5">
       {/* Input form */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="border-b border-slate-100 px-5 py-4">
           <h3 className="font-bold text-slate-900">Upload Resume + Target Posting</h3>
         </div>
@@ -118,7 +119,7 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
             </Button>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Results */}
       {hasResult && (
@@ -126,12 +127,16 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
           {/* Tab switcher */}
           <div className="flex gap-1 rounded-2xl border border-slate-200 bg-slate-50 p-1">
             {(["resume", "cover"] as const).map((t) => (
-              <button key={t} type="button" onClick={() => setActiveTab(t)}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition ${
-                  activeTab === t ? "bg-white text-slate-900 shadow-sm" : "text-slate-400"
-                } ${t === "resume" && !resumeResult ? "opacity-40 pointer-events-none" : ""} ${t === "cover" && !coverResult ? "opacity-40 pointer-events-none" : ""}`}>
+              <Button
+                key={t}
+                type="button"
+                variant="chip"
+                aria-pressed={activeTab === t}
+                onClick={() => setActiveTab(t)}
+                className={`flex-1 ${t === "resume" && !resumeResult ? "opacity-40 pointer-events-none" : ""} ${t === "cover" && !coverResult ? "opacity-40 pointer-events-none" : ""}`}
+              >
                 {t === "resume" ? <><FileText className="h-4 w-4" /> Tailored Resume</> : <><Mail className="h-4 w-4" /> Cover Letter</>}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -139,17 +144,17 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
           {activeTab === "resume" && resumeResult && (
             <div className="space-y-4">
               {/* Fit score */}
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <Card padding="md" className="overflow-hidden">
                 <h4 className="mb-3 font-bold text-slate-900">Fit Score</h4>
                 <div className="flex items-center gap-4">
                   <FitBar label="Before" score={resumeResult.fitScore} color="text-amber-600" />
                   <ArrowRight className="h-5 w-5 shrink-0 text-brand-400" />
                   <FitBar label="After tailoring" score={resumeResult.tailoredFitScore} color="text-green-600" />
                 </div>
-              </div>
+              </Card>
 
               {/* Tailored summary */}
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <Card padding="md" className="overflow-hidden">
                 <div className="mb-2 flex items-center justify-between">
                   <h4 className="font-bold text-slate-900">Tailored Professional Summary</h4>
                   <CopyBtn text={resumeResult.tailoredSummary} />
@@ -157,11 +162,11 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
                 <p className="rounded-xl bg-brand-50 border border-brand-100 px-4 py-3 text-sm text-slate-700 leading-relaxed italic">
                   {resumeResult.tailoredSummary}
                 </p>
-              </div>
+              </Card>
 
               {/* Experience bullets */}
               {resumeResult.experienceTailoring?.map((job) => (
-                <div key={job.jobTitle} className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <Card key={job.jobTitle} padding="md" className="overflow-hidden">
                   <div className="mb-3 flex items-center justify-between">
                     <h4 className="font-bold text-slate-900 text-sm">{job.jobTitle}</h4>
                     <CopyBtn text={job.tailoredBullets.map((b) => `• ${b}`).join("\n")} />
@@ -173,35 +178,35 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Card>
               ))}
 
               {/* Skills + keywords */}
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="overflow-hidden rounded-2xl border border-green-100 bg-green-50 p-4 shadow-sm">
+                <Card variant="success" padding="sm" className="overflow-hidden border-green-100 bg-green-50 shadow-sm">
                   <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-green-700">Skills to Highlight</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {resumeResult.skillsToHighlight.map((s) => (
                       <span key={s} className="rounded-full border border-green-200 bg-white px-2.5 py-0.5 text-xs font-semibold text-green-800">{s}</span>
                     ))}
                   </div>
-                </div>
-                <div className="overflow-hidden rounded-2xl border border-amber-100 bg-amber-50 p-4 shadow-sm">
+                </Card>
+                <Card variant="warning" padding="sm" className="overflow-hidden border-amber-100 shadow-sm">
                   <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-700">Keywords to Add</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {resumeResult.keywordsToAdd.map((k) => (
                       <span key={k} className="rounded-full border border-amber-200 bg-white px-2.5 py-0.5 text-xs font-semibold text-amber-800">{k}</span>
                     ))}
                   </div>
-                </div>
+                </Card>
               </div>
 
               {resumeResult.tips?.length > 0 && (
-                <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 space-y-1">
+                <Card variant="info" radius="xl" className="border-blue-100 px-4 py-3 space-y-1">
                   {resumeResult.tips.map((t, i) => (
                     <p key={i} className="text-xs text-blue-700">💡 {t}</p>
                   ))}
-                </div>
+                </Card>
               )}
             </div>
           )}
@@ -209,15 +214,15 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
           {/* Cover letter tab */}
           {activeTab === "cover" && coverResult && (
             <div className="space-y-4">
-              <div className="overflow-hidden rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 flex items-center justify-between">
+              <Card variant="brand" className="overflow-hidden px-4 py-3 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-brand-700">Email Subject</p>
                   <p className="text-sm font-semibold text-slate-800">{coverResult.subject}</p>
                 </div>
                 <CopyBtn text={coverResult.subject} />
-              </div>
+              </Card>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <Card padding="md" className="overflow-hidden">
                 <div className="mb-3 flex items-center justify-between">
                   <h4 className="font-bold text-slate-900">Cover Letter</h4>
                   <CopyBtn text={coverResult.coverLetter.replace(/\\n/g, "\n")} />
@@ -225,10 +230,10 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
                 <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed rounded-xl bg-slate-50 border border-slate-100 p-4">
                   {coverResult.coverLetter.replace(/\\n/g, "\n")}
                 </pre>
-              </div>
+              </Card>
 
               {coverResult.highlights?.length > 0 && (
-                <div className="overflow-hidden rounded-2xl border border-green-100 bg-green-50 p-4 shadow-sm">
+                <Card variant="success" padding="sm" className="overflow-hidden border-green-100 bg-green-50 shadow-sm">
                   <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-green-700">Why This Works</h4>
                   <ul className="space-y-1">
                     {coverResult.highlights.map((h, i) => (
@@ -237,15 +242,15 @@ export function TailorClient({ targetRole }: { targetRole: string }) {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Card>
               )}
 
               {coverResult.tips?.length > 0 && (
-                <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 space-y-1">
+                <Card variant="info" radius="xl" className="border-blue-100 px-4 py-3 space-y-1">
                   {coverResult.tips.map((t, i) => (
                     <p key={i} className="text-xs text-blue-700">💡 {t}</p>
                   ))}
-                </div>
+                </Card>
               )}
             </div>
           )}

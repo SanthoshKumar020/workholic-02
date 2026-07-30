@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getIsland, isIslandUnlocked } from "@/lib/dsa/curriculum";
 import { getTopicModule } from "@/components/dsa/topics/registry";
 import { IslandClient } from "@/components/dsa/IslandClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { Bit } from "@/components/dsa/Mascot";
 import type { DsaMode } from "@/lib/dsa/types";
 import { redirect, notFound } from "next/navigation";
@@ -40,7 +41,7 @@ export default async function IslandPage({ params }: { params: { topic: string }
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <PageShell width="default">
         {!unlocked ? (
           <Gate
             emoji="🔒"
@@ -63,7 +64,7 @@ export default async function IslandPage({ params }: { params: { topic: string }
         ) : (
           <IslandClient island={island} initialMode={mode} initialStars={thisStars} />
         )}
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

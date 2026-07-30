@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card, SectionCard } from "@/components/ui/Card";
 import { Mic, Square, RotateCcw, Play, CheckCircle, AlertCircle, Timer } from "lucide-react";
 import { PlanUsageBadge, UpgradeWall } from "@/components/ui/PlanUsageBadge";
 
@@ -225,11 +226,11 @@ export function GDPracticeClient({
         <PlanUsageBadge used={usedCount} limit={freeLimit} feature="GD practice" />
       )}
       {limitReached && <UpgradeWall limit={freeLimit} feature="GD practice" />}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <h3 className="mb-4 font-bold text-slate-900">Choose a Category</h3>
+      <SectionCard as="h3" title="Choose a Category" titleClassName="text-base" padding="md" className="overflow-hidden">
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {CATEGORIES.map((c) => (
             <button key={c.key} type="button" onClick={() => setCategory(c.key)}
+              aria-pressed={category === c.key}
               className={`flex items-center gap-2.5 rounded-xl border px-4 py-3 text-left font-semibold transition ${
                 category === c.key ? "border-slate-900 bg-slate-900 text-white" : `${c.color} hover:opacity-80`
               }`}>
@@ -238,12 +239,12 @@ export function GDPracticeClient({
             </button>
           ))}
         </div>
-      </div>
+      </SectionCard>
 
-      <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+      <Card variant="info" radius="xl" className="border-blue-100 px-4 py-3">
         <p className="text-xs font-semibold text-blue-800">🎤 Voice Practice</p>
         <p className="mt-0.5 text-xs text-blue-600">You&apos;ll get 2 minutes to speak. After recording, play it back and get AI feedback.</p>
-      </div>
+      </Card>
 
       {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
       <Button onClick={getTopic} loading={loading} disabled={!category || exhausted || limitReached} className="w-full" size="lg">
@@ -256,29 +257,29 @@ export function GDPracticeClient({
 
   if (phase === "topic" && topic) return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-2xl border-2 border-brand-500 bg-white p-6 shadow-sm">
+      <Card variant="selected" padding="lg" className="overflow-hidden">
         <div className="flex items-center gap-2 mb-3">
           <span className="rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-bold text-brand-700">{topic.category}</span>
           <span className="text-xs text-slate-400">2 min response</span>
         </div>
         <h2 className="text-2xl font-bold text-slate-900 leading-snug">{topic.topic}</h2>
-      </div>
+      </Card>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md" className="overflow-hidden">
         <p className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-2">Background</p>
         <p className="text-sm text-slate-700 leading-relaxed">{topic.context}</p>
-      </div>
+      </Card>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md" className="overflow-hidden">
         <p className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-3">Key angles to consider</p>
         <div className="grid gap-2 sm:grid-cols-2">
           {topic.keyAngles.map((a, i) => (
-            <div key={i} className="flex items-start gap-2 rounded-xl bg-slate-50 border border-slate-100 px-3 py-2.5 text-sm text-slate-700">
+            <Card key={i} variant="muted" radius="xl" className="flex items-start gap-2 px-3 py-2.5 text-sm text-slate-700">
               <span className="shrink-0 font-bold text-brand-500">{i + 1}.</span> {a}
-            </div>
+            </Card>
           ))}
         </div>
-      </div>
+      </Card>
 
       <div className="flex gap-3">
         <Button onClick={startRecording} className="flex-1" size="lg">
@@ -295,13 +296,13 @@ export function GDPracticeClient({
 
   if (phase === "speaking") return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md" className="overflow-hidden">
         <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">Topic</p>
         <p className="font-semibold text-slate-900">{topic?.topic}</p>
-      </div>
+      </Card>
 
       {/* Timer */}
-      <div className="overflow-hidden rounded-2xl border-2 border-red-200 bg-red-50 p-5 shadow-sm text-center">
+      <Card variant="danger" padding="md" className="overflow-hidden border-2 shadow-sm text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Timer className="h-4 w-4 text-red-500" />
           <span className="text-xs font-bold uppercase tracking-wide text-red-600">Time Remaining</span>
@@ -314,7 +315,7 @@ export function GDPracticeClient({
           <span className="flex h-2 w-2 animate-pulse rounded-full bg-red-500" />
           <span className="text-xs font-semibold text-red-600">Recording</span>
         </div>
-      </div>
+      </Card>
 
       <Button onClick={stopRecording} variant="outline" size="lg" className="w-full border-red-200 text-red-600 hover:bg-red-50">
         <Square className="h-4 w-4" /> Stop Recording
@@ -329,14 +330,14 @@ export function GDPracticeClient({
     const wordCount = fullText.split(/\s+/).filter(Boolean).length;
     return (
       <div className="space-y-4">
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <Card padding="md" className="overflow-hidden">
           <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">Topic</p>
           <p className="font-semibold text-slate-900">{topic?.topic}</p>
-        </div>
+        </Card>
 
         {/* Audio playback */}
         {audioUrl ? (
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Play className="h-4 w-4 text-brand-500" />
@@ -345,16 +346,16 @@ export function GDPracticeClient({
               <span className="text-xs text-slate-400">{elapsed}s{wordCount > 0 ? ` · ${wordCount} words` : ""}</span>
             </div>
             <audio src={audioUrl} controls className="w-full rounded-xl" />
-          </div>
+          </Card>
         ) : (
           /* Fallback textarea if audio capture failed */
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <Card padding="sm" className="overflow-hidden">
             <p className="mb-2 text-sm font-semibold text-slate-700">Type your response</p>
             <textarea rows={6} value={fullText} onChange={(e) => setTranscript(e.target.value)}
               placeholder="Type your response here…"
               className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 resize-none"
             />
-          </div>
+          </Card>
         )}
 
         {!fullText && audioUrl && (
@@ -382,7 +383,7 @@ export function GDPracticeClient({
   if (phase === "feedback" && feedback) return (
     <div className="space-y-4">
       {/* Overall score */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm text-center">
+      <Card padding="lg" className="overflow-hidden text-center">
         <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2">Overall Score</p>
         <span className={`text-6xl font-extrabold ${SCORE_COLOR(feedback.overallScore)}`}>{feedback.overallScore}</span>
         <p className="text-sm text-slate-500 mt-1">
@@ -391,30 +392,30 @@ export function GDPracticeClient({
         {feedback.fillerWordCount > 0 && (
           <p className="mt-2 text-xs text-amber-600">~{feedback.fillerWordCount} filler words detected</p>
         )}
-      </div>
+      </Card>
 
       {/* Audio playback in feedback phase */}
       {audioUrl && (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <Card padding="sm" className="overflow-hidden">
           <div className="mb-3 flex items-center gap-2">
             <Play className="h-4 w-4 text-brand-500" />
             <span className="text-sm font-semibold text-slate-700">Your Recording</span>
           </div>
           <audio src={audioUrl} controls className="w-full rounded-xl" />
-        </div>
+        </Card>
       )}
 
       {/* 3 dimensions */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+      <Card padding="md" className="overflow-hidden space-y-4">
         <h3 className="font-bold text-slate-900">Dimension Scores</h3>
         <ScoreBar label="Fluency" score={feedback.fluency.score} feedback={feedback.fluency.feedback} />
         <ScoreBar label="Structure" score={feedback.structure.score} feedback={feedback.structure.feedback} />
         <ScoreBar label="Content" score={feedback.content.score} feedback={feedback.content.feedback} />
-      </div>
+      </Card>
 
       {/* Strengths & improvements */}
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="overflow-hidden rounded-2xl border border-green-100 bg-green-50 p-4 shadow-sm">
+        <Card padding="sm" className="overflow-hidden border-green-100 bg-green-50">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-green-700">Strengths</p>
           <ul className="space-y-1.5">
             {feedback.strengths.map((s, i) => (
@@ -423,8 +424,8 @@ export function GDPracticeClient({
               </li>
             ))}
           </ul>
-        </div>
-        <div className="overflow-hidden rounded-2xl border border-amber-100 bg-amber-50 p-4 shadow-sm">
+        </Card>
+        <Card variant="warning" padding="sm" className="overflow-hidden border-amber-100 shadow-sm">
           <p className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-700">Improvements</p>
           <ul className="space-y-1.5">
             {feedback.improvements.map((s, i) => (
@@ -433,19 +434,19 @@ export function GDPracticeClient({
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
       </div>
 
       {/* Model responses */}
-      <div className="overflow-hidden rounded-2xl border border-brand-200 bg-brand-50 p-5 shadow-sm">
+      <Card variant="brand" padding="md" className="overflow-hidden shadow-sm">
         <p className="mb-1 text-xs font-bold uppercase tracking-wide text-brand-700">Model Opening Line</p>
         <p className="text-sm text-slate-700 italic">&ldquo;{feedback.modelOpening}&rdquo;</p>
-      </div>
+      </Card>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md" className="overflow-hidden">
         <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">How a High Scorer Would Structure It</p>
         <p className="text-sm text-slate-700 leading-relaxed">{feedback.modelResponse}</p>
-      </div>
+      </Card>
 
       <Button onClick={reset} variant="outline" className="w-full">
         <RotateCcw className="h-4 w-4" /> Practice Another Topic

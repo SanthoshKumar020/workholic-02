@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { Globe, Link2, ExternalLink, Award, CheckCircle } from "lucide-react";
 import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
+import { PageShell } from "@/components/ui/PageShell";
 import { shareText, SITE_URL } from "@/lib/share";
 
 export const dynamic = "force-dynamic";
@@ -51,7 +52,7 @@ export default async function PublicProfilePage({ params }: Props) {
         </div>
       </div>
 
-      <main className="mx-auto max-w-3xl px-4 py-10 space-y-6">
+      <PageShell width="narrow" className="space-y-6">
         {/* Profile card */}
         <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
           <div className="flex items-start gap-5">
@@ -161,7 +162,7 @@ export default async function PublicProfilePage({ params }: Props) {
             Get started free <ExternalLink className="h-3.5 w-3.5" />
           </Link>
         </div>
-      </main>
+      </PageShell>
     </div>
   );
 }

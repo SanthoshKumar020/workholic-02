@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { WorldMapClient, type IslandProgress } from "@/components/dsa/WorldMapClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
@@ -33,7 +34,7 @@ export default async function DSAMapPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10">
+      <PageShell width="default">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-extrabold text-slate-900">
             DSA <span className="text-gradient">Adventure</span> 🗺️
@@ -62,7 +63,7 @@ export default async function DSAMapPage() {
           pro={isUserPro(profile.plan, profile.email)}
           dueCount={dueCount ?? 0}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

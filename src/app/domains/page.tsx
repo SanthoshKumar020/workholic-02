@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { DomainsHubClient } from "@/components/domains/DomainsHubClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 
@@ -39,7 +40,7 @@ export default async function DomainsPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-5xl px-4 py-10">
+      <PageShell width="wide">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-extrabold text-slate-900">
             Learn any <span className="text-gradient">Domain</span> 🧭
@@ -55,7 +56,7 @@ export default async function DomainsPage() {
           freeLimit={FREE_FEATURE_LIMIT}
           isPro={proUser}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

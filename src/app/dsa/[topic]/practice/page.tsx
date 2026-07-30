@@ -4,6 +4,7 @@ import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { getIsland } from "@/lib/dsa/curriculum";
 import { PracticeClient } from "@/components/dsa/PracticeClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { Bit } from "@/components/dsa/Mascot";
 import type { DsaMode } from "@/lib/dsa/types";
 import { redirect, notFound } from "next/navigation";
@@ -30,7 +31,7 @@ export default async function PracticePage({ params }: { params: { topic: string
     return (
       <>
         <Navbar />
-        <main className="mx-auto max-w-md px-4 py-16 text-center">
+        <PageShell width="form" className="text-center">
           <div className="mb-3 text-5xl">👑</div>
           <Bit mood="think" size="lg" className="mx-auto" />
           <h1 className="mt-3 text-2xl font-extrabold text-slate-900">Practice is a Pro feature here</h1>
@@ -39,7 +40,7 @@ export default async function PracticePage({ params }: { params: { topic: string
             <Link href="/dsa" className="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200">← Map</Link>
             <Link href="/billing" className="rounded-xl bg-brand-gradient px-5 py-2.5 text-sm font-bold text-white shadow-md hover:opacity-90">Upgrade to Pro</Link>
           </div>
-        </main>
+        </PageShell>
         <Footer />
       </>
     );
@@ -58,9 +59,9 @@ export default async function PracticePage({ params }: { params: { topic: string
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10">
+      <PageShell width="default">
         <PracticeClient island={island} mode={mode} initialSolvedIds={solvedIds} />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AtsScoreRing } from "@/components/AtsScoreRing";
+import { PageShell } from "@/components/ui/PageShell";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { SITE_URL } from "@/lib/share";
 
@@ -104,7 +105,7 @@ export default async function SharedScanPage({ params }: { params: { id: string 
     <>
       <Navbar />
 
-      <main className="mx-auto max-w-3xl px-4 py-14">
+      <PageShell width="narrow">
         <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-brand-100/40">
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
             <AtsScoreRing score={scan.score} />
@@ -179,7 +180,7 @@ export default async function SharedScanPage({ params }: { params: { id: string 
         <p className="mt-6 text-center text-xs text-slate-400">
           Shared from HYRISE · Scores are an estimate of ATS readability, not a hiring prediction.
         </p>
-      </main>
+      </PageShell>
 
       <Footer />
     </>

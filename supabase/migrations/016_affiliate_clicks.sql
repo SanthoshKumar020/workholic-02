@@ -40,15 +40,15 @@ notify pgrst, 'reload schema';
 -- ── Reporting ────────────────────────────────────────────────────────────────
 -- Clicks by partner, last 30 days:
 --
---   select partner_id, count(*) as clicks
---     from public.affiliate_clicks
---    where created_at > now() - interval '30 days'
---    group by partner_id order by clicks desc;
---
+  select partner_id, count(*) as clicks
+    from public.affiliate_clicks
+   where created_at > now() - interval '30 days'
+   group by partner_id order by clicks desc;
+
 -- Which skill gaps actually drive clicks (i.e. which recommendations earn
 -- their slot — drop the ones that never get clicked):
 --
---   select skill_label, surface, count(*) as clicks
---     from public.affiliate_clicks
---    where created_at > now() - interval '30 days'
---    group by skill_label, surface order by clicks desc;
+  select skill_label, surface, count(*) as clicks
+    from public.affiliate_clicks
+   where created_at > now() - interval '30 days'
+   group by skill_label, surface order by clicks desc;

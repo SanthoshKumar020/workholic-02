@@ -3,11 +3,11 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SEO_ROLES, roleCategories } from "@/lib/seo/roles";
+import { COMPANIES } from "@/lib/company-data";
 
 export const metadata: Metadata = {
   title: "Mock Interview Questions by Role | HYRISE",
-  description:
-    "Common interview questions for 30+ roles — behavioral, technical, and role-specific. Practice with a free AI mock interview that scores your answers.",
+  description: `Common interview questions for ${SEO_ROLES.length} roles — behavioral, technical, and role-specific. Practice with a free AI mock interview that scores your answers.`,
   alternates: { canonical: "/interview-questions" },
 };
 
@@ -49,6 +49,30 @@ export default function InterviewQuestionsHub() {
             </div>
           </section>
         ))}
+
+        <section className="mt-12 border-t border-slate-100 pt-8">
+          <h2 className="mb-1 text-lg font-bold text-slate-900">Company-specific interview questions</h2>
+          <p className="mb-4 text-sm text-slate-500">
+            Interviewing somewhere specific? See the full process — every round, its duration, and what it assesses.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {COMPANIES.map((c) => (
+              <Link
+                key={c.id}
+                href={`/companies/${c.id}`}
+                className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-brand-300 hover:text-brand-700"
+              >
+                {c.name} interview questions
+              </Link>
+            ))}
+            <Link
+              href="/companies"
+              className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-brand-300 hover:text-brand-700"
+            >
+              All companies
+            </Link>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

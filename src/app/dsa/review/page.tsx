@@ -4,6 +4,7 @@ import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { ReviewClient } from "@/components/dsa/ReviewClient";
 import { Bit } from "@/components/dsa/Mascot";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
@@ -20,7 +21,7 @@ export default async function ReviewPage() {
     return (
       <>
         <Navbar />
-        <main className="mx-auto max-w-md px-4 py-16 text-center">
+        <PageShell width="form" className="text-center">
           <div className="mb-3 text-5xl">👑</div>
           <Bit mood="think" size="lg" className="mx-auto" />
           <h1 className="mt-3 text-2xl font-extrabold text-slate-900">Daily Practice is a Pro feature</h1>
@@ -36,7 +37,7 @@ export default async function ReviewPage() {
               Upgrade to Pro
             </Link>
           </div>
-        </main>
+        </PageShell>
         <Footer />
       </>
     );
@@ -54,11 +55,11 @@ export default async function ReviewPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10">
+      <PageShell width="default">
         <h1 className="mb-1 text-center text-3xl font-extrabold text-slate-900">Daily Practice 🧠</h1>
         <p className="mb-8 text-center text-slate-500">Quick flashcards to keep what you learned fresh.</p>
         <ReviewClient due={due ?? []} />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { getCurrentProfile } from "@/lib/plan";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { InstitutionDashboard } from "@/components/InstitutionDashboard";
+import { PageShell } from "@/components/ui/PageShell";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -34,9 +35,9 @@ export default async function InstitutionPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+      <PageShell width="wide">
         <InstitutionDashboard />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

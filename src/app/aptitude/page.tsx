@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AptitudeHubClient } from "@/components/AptitudeHubClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { APTITUDE_CATEGORIES } from "@/lib/aptitude-topics";
 import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
@@ -33,7 +34,7 @@ export default async function AptitudePage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-6xl px-4 py-10">
+      <PageShell width="wide">
         <div className="mb-10 text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
             ⚡ {proUser ? "Pro" : "Free"} · {totalTopics} topics · AI-powered lessons &amp; quizzes
@@ -50,7 +51,7 @@ export default async function AptitudePage() {
           freeLimit={FREE_FEATURE_LIMIT}
           isPro={proUser}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

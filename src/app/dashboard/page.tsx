@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { DashboardClient } from "@/components/DashboardClient";
 import { ProHistoryGate } from "@/components/ui/ProHistoryGate";
+import { PageShell } from "@/components/ui/PageShell";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile, isPro } from "@/lib/plan";
 import { StreakWidget } from "@/components/StreakWidget";
@@ -137,7 +138,7 @@ export default async function DashboardPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+      <PageShell width="wide">
         {/* Header */}
         <div className="mb-8 overflow-hidden rounded-3xl bg-brand-gradient p-7 text-white shadow-md sm:p-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -283,7 +284,7 @@ export default async function DashboardPage() {
             blurb="Your enhanced resumes are saved securely. Upgrade to Pro to view, manage, and re-download your full resume history anytime."
           />
         )}
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

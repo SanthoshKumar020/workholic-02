@@ -433,11 +433,40 @@ export function getByCategory(cat: Category): CompanyData[] {
   return COMPANIES.filter((c) => c.category === cat);
 }
 
+/** Display order for category sections on the public /companies pages. */
+export const COMPANY_CATEGORIES: Category[] = ["FAANG", "Indian Product", "IT Services"];
+
+/** Short, human-readable description of each category, for hub-page copy. */
+export const CATEGORY_BLURB: Record<Category, string> = {
+  "FAANG": "Global product companies hiring in India. Longest processes, hardest DSA bar, highest compensation.",
+  "Indian Product": "Bengaluru-led product and fintech companies. Strong DSA plus low-level and system design.",
+  "IT Services": "Mass fresher hiring through aptitude tests. Shortest processes and the widest campus intake.",
+};
+
+/**
+ * Sibling companies in the same category — used for internal linking between
+ * public company pages.
+ */
+export function relatedCompanies(id: string, limit = 4): CompanyData[] {
+  const self = getCompany(id);
+  if (!self) return [];
+  return COMPANIES.filter((c) => c.id !== id && c.category === self.category).slice(0, limit);
+}
+
 export const DIFFICULTY_COLOR: Record<Difficulty, string> = {
   "Easy":      "bg-green-100 text-green-700 border-green-200",
   "Medium":    "bg-blue-100 text-blue-700 border-blue-200",
   "Hard":      "bg-amber-100 text-amber-700 border-amber-200",
   "Very Hard": "bg-red-100 text-red-700 border-red-200",
+};
+
+export const STEP_TYPE_LABEL: Record<ProcessStep["type"], string> = {
+  screening:     "Screening",
+  dsa:           "Coding / DSA",
+  system_design: "System Design",
+  behavioral:    "Behavioral",
+  hr:            "HR / Culture",
+  mixed:         "Mixed",
 };
 
 export const STEP_TYPE_COLOR: Record<ProcessStep["type"], string> = {

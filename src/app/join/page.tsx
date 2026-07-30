@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { getCurrentProfile } from "@/lib/plan";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { JoinInstitutionClient } from "@/components/JoinInstitutionClient";
+import { PageShell } from "@/components/ui/PageShell";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -60,9 +61,9 @@ export default async function JoinPage({
   return (
     <>
       <Navbar />
-      <main className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-4 py-14">
+      <PageShell width="form" className="flex flex-col justify-center">
         <JoinInstitutionClient initialCode={searchParams.code ?? ""} existing={existing} />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

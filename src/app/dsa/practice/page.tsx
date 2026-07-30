@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getCurrentProfile } from "@/lib/plan";
 import { DSAPracticeClient } from "@/components/DSAPracticeClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -15,7 +16,7 @@ export default async function DSAPracticePage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-12">
+      <PageShell width="default">
         <Link href="/dsa" className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:underline">
           <ArrowLeft className="h-4 w-4" /> DSA Adventure
         </Link>
@@ -27,7 +28,7 @@ export default async function DSAPracticePage() {
           </p>
         </div>
         <DSAPracticeClient />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

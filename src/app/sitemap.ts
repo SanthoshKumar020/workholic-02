@@ -4,6 +4,7 @@ import { DOMAINS } from "@/lib/domains/catalog";
 import { ISLANDS } from "@/lib/dsa/curriculum";
 import { SEO_ROLES } from "@/lib/seo/roles";
 import { BLOG_POSTS } from "@/lib/blog/posts";
+import { COMPANIES } from "@/lib/company-data";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url("/blog",              0.8, "weekly"),
     url("/resume-checker",    0.8, "weekly"),
     url("/interview-questions", 0.8, "weekly"),
+    url("/companies",         0.8, "weekly"),
   ];
 
   // ── Blog posts ────────────────────────────────────────────────────────────
@@ -66,6 +68,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
   const interviewQuestionPages: MetadataRoute.Sitemap = SEO_ROLES.map((r) =>
     url(`/interview-questions/${r.slug}`, 0.7, "monthly")
+  );
+
+  // ── Programmatic SEO: public company interview-process pages ──────────────
+  const companyPages: MetadataRoute.Sitemap = COMPANIES.map((c) =>
+    url(`/companies/${c.id}`, 0.8, "monthly")
   );
 
   // ── Aptitude topics ───────────────────────────────────────────────────────
@@ -93,6 +100,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogPages,
     ...resumeCheckerPages,
     ...interviewQuestionPages,
+    ...companyPages,
     ...aptitudePages,
     ...dsaPages,
     ...domainHubPages,

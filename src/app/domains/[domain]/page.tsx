@@ -4,6 +4,7 @@ import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { getDomain } from "@/lib/domains/catalog";
 import { DomainRoadmapClient } from "@/components/domains/DomainRoadmapClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -37,7 +38,7 @@ export default async function DomainPage({ params }: { params: { domain: string 
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-10">
+      <PageShell width="default">
         <Link href="/domains" className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:underline">
           <ArrowLeft className="h-4 w-4" /> All domains
         </Link>
@@ -56,7 +57,7 @@ export default async function DomainPage({ params }: { params: { domain: string 
           stars={stars}
           pro={isUserPro(profile.plan, profile.email)}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

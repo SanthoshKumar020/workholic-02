@@ -1,3 +1,4 @@
+import type { CompanyData } from "@/lib/company-data";
 import type { SeoRole } from "./roles";
 
 /** ATS keywords a recruiter scans for, for this role. */
@@ -48,4 +49,90 @@ export function roleInterviewQuestions(role: SeoRole): { section: string; questi
     { section: "Tools & technologies", questions: tools },
     { section: "Role-specific", questions: roleSpecific },
   ];
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+ * Company pages (/companies/[company])
+ *
+ * Every string below is derived from the fields already present in
+ * `COMPANIES`. Nothing is invented — no success rates, no "X% of candidates",
+ * no salary figures beyond the ranges already in the data. There is also
+ * deliberately no rating or review markup anywhere on these pages: fabricated
+ * `aggregateRating` / `Review` JSON-LD was removed from this site because it
+ * is a Google manual-action risk. Do not reintroduce it.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/** One-line summary used in metadata descriptions and hub cards. */
+export function companySummary(c: CompanyData): string {
+  return `${c.avgRounds} rounds · ${c.difficulty} · ${c.prepWeeks} of prep`;
+}
+
+/** Substantive FAQ for a company page, built entirely from company-data.ts. */
+export function companyFaq(c: CompanyData): { q: string; a: string }[] {
+  const steps = c.interviewProcess;
+  const roundNames = steps.map((s) => s.name);
+  const technicalRounds = steps.filter((s) => s.type === "dsa" || s.type === "system_design");
+  const finalRound = steps.length > 0 ? steps[steps.length - 1] : undefined;
+
+  const faq: { q: string; a: string }[] = [
+    {
+      q: `How many rounds are there in the ${c.name} interview process?`,
+      a: `${c.name} usually runs ${c.avgRounds} rounds: ${roundNames.join(" → ")}. The exact number varies by role, level, and whether you apply on-campus, off-campus, or through a referral.`,
+    },
+    {
+      q: `What does each ${c.name} interview round cover?`,
+      a: steps
+        .map((s) => `Round ${s.step} — ${s.name} (${s.duration}): ${s.focus}.`)
+        .join(" "),
+    },
+    {
+      q: `Is the ${c.name} interview hard?`,
+      a: `On this list we place ${c.name} at ${c.difficulty} difficulty. ${technicalRounds.length} of the ${c.avgRounds} rounds are technical (coding or system design). ${c.tagline}.`,
+    },
+    {
+      q: `How long should I prepare for a ${c.name} interview?`,
+      a: `Plan for roughly ${c.prepWeeks} of focused preparation. That figure assumes consistent daily practice rather than last-minute cramming, and it shifts with your starting point — this is guidance, not a promise about your outcome.`,
+    },
+    {
+      q: `Which roles does ${c.name} hire for?`,
+      a: `The roles most commonly seen in ${c.name} hiring cycles are ${c.hiringFor.join(", ")}. Open positions change constantly, so always check the official careers page before you prepare for a specific title.`,
+    },
+    {
+      q: `What salary range does ${c.name} offer?`,
+      a: `Reported ranges for ${c.name} sit around ${c.avgSalary}. Actual offers depend on level, location, interview performance, and the year you join, so treat this as a rough band rather than a number to expect.`,
+    },
+    {
+      q: `What does ${c.name} look for beyond technical skill?`,
+      a: `${c.name} interviewers assess against ${c.values.join(", ")}. On culture: ${c.culture}`,
+    },
+    {
+      q: `How should I prepare for the ${c.name} interview?`,
+      a: c.tips.slice(0, 3).map((t) => `${t}.`).join(" "),
+    },
+  ];
+
+  if (finalRound) {
+    faq.push({
+      q: `What is the last round of the ${c.name} interview?`,
+      a: `The final stage is usually "${finalRound.name}" (${finalRound.duration}), focused on ${finalRound.focus.toLowerCase()}. ${finalRound.what}`,
+    });
+  }
+
+  return faq;
+}
+
+/**
+ * Behavioral question themes derived from the company's own stated values.
+ * These are the standard STAR-format prompts for each value — grounded in
+ * `values`, not invented question banks.
+ */
+export function companyValueQuestions(c: CompanyData): string[] {
+  return c.values.map((v) => `Tell me about a time you demonstrated ${v.toLowerCase()}.`);
+}
+
+/** What to expect per round, phrased as questions a candidate would search for. */
+export function companyRoundQuestions(c: CompanyData): string[] {
+  return c.interviewProcess.map(
+    (s) => `${s.name} (${s.duration}) — what is assessed: ${s.focus}. ${s.what}`
+  );
 }

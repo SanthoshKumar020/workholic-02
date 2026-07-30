@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Combobox } from "@/components/ui/Combobox";
 import {
   TrendingUp, FileText, MessageSquare, Loader2, Send, RotateCcw, ChevronDown, ChevronUp,
@@ -122,7 +123,7 @@ function MarketDataTab({ initRole }: { initRole: string }) {
 
   return (
     <div className="space-y-5">
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="border-b border-slate-100 px-5 py-4">
           <h3 className="font-bold text-slate-900">Market Salary Data</h3>
           <p className="text-sm text-slate-500">AI-sourced percentile ranges for your role and location</p>
@@ -137,10 +138,9 @@ function MarketDataTab({ initRole }: { initRole: string }) {
               <label className="mb-1.5 block text-sm font-medium text-slate-700">Experience</label>
               <div className="flex flex-wrap gap-1.5">
                 {EXP_OPTIONS.map((e) => (
-                  <button key={e} type="button" onClick={() => setExperience(e)}
-                    className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition ${experience === e ? "border-brand-600 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}>
+                  <Button key={e} type="button" variant="chip" size="sm" aria-pressed={experience === e} onClick={() => setExperience(e)}>
                     {e}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -148,10 +148,9 @@ function MarketDataTab({ initRole }: { initRole: string }) {
               <label className="mb-1.5 block text-sm font-medium text-slate-700">Company Type</label>
               <div className="flex flex-wrap gap-1.5">
                 {COMPANY_SIZES.map((s) => (
-                  <button key={s} type="button" onClick={() => setCompanySize(s)}
-                    className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition ${companySize === s ? "border-brand-600 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}>
+                  <Button key={s} type="button" variant="chip" size="sm" aria-pressed={companySize === s} onClick={() => setCompanySize(s)}>
                     {s}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -162,20 +161,20 @@ function MarketDataTab({ initRole }: { initRole: string }) {
             {loading ? "Fetching market data…" : "Get Salary Data"}
           </Button>
         </div>
-      </div>
+      </Card>
 
       {data && (
         <div className="space-y-4">
           {/* Percentile bars */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <h4 className="mb-4 font-bold text-slate-900">
               {data.role} · {data.location} · Annual Salary ({data.currency})
             </h4>
             <SalaryBar data={data} />
-          </div>
+          </Card>
 
           {/* Total comp */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <h4 className="mb-3 font-bold text-slate-900">Total Compensation Breakdown</h4>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
@@ -183,17 +182,17 @@ function MarketDataTab({ initRole }: { initRole: string }) {
                 { label: "Bonus", value: data.totalComp.bonus },
                 { label: "Equity / ESOP", value: data.totalComp.equity },
               ].map((item) => (
-                <div key={item.label} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+                <Card key={item.label} variant="muted" radius="xl" className="p-3">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">{item.label}</p>
                   <p className="mt-0.5 text-sm font-semibold text-slate-800">{item.value}</p>
-                </div>
+                </Card>
               ))}
             </div>
             <p className="mt-3 text-xs text-slate-500">{data.totalComp.totalNote}</p>
-          </div>
+          </Card>
 
           {/* By company type */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <h4 className="mb-3 font-bold text-slate-900">By Company Type</h4>
             <div className="divide-y divide-slate-100">
               {data.byCompanyType.map((c) => (
@@ -203,10 +202,10 @@ function MarketDataTab({ initRole }: { initRole: string }) {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* What increases salary */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <h4 className="mb-3 font-bold text-slate-900">What Increases Your Salary</h4>
             <ul className="space-y-1.5">
               {data.factors.map((f, i) => (
@@ -215,13 +214,13 @@ function MarketDataTab({ initRole }: { initRole: string }) {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
 
           {/* Negotiation tip */}
-          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+          <Card variant="warning" radius="xl" className="px-4 py-3">
             <p className="text-xs font-bold text-amber-700 mb-0.5">💡 Key Negotiation Tip</p>
             <p className="text-sm text-amber-800">{data.negotiationTip}</p>
-          </div>
+          </Card>
         </div>
       )}
     </div>
@@ -264,7 +263,7 @@ function ScriptsTab({ initRole }: { initRole: string }) {
 
   return (
     <div className="space-y-5">
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="border-b border-slate-100 px-5 py-4">
           <h3 className="font-bold text-slate-900">Negotiation Script Generator</h3>
           <p className="text-sm text-slate-500">Exact words to say, objection handlers, and do-nots</p>
@@ -274,10 +273,10 @@ function ScriptsTab({ initRole }: { initRole: string }) {
             <label className="mb-2 block text-sm font-medium text-slate-700">Scenario</label>
             <div className="grid gap-2 sm:grid-cols-2">
               {SCENARIOS.map((s) => (
-                <button key={s.key} type="button" onClick={() => setScenario(s.key)}
-                  className={`rounded-xl border px-3 py-2 text-left text-sm font-semibold transition ${scenario === s.key ? "border-brand-600 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}>
+                <Button key={s.key} type="button" variant="chip" aria-pressed={scenario === s.key} onClick={() => setScenario(s.key)}
+                  className="justify-start whitespace-normal px-3 text-left">
                   {s.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -310,18 +309,18 @@ function ScriptsTab({ initRole }: { initRole: string }) {
             {loading ? "Generating script…" : "Generate Script"}
           </Button>
         </div>
-      </div>
+      </Card>
 
       {data && (
         <div className="space-y-4">
           {/* Opener */}
-          <div className="rounded-2xl border border-brand-200 bg-brand-50 p-5 shadow-sm">
+          <Card variant="brand" padding="md" className="shadow-sm">
             <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-brand-700">Opening Line</p>
             <p className="text-base font-semibold text-slate-900 italic">&ldquo;{data.opener}&rdquo;</p>
-          </div>
+          </Card>
 
           {/* Key phrases */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <h4 className="mb-3 font-bold text-slate-900">Power Phrases to Use</h4>
             <div className="flex flex-wrap gap-2">
               {data.keyPhrases.map((p, i) => (
@@ -330,18 +329,18 @@ function ScriptsTab({ initRole }: { initRole: string }) {
                 </span>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* Full script */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <Card padding="md" className="overflow-hidden">
             <h4 className="mb-3 font-bold text-slate-900">Complete Script</h4>
             <p className="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 text-sm text-slate-700 leading-relaxed italic">
               &ldquo;{data.script}&rdquo;
             </p>
-          </div>
+          </Card>
 
           {/* Objections */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <Card className="overflow-hidden">
             <h4 className="border-b border-slate-100 px-5 py-3 font-bold text-slate-900">Handling Objections</h4>
             {data.objections.map((o, i) => (
               <div key={i} className="border-b border-slate-50 last:border-0">
@@ -357,10 +356,10 @@ function ScriptsTab({ initRole }: { initRole: string }) {
                 )}
               </div>
             ))}
-          </div>
+          </Card>
 
           {/* Do NOT */}
-          <div className="overflow-hidden rounded-2xl border border-red-100 bg-red-50 p-5 shadow-sm">
+          <Card variant="danger" padding="md" className="overflow-hidden border-red-100 shadow-sm">
             <h4 className="mb-2 font-bold text-red-700">❌ Do NOT</h4>
             <ul className="space-y-1">
               {data.doNot.map((d, i) => (
@@ -369,13 +368,13 @@ function ScriptsTab({ initRole }: { initRole: string }) {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
 
           {/* Follow up */}
-          <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
-            <p className="text-xs font-bold text-blue-700 mb-0.5">If they say "let me think about it"</p>
+          <Card variant="info" radius="xl" className="px-4 py-3">
+            <p className="text-xs font-bold text-blue-700 mb-0.5">If they say &quot;let me think about it&quot;</p>
             <p className="text-sm text-blue-800 italic">&ldquo;{data.followUp}&rdquo;</p>
-          </div>
+          </Card>
         </div>
       )}
     </div>
@@ -451,7 +450,7 @@ function RolePlayTab({ initRole }: { initRole: string }) {
   function reset() { setStarted(false); setMessages([]); setError(null); }
 
   if (!started) return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden">
       <div className="border-b border-slate-100 px-5 py-4">
         <h3 className="font-bold text-slate-900">Role-Play: Negotiate Live</h3>
         <p className="text-sm text-slate-500">AI plays a realistic hiring manager. Practice your negotiation in real time.</p>
@@ -478,10 +477,10 @@ function RolePlayTab({ initRole }: { initRole: string }) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+        <Card variant="info" radius="xl" className="border-blue-100 px-4 py-3">
           <p className="text-xs font-semibold text-blue-800">💬 How it works</p>
           <p className="mt-0.5 text-xs text-blue-600">The AI acts as a hiring manager who starts firm. You negotiate back. After several turns, they may improve the offer.</p>
-        </div>
+        </Card>
 
         {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
         <Button onClick={startRolePlay} loading={sending} disabled={!role.trim()} className="w-full">
@@ -489,11 +488,11 @@ function RolePlayTab({ initRole }: { initRole: string }) {
           Start Negotiation
         </Button>
       </div>
-    </div>
+    </Card>
   );
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden">
       <div className="border-b border-slate-100 bg-slate-900 px-5 py-3 flex items-center justify-between">
         <div>
           <p className="text-sm font-bold text-white">Hiring Manager — {companyName || "Tech Company"}</p>
@@ -547,7 +546,7 @@ function RolePlayTab({ initRole }: { initRole: string }) {
           </button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 

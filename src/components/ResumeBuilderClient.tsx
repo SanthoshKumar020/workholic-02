@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Alert } from "@/components/ui/Alert";
@@ -432,11 +433,11 @@ export function ResumeBuilderClient({
 
         {/* Live usage indicator for free users */}
         {!isPro && (
-          <div
-            className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${
-              resumeUsedCount >= freeLimit
-                ? "border-red-200 bg-red-50 text-red-700"
-                : "border-amber-200 bg-amber-50 text-amber-800"
+          <Card
+            variant={resumeUsedCount >= freeLimit ? "danger" : "warning"}
+            radius="xl"
+            className={`flex items-center justify-between px-4 py-3 text-sm ${
+              resumeUsedCount >= freeLimit ? "text-red-700" : "text-amber-800"
             }`}
           >
             <span>
@@ -450,17 +451,17 @@ export function ResumeBuilderClient({
             >
               Upgrade to Pro
             </a>
-          </div>
+          </Card>
         )}
 
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6">
+          <Card variant="flat" padding="lg" className="flex flex-col items-center justify-center">
             <AtsScoreRing score={result.atsScore ?? 0} />
             <p className="mt-3 text-center text-sm font-medium text-slate-700">ATS Score</p>
             <p className="mt-1 text-center text-xs text-slate-400">Estimated readability by applicant tracking systems</p>
-          </div>
+          </Card>
 
-          <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6">
+          <Card variant="flat" padding="lg" className="lg:col-span-2">
             <h3 className="text-lg font-semibold text-slate-900">Top improvements</h3>
             {improvements.length ? (
               <ul className="mt-3 space-y-2.5">
@@ -474,17 +475,17 @@ export function ResumeBuilderClient({
             ) : (
               <p className="mt-3 text-sm text-slate-500">No specific suggestions returned.</p>
             )}
-          </div>
+          </Card>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <Card variant="flat" padding="lg">
           <h3 className="text-lg font-semibold text-slate-900">Enhanced resume</h3>
           <pre className="mt-3 max-h-[32rem] overflow-auto whitespace-pre-wrap rounded-xl bg-slate-50 p-4 text-sm leading-relaxed text-slate-800">
             {result.enhancedResume || "(No enhanced text returned.)"}
           </pre>
-        </div>
+        </Card>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <Card variant="flat" padding="lg">
           <h3 className="text-lg font-semibold text-slate-900">Choose a template &amp; download</h3>
           <p className="mt-1 text-sm text-slate-500">Pick any free template and download your PDF instantly. Pro templates require an upgrade.</p>
           <div className="mt-5">
@@ -507,7 +508,7 @@ export function ResumeBuilderClient({
               }}
             />
           </div>
-        </div>
+        </Card>
 
         <Button variant="secondary" onClick={() => { setResult(null); setError(null); }}>
           Enhance another resume
@@ -520,26 +521,36 @@ export function ResumeBuilderClient({
   return (
     <div className="space-y-5">
       {/* Mode toggle */}
-      <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
-        <button
+      <Card radius="xl" className="inline-flex p-1">
+        <Button
           type="button"
+          variant="chip"
+          size="sm"
+          className="px-5 text-sm"
+          aria-pressed={mode === "form"}
           onClick={() => setMode("form")}
-          className={`rounded-lg px-5 py-2 text-sm font-medium transition ${mode === "form" ? "bg-brand-600 text-white shadow" : "text-slate-600 hover:text-slate-900"}`}
         >
           Build from scratch
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="chip"
+          size="sm"
+          className="px-5 text-sm"
+          aria-pressed={mode === "upload"}
           onClick={() => setMode("upload")}
-          className={`rounded-lg px-5 py-2 text-sm font-medium transition ${mode === "upload" ? "bg-brand-600 text-white shadow" : "text-slate-600 hover:text-slate-900"}`}
         >
           Upload &amp; enhance
-        </button>
-      </div>
+        </Button>
+      </Card>
 
       {/* Usage badge for free users */}
       {!isPro && (
-        <div className={`flex items-center justify-between rounded-xl border px-4 py-3 text-sm ${resumeUsedCount >= freeLimit ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-800"}`}>
+        <Card
+          variant={resumeUsedCount >= freeLimit ? "danger" : "warning"}
+          radius="xl"
+          className={`flex items-center justify-between px-4 py-3 text-sm ${resumeUsedCount >= freeLimit ? "text-red-700" : "text-amber-800"}`}
+        >
           <span>
             {resumeUsedCount >= freeLimit
               ? `You've used all ${freeLimit} free enhancements.`
@@ -548,12 +559,12 @@ export function ResumeBuilderClient({
           <a href="/billing" className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition">
             Upgrade to Pro
           </a>
-        </div>
+        </Card>
       )}
 
       {/* ── UPLOAD MODE ── */}
       {mode === "upload" && (
-        <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6">
+        <Card variant="flat" padding="lg" className="space-y-4">
           <div>
             <h2 className="text-base font-semibold text-slate-900">Upload your existing resume</h2>
             <p className="mt-0.5 text-sm text-slate-500">We&apos;ll parse it and enhance it with AI — PDF, DOCX, or TXT accepted.</p>
@@ -580,13 +591,13 @@ export function ResumeBuilderClient({
                 onChange={(e) => e.target.files?.[0] && parseFile(e.target.files[0])} />
             </div>
           ) : (
-            <div className="flex items-center gap-3 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3">
+            <Card variant="brand" radius="xl" className="flex items-center gap-3 px-4 py-3">
               <FileText className="h-5 w-5 shrink-0 text-brand-600" />
               <p className="flex-1 truncate text-sm font-medium text-brand-800">{uploadedFile}</p>
               <button type="button" onClick={() => { setUploadedFile(null); setUploadedText(""); }} className="text-slate-400 hover:text-red-500">
                 <X className="h-4 w-4" />
               </button>
-            </div>
+            </Card>
           )}
 
           <Input
@@ -614,13 +625,13 @@ export function ResumeBuilderClient({
           )}
 
           {error === "free_limit_reached" ? (
-            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-center">
+            <Card variant="danger" radius="xl" padding="sm" className="text-center">
               <p className="text-sm font-semibold text-red-700">You&apos;ve used all {freeLimit} free enhancements.</p>
               <p className="mt-1 text-xs text-red-600">Upgrade to Pro for unlimited resume enhancements.</p>
               <a href="/billing" className="mt-3 inline-block rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition">
                 Upgrade to Pro →
               </a>
-            </div>
+            </Card>
           ) : (
             <>
               {error && <Alert tone="error">{error}</Alert>}
@@ -629,14 +640,14 @@ export function ResumeBuilderClient({
               </Button>
             </>
           )}
-        </div>
+        </Card>
       )}
 
       {/* ── FORM MODE ── */}
       {mode === "form" && (
         <div className="space-y-4">
           {/* Contact & basics */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<User className="h-4 w-4" />}
               title="Contact Information"
@@ -670,10 +681,10 @@ export function ResumeBuilderClient({
                 />
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Work Experience */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<Briefcase className="h-4 w-4" />}
               title="Work Experience"
@@ -685,7 +696,7 @@ export function ResumeBuilderClient({
             {openSections.experience && (
               <div className="space-y-6 pt-1">
                 {experiences.map((exp, idx) => (
-                  <div key={exp.id} className="relative rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                  <Card key={exp.id} variant="muted" radius="xl" padding="sm" className="relative space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                         Experience {idx + 1}
@@ -729,14 +740,14 @@ export function ResumeBuilderClient({
                       value={exp.description}
                       onChange={(e) => setExperiences((p) => p.map((x) => x.id === exp.id ? { ...x, description: e.target.value } : x))}
                     />
-                  </div>
+                  </Card>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Education */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<GraduationCap className="h-4 w-4" />}
               title="Education"
@@ -748,7 +759,7 @@ export function ResumeBuilderClient({
             {openSections.education && (
               <div className="space-y-6 pt-1">
                 {educations.map((edu, idx) => (
-                  <div key={edu.id} className="relative rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                  <Card key={edu.id} variant="muted" radius="xl" padding="sm" className="relative space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Education {idx + 1}</span>
                       {educations.length > 1 && (
@@ -786,14 +797,14 @@ export function ResumeBuilderClient({
                         onChange={(e) => setEducations((p) => p.map((x) => x.id === edu.id ? { ...x, endYear: e.target.value } : x))}
                         placeholder="2023" />
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Skills */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<Code2 className="h-4 w-4" />}
               title="Skills"
@@ -825,10 +836,10 @@ export function ResumeBuilderClient({
                 />
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Projects */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<FolderGit2 className="h-4 w-4" />}
               title="Projects"
@@ -843,7 +854,7 @@ export function ResumeBuilderClient({
                   <p className="text-sm text-slate-400">No projects added yet. Click &quot;Add project&quot; above.</p>
                 )}
                 {projects.map((proj, idx) => (
-                  <div key={proj.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                  <Card key={proj.id} variant="muted" radius="xl" padding="sm" className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Project {idx + 1}</span>
                       <button type="button" onClick={() => setProjects((p) => p.filter((x) => x.id !== proj.id))}
@@ -868,14 +879,14 @@ export function ResumeBuilderClient({
                       placeholder="What did you build? What problem did it solve? What was your impact?"
                       onChange={(e) => setProjects((p) => p.map((x) => x.id === proj.id ? { ...x, description: e.target.value } : x))}
                     />
-                  </div>
+                  </Card>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Certifications */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<Award className="h-4 w-4" />}
               title="Certifications"
@@ -890,7 +901,7 @@ export function ResumeBuilderClient({
                   <p className="text-sm text-slate-400">No certifications added yet.</p>
                 )}
                 {certifications.map((cert, idx) => (
-                  <div key={cert.id} className="flex items-end gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4">
+                  <Card key={cert.id} variant="muted" radius="xl" padding="sm" className="flex items-end gap-3">
                     <div className="grid flex-1 gap-3 sm:grid-cols-3">
                       <Input label="Certification name *" value={cert.name}
                         onChange={(e) => setCertifications((p) => p.map((x) => x.id === cert.id ? { ...x, name: e.target.value } : x))}
@@ -906,14 +917,14 @@ export function ResumeBuilderClient({
                       className="mb-2 text-slate-300 hover:text-red-500">
                       <Trash2 className="h-4 w-4" />
                     </button>
-                  </div>
+                  </Card>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Languages */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+          <Card variant="flat" padding="lg" className="space-y-4">
             <SectionHeader
               icon={<Globe className="h-4 w-4" />}
               title="Languages"
@@ -925,7 +936,7 @@ export function ResumeBuilderClient({
             {openSections.languages && (
               <div className="space-y-3 pt-1">
                 {languages.map((lang) => (
-                  <div key={lang.id} className="flex items-end gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4">
+                  <Card key={lang.id} variant="muted" radius="xl" padding="sm" className="flex items-end gap-3">
                     <div className="grid flex-1 gap-3 sm:grid-cols-2">
                       <Combobox
                         label="Language"
@@ -951,15 +962,15 @@ export function ResumeBuilderClient({
                         <Trash2 className="h-4 w-4" />
                       </button>
                     )}
-                  </div>
+                  </Card>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* ── Optional sections ── */}
           {activeOptional.has("volunteer") && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+            <Card variant="flat" padding="lg" className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <button type="button" onClick={() => toggleSection("volunteer")} className="flex items-center gap-2 text-left">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Heart className="h-4 w-4" /></span>
@@ -979,7 +990,7 @@ export function ResumeBuilderClient({
               {openSections.volunteer && (
                 <div className="space-y-4 pt-1">
                   {volunteers.map((vol, idx) => (
-                    <div key={vol.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                    <Card key={vol.id} variant="muted" radius="xl" padding="sm" className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Entry {idx + 1}</span>
                         {volunteers.length > 1 && (
@@ -997,15 +1008,15 @@ export function ResumeBuilderClient({
                         Currently volunteering here
                       </label>
                       <Textarea label="Description" rows={3} placeholder="What did you do? What impact did you make?" value={vol.description} onChange={(e) => setVolunteers((p) => p.map((x) => x.id === vol.id ? { ...x, description: e.target.value } : x))} />
-                    </div>
+                    </Card>
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
           )}
 
           {activeOptional.has("awards") && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+            <Card variant="flat" padding="lg" className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <button type="button" onClick={() => toggleSection("awards")} className="flex items-center gap-2 text-left">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Trophy className="h-4 w-4" /></span>
@@ -1023,7 +1034,7 @@ export function ResumeBuilderClient({
               {openSections.awards && (
                 <div className="space-y-3 pt-1">
                   {awardEntries.map((aw, idx) => (
-                    <div key={aw.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                    <Card key={aw.id} variant="muted" radius="xl" padding="sm" className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Award {idx + 1}</span>
                         {awardEntries.length > 1 && (
@@ -1036,15 +1047,15 @@ export function ResumeBuilderClient({
                         <Input label="Year" value={aw.year} onChange={(e) => setAwardEntries((p) => p.map((x) => x.id === aw.id ? { ...x, year: e.target.value } : x))} placeholder="2024" />
                       </div>
                       <Textarea label="Description (optional)" rows={2} placeholder="Brief description of the achievement…" value={aw.description} onChange={(e) => setAwardEntries((p) => p.map((x) => x.id === aw.id ? { ...x, description: e.target.value } : x))} />
-                    </div>
+                    </Card>
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
           )}
 
           {activeOptional.has("interests") && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+            <Card variant="flat" padding="lg" className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <button type="button" onClick={() => toggleSection("interests")} className="flex items-center gap-2 text-left">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Star className="h-4 w-4" /></span>
@@ -1058,11 +1069,11 @@ export function ResumeBuilderClient({
                   <Textarea rows={2} placeholder="e.g. Photography, Open-source contribution, Chess, Hiking, Reading" value={interests} onChange={(e) => setInterests(e.target.value)} />
                 </div>
               )}
-            </div>
+            </Card>
           )}
 
           {activeOptional.has("publications") && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+            <Card variant="flat" padding="lg" className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <button type="button" onClick={() => toggleSection("publications")} className="flex items-center gap-2 text-left">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><BookOpen className="h-4 w-4" /></span>
@@ -1080,7 +1091,7 @@ export function ResumeBuilderClient({
               {openSections.publications && (
                 <div className="space-y-3 pt-1">
                   {publications.map((pub, idx) => (
-                    <div key={pub.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-3">
+                    <Card key={pub.id} variant="muted" radius="xl" padding="sm" className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Publication {idx + 1}</span>
                         {publications.length > 1 && (
@@ -1093,15 +1104,15 @@ export function ResumeBuilderClient({
                         <Input label="Year" value={pub.year} onChange={(e) => setPublications((p) => p.map((x) => x.id === pub.id ? { ...x, year: e.target.value } : x))} placeholder="2024" />
                         <Input label="URL / DOI" value={pub.url} onChange={(e) => setPublications((p) => p.map((x) => x.id === pub.id ? { ...x, url: e.target.value } : x))} placeholder="https://doi.org/..." />
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
           )}
 
           {activeOptional.has("references") && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+            <Card variant="flat" padding="lg" className="space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <button type="button" onClick={() => toggleSection("references")} className="flex items-center gap-2 text-left">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><Users className="h-4 w-4" /></span>
@@ -1119,7 +1130,7 @@ export function ResumeBuilderClient({
               {openSections.references && (
                 <div className="space-y-3 pt-1">
                   {references.map((ref, idx) => (
-                    <div key={ref.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                    <Card key={ref.id} variant="muted" radius="xl" padding="sm">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Reference {idx + 1}</span>
                         {references.length > 1 && (
@@ -1132,51 +1143,53 @@ export function ResumeBuilderClient({
                         <Input label="Company" value={ref.company} onChange={(e) => setReferences((p) => p.map((x) => x.id === ref.id ? { ...x, company: e.target.value } : x))} placeholder="e.g. Infosys" />
                         <Input label="Email / Phone" value={ref.contact} onChange={(e) => setReferences((p) => p.map((x) => x.id === ref.id ? { ...x, contact: e.target.value } : x))} placeholder="john@company.com" />
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
           )}
 
           {/* Add optional section picker */}
           {OPTIONAL_SECTIONS.some((s) => !activeOptional.has(s.key)) && (
-            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-5">
+            <Card variant="dashed" padding="md" className="border-slate-200">
               <p className="mb-3 text-sm font-medium text-slate-500">Add more sections</p>
               <div className="flex flex-wrap gap-2">
                 {OPTIONAL_SECTIONS.filter((s) => !activeOptional.has(s.key)).map((s) => (
-                  <button
+                  <Button
                     key={s.key}
                     type="button"
+                    variant="chip"
+                    size="sm"
                     onClick={() => addOptionalSection(s.key)}
-                    className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-brand-300 hover:text-brand-600 transition"
+                    className="gap-1.5 shadow-sm"
                   >
                     {s.icon}
                     <Plus className="h-3 w-3" />
                     {s.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {error === "free_limit_reached" ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-center">
+            <Card variant="danger" padding="md" className="text-center">
               <p className="text-sm font-semibold text-red-700">You&apos;ve used all {freeLimit} free enhancements.</p>
               <p className="mt-1 text-xs text-red-600">Upgrade to Pro for unlimited resume enhancements.</p>
               <a href="/billing" className="mt-3 inline-block rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition">
                 Upgrade to Pro →
               </a>
-            </div>
+            </Card>
           ) : (
             <>
               {error && <Alert tone="error">{error}</Alert>}
-              <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+              <Card variant="flat" padding="md" className="flex items-center gap-4">
                 <Button size="lg" onClick={handleSubmit} loading={loading} disabled={!isPro && resumeUsedCount >= freeLimit}>
                   {loading ? "Enhancing with AI…" : "Enhance with AI"}
                 </Button>
                 {loading && <span className="text-sm text-slate-500">Analysing and rewriting your resume — takes ~20 seconds.</span>}
-              </div>
+              </Card>
             </>
           )}
         </div>

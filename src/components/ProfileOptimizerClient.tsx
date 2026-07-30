@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState } from "react";
+import { LoadingPanel } from "@/components/ui/AsyncState";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Combobox } from "@/components/ui/Combobox";
-import { Upload, FileText, X, Loader2, Copy, CheckCheck, ChevronDown, ChevronUp, Lightbulb } from "lucide-react";
+import { ResumeUpload } from "@/components/ui/ResumeUpload";
+import { Copy, CheckCheck, ChevronDown, ChevronUp, Lightbulb } from "lucide-react";
 
 const TARGET_ROLES = [
   "Software Engineer", "Frontend Developer", "Backend Developer", "Full Stack Developer",
@@ -51,7 +54,7 @@ function FieldCard({
   const overLimit = charLimit ? chars > charLimit : false;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden">
       <button type="button" onClick={() => setExpanded((o) => !o)}
         className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-slate-50 transition">
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">
@@ -80,9 +83,14 @@ function FieldCard({
 
           {/* Content */}
           <div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800 leading-relaxed whitespace-pre-wrap font-mono">
+            <Card
+              variant="muted"
+              radius="xl"
+              padding="sm"
+              className="border-slate-200 text-sm text-slate-800 leading-relaxed whitespace-pre-wrap font-mono"
+            >
               {content}
-            </div>
+            </Card>
             <div className="mt-2 flex justify-end">
               <CopyBtn text={content} />
             </div>
@@ -99,7 +107,7 @@ function FieldCard({
           {extra}
         </div>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -196,7 +204,7 @@ function LinkedInResult({ result }: { result: LinkedInData }) {
       )}
 
       {/* 4. Skills */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="flex items-center gap-3 px-5 py-4">
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">4</span>
           <span className="text-xl">🛠️</span>
@@ -224,7 +232,7 @@ function LinkedInResult({ result }: { result: LinkedInData }) {
           </div>
           <p className="mt-2 text-xs text-slate-400">Click any skill pill to copy it</p>
         </div>
-      </div>
+      </Card>
 
       {/* 5+. Experience bullets */}
       {(result.experiences ?? []).map((exp, i) => (
@@ -281,7 +289,7 @@ function NaukriResult({ result }: { result: NaukriData }) {
       )}
 
       {/* 4. Key Skills */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="flex items-center gap-3 px-5 py-4">
           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">4</span>
           <span className="text-xl">🛠️</span>
@@ -309,11 +317,11 @@ function NaukriResult({ result }: { result: NaukriData }) {
           </div>
           <p className="mt-2 text-xs text-slate-400">Click any skill pill to copy it</p>
         </div>
-      </div>
+      </Card>
 
       {/* 5. IT Skills table */}
       {(result.itSkills ?? []).length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <Card className="overflow-hidden">
           <div className="flex items-center gap-3 px-5 py-4">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">5</span>
             <span className="text-xl">💻</span>
@@ -352,7 +360,7 @@ function NaukriResult({ result }: { result: NaukriData }) {
               </table>
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* 6+. Experience descriptions */}
@@ -377,45 +385,11 @@ export function ProfileOptimizerClient() {
   const [platform, setPlatform] = useState<"linkedin" | "naukri">("linkedin");
   const [targetRole, setTargetRole] = useState("");
   const [resumeText, setResumeText] = useState("");
-  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<LinkedInData | NaukriData | null>(null);
   const [resultPlatform, setResultPlatform] = useState<"linkedin" | "naukri">("linkedin");
-
-  async function parseFile(file: File) {
-    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-    if (!["pdf", "docx", "txt"].includes(ext)) {
-      setError("Only PDF, DOCX, and TXT files are supported.");
-      return;
-    }
-    setUploading(true);
-    setError(null);
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/parse-resume", { method: "POST", body: form });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to parse file.");
-      setResumeText(data.text || "");
-      setUploadedFile(file.name);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to parse file.");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) parseFile(file);
-  }, []);
 
   async function generate() {
     if (!resumeText.trim()) { setError("Please upload your resume first."); return; }
@@ -465,7 +439,7 @@ export function ProfileOptimizerClient() {
       </div>
 
       {/* Input card */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className={`h-1 w-full ${isLinkedIn ? "bg-[#0077b5]" : "bg-[#ff7555]"}`} />
         <div className="p-6 space-y-5">
           <Combobox
@@ -485,45 +459,14 @@ export function ProfileOptimizerClient() {
               </span>
             </p>
 
-            {!uploadedFile ? (
-              <div
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={onDrop}
-                onClick={() => fileInputRef.current?.click()}
-                className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 transition ${
-                  dragOver ? "border-brand-400 bg-brand-50" : "border-slate-200 bg-slate-50 hover:border-brand-300 hover:bg-brand-50/50"
-                }`}
-              >
-                {uploading
-                  ? <Loader2 className="h-9 w-9 animate-spin text-brand-400" />
-                  : <Upload className="h-9 w-9 text-slate-300" />}
-                <div className="text-center">
-                  <p className="font-medium text-slate-600">
-                    {uploading ? "Reading your resume…" : "Drag & drop or click to upload"}
-                  </p>
-                  <p className="mt-1 text-sm text-slate-400">PDF · DOCX · TXT</p>
-                </div>
-                <input ref={fileInputRef} type="file" accept=".pdf,.docx,.txt" className="hidden"
-                  onChange={(e) => e.target.files?.[0] && parseFile(e.target.files[0])} />
-              </div>
-            ) : (
-              <div className="flex items-center gap-3 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3">
-                <FileText className="h-5 w-5 shrink-0 text-brand-600" />
-                <p className="flex-1 truncate text-sm font-medium text-brand-800">{uploadedFile}</p>
-                <button type="button" onClick={() => { setUploadedFile(null); setResumeText(""); }}
-                  className="text-slate-400 hover:text-red-500 transition">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            )}
+            <ResumeUpload value={resumeText} onChange={setResumeText} label="" />
           </div>
 
           {error && (
             <p className="rounded-xl bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">{error}</p>
           )}
 
-          <Button size="lg" onClick={generate} loading={loading} disabled={!resumeText || uploading}
+          <Button size="lg" onClick={generate} loading={loading} disabled={!resumeText}
             className={`text-white hover:opacity-90 ${isLinkedIn ? "bg-[#0077b5]" : "bg-[#ff7555]"}`}>
             {loading
               ? `Generating your ${isLinkedIn ? "LinkedIn" : "Naukri"} profile…`
@@ -531,20 +474,13 @@ export function ProfileOptimizerClient() {
           </Button>
 
           {loading && (
-            <div className="flex items-start gap-3 rounded-xl bg-slate-50 border border-slate-200 p-4">
-              <span className="mt-0.5 h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-brand-400 border-t-transparent" />
-              <div>
-                <p className="text-sm font-semibold text-slate-800">
-                  Writing your {isLinkedIn ? "LinkedIn" : "Naukri"} profile…
-                </p>
-                <p className="mt-0.5 text-xs text-slate-500">
-                  Generating headline, about, skills, experience bullets, and more. Takes 15–25 seconds.
-                </p>
-              </div>
-            </div>
+            <LoadingPanel
+              label={`Writing your ${isLinkedIn ? "LinkedIn" : "Naukri"} profile…`}
+              eta="Generating headline, about, skills, experience bullets, and more. Takes 15–25 seconds."
+            />
           )}
         </div>
-      </div>
+      </Card>
 
       {/* Results */}
       {result && (

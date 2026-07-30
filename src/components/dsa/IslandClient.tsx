@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, Volume2, VolumeX, Code2, Star, Type, Sparkles } from "lucide-react";
 import type { DsaMode } from "@/lib/dsa/types";
 import type { Island } from "@/lib/dsa/curriculum";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { getTopicModule } from "@/components/dsa/topics/registry";
 import { ModeSwitch } from "@/components/dsa/ModeSwitch";
 import { Visualizer } from "@/components/dsa/Visualizer";
@@ -159,16 +161,15 @@ export function IslandClient({
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex gap-1.5">
               {module.demos.map((d, i) => (
-                <button
+                <Button
                   key={d.key}
+                  variant="chip"
+                  size="sm"
+                  aria-pressed={i === demoIdx}
                   onClick={() => setDemoIdx(i)}
-                  className={cn(
-                    "rounded-xl px-3 py-1.5 text-sm font-bold transition",
-                    i === demoIdx ? "bg-brand-gradient text-white shadow" : "bg-slate-100 text-slate-600 hover:bg-slate-200",
-                  )}
                 >
                   {d.emoji} {d.label}
-                </button>
+                </Button>
               ))}
             </div>
             <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-600">
@@ -363,7 +364,7 @@ function CodeLayer({
   return (
     <div className="space-y-4">
       {lesson.steps && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+        <Card variant="flat" padding="sm">
           <ul className="space-y-2">
             {lesson.steps.map((s, i) => (
               <li key={i} className="flex gap-2 text-sm text-slate-700">
@@ -371,7 +372,7 @@ function CodeLayer({
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
       )}
 
       {module.demos.map((d) => (
@@ -425,10 +426,10 @@ function InfoCard({ title, tone, children }: { title: string; tone: "brand" | "a
     emerald: "border-emerald-100 bg-emerald-50/50",
   };
   return (
-    <div className={cn("rounded-2xl border p-4 text-sm text-slate-700", map[tone])}>
+    <Card variant="flat" padding="sm" className={cn("text-sm text-slate-700", map[tone])}>
       <h4 className="mb-2 font-bold text-slate-800">{title}</h4>
       {children}
-    </div>
+    </Card>
   );
 }
 
@@ -547,7 +548,7 @@ function RecallCheck({
 
   if (phase === "confidence") {
     return (
-      <div className="rounded-3xl border border-brand-100 bg-white p-6 text-center">
+      <Card variant="flat" radius="3xl" padding="lg" className="border-brand-100 text-center">
         <BitSays mood="happy" className="mb-4 justify-center">
           You got {correctCount}/{questions.length}! How well do you feel you know this?
         </BitSays>
@@ -564,7 +565,7 @@ function RecallCheck({
           ))}
         </div>
         <p className="mt-3 text-xs text-slate-400">This sets when we&apos;ll remind you to review (spaced repetition).</p>
-      </div>
+      </Card>
     );
   }
 
@@ -573,7 +574,7 @@ function RecallCheck({
     typeof q.answer === "boolean" ? opt === (q.answer ? "True" : "False") : opt === q.answer;
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6">
+    <Card variant="flat" radius="3xl" padding="lg">
       <div className="mb-4 flex items-center justify-between text-xs font-semibold text-slate-400">
         <span>Question {idx + 1} of {questions.length}</span>
         <span>{correctCount} correct</span>
@@ -616,6 +617,6 @@ function RecallCheck({
           </button>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

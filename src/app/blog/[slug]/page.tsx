@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Markdown } from "@/components/Markdown";
+import { PageShell } from "@/components/ui/PageShell";
 import { getBlogPost, sortedPosts, BLOG_POSTS } from "@/lib/blog/posts";
 import { SITE_URL } from "@/lib/share";
 
@@ -58,7 +59,7 @@ export default function BlogPostPage({ params }: Props) {
     <>
       <Navbar />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
+      <PageShell width="narrow">
         <nav className="mb-6 text-sm text-slate-400">
           <Link href="/blog" className="hover:text-brand-600">← All articles</Link>
         </nav>
@@ -110,7 +111,7 @@ export default function BlogPostPage({ params }: Props) {
             </div>
           </section>
         )}
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

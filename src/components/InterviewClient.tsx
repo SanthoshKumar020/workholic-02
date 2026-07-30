@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { Combobox } from "@/components/ui/Combobox";
 import {
   Mic, MicOff, Volume2, VolumeX, ChevronDown, ChevronUp,
@@ -126,7 +127,7 @@ function SetupScreen({ targetRole, onStart, loading }: {
   ];
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden">
       <div className="border-b border-slate-100 bg-gradient-to-r from-slate-900 to-slate-700 px-6 py-5 text-white">
         <h2 className="text-lg font-bold">Configure Your Interview</h2>
         <p className="mt-0.5 text-sm text-slate-300">Voice interview · live transcription · full report card</p>
@@ -153,10 +154,11 @@ function SetupScreen({ targetRole, onStart, loading }: {
             <p className="mb-2 text-sm font-medium text-slate-700">Experience Level</p>
             <div className="flex gap-2">
               {LEVELS.map((l) => (
-                <button key={l.key} type="button" onClick={() => setLevel(l.key)}
-                  className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${level === l.key ? "border-brand-600 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}>
+                <Button key={l.key} type="button" variant="chip" size="sm"
+                  onClick={() => setLevel(l.key)} aria-pressed={level === l.key}
+                  className="font-semibold aria-pressed:border-brand-600">
                   {l.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -165,19 +167,20 @@ function SetupScreen({ targetRole, onStart, loading }: {
             <p className="mb-2 text-sm font-medium text-slate-700">Questions</p>
             <div className="flex gap-2">
               {[5, 8, 10].map((n) => (
-                <button key={n} type="button" onClick={() => setCount(n)}
-                  className={`rounded-lg border px-4 py-1.5 text-xs font-bold transition ${count === n ? "border-brand-600 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}>
+                <Button key={n} type="button" variant="chip" size="sm"
+                  onClick={() => setCount(n)} aria-pressed={count === n}
+                  className="px-4 font-bold aria-pressed:border-brand-600 aria-pressed:font-bold">
                   {n}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+        <Card variant="info" radius="xl" className="border-blue-100 px-4 py-3">
           <p className="text-xs font-semibold text-blue-800">🎤 Voice Interview</p>
           <p className="mt-0.5 text-xs text-blue-600">AI interviewer speaks each question aloud. Your answer is transcribed live. Works best in Chrome/Edge.</p>
-        </div>
+        </Card>
 
         <Button size="lg" onClick={() => onStart({ role, company, interviewType, level, count })}
           loading={loading} disabled={!role.trim()} className="w-full">
@@ -185,7 +188,7 @@ function SetupScreen({ targetRole, onStart, loading }: {
           {loading ? "Generating question bank…" : "Start Interview"}
         </Button>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -355,7 +358,7 @@ function InterviewScreen({
       </div>
 
       {/* Interviewer card */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <Card className="overflow-hidden">
         <div className="border-b border-slate-100 bg-slate-900 px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`relative flex h-9 w-9 items-center justify-center rounded-full bg-brand-gradient text-sm font-bold text-white ${state === "ai_speaking" ? "ring-2 ring-brand-400 ring-offset-2 ring-offset-slate-900" : ""}`}>
@@ -397,15 +400,15 @@ function InterviewScreen({
 
           {/* Hint */}
           {currentQ.hint && state !== "ai_speaking" && (
-            <div className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2">
+            <Card variant="warning" radius="xl" className="flex items-start gap-2 border-amber-100 px-3 py-2">
               <span className="text-sm">💡</span>
               <p className="text-xs text-amber-800">{currentQ.hint}</p>
-            </div>
+            </Card>
           )}
 
           {/* AI speaking indicator */}
           {state === "ai_speaking" && (
-            <div className="flex items-center gap-3 rounded-xl bg-slate-50 border border-slate-100 px-4 py-3">
+            <Card variant="muted" radius="xl" className="flex items-center gap-3 px-4 py-3">
               <Volume2 className="h-4 w-4 text-brand-400 animate-pulse" />
               <div className="flex gap-0.5">
                 {[0, 1, 2, 3, 4].map((i) => (
@@ -414,14 +417,14 @@ function InterviewScreen({
                 ))}
               </div>
               <span className="text-sm text-slate-500">Alex is speaking…</span>
-            </div>
+            </Card>
           )}
         </div>
-      </div>
+      </Card>
 
       {/* Answer area */}
       {(state === "ready" || state === "recording" || state === "done_answer") && (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <Card className="overflow-hidden">
           <div className="border-b border-slate-100 px-5 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <User className="h-4 w-4 text-slate-400" />
@@ -495,7 +498,7 @@ function InterviewScreen({
               )}
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Question navigator */}
@@ -519,7 +522,7 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
   return (
     <div className="space-y-6">
       {/* Overall score */}
-      <div className={`overflow-hidden rounded-2xl border ${grade.bg} shadow-sm`}>
+      <Card className={`overflow-hidden ${grade.bg}`}>
         <div className="p-6 text-center">
           <Trophy className={`mx-auto mb-2 h-10 w-10 ${grade.color}`} />
           <div className="flex items-center justify-center gap-3">
@@ -531,10 +534,10 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
           </div>
           <p className="mt-2 text-slate-600 font-medium">{report.headline}</p>
         </div>
-      </div>
+      </Card>
 
       {/* Competencies */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md">
         <h3 className="mb-4 font-bold text-slate-900">Competency Scores</h3>
         <div className="space-y-3.5">
           {report.competencies.map((c, i) => (
@@ -550,21 +553,21 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
             </div>
           ))}
         </div>
-      </div>
+      </Card>
 
       {/* Filler word summary */}
       {report.fillerWordSummary && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+        <Card variant="warning" radius="xl" className="px-4 py-3">
           <p className="text-xs font-bold text-amber-700 mb-0.5">🗣️ Filler Words</p>
           <p className="text-sm text-amber-800">{report.fillerWordSummary}</p>
-        </div>
+        </Card>
       )}
 
       {/* Per-answer breakdown */}
       <div className="space-y-3">
         <h3 className="font-bold text-slate-900">Answer-by-Answer Analysis</h3>
         {report.answers.map((ans, i) => (
-          <div key={i} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <Card key={i} className="overflow-hidden">
             <button type="button" onClick={() => setOpenAnswer(openAnswer === i ? null : i)}
               className="flex w-full items-center justify-between px-5 py-3.5 text-left hover:bg-slate-50 transition">
               <div className="flex items-center gap-3 min-w-0">
@@ -614,19 +617,19 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
                 {ans.modelAnswer && (
                   <div>
                     <p className="mb-1.5 text-xs font-bold text-brand-700 uppercase tracking-wide">Model Answer</p>
-                    <p className="rounded-xl bg-brand-50 border border-brand-100 px-3 py-2.5 text-sm text-slate-700 leading-relaxed italic">
+                    <Card variant="brand" radius="xl" className="border-brand-100 px-3 py-2.5 text-sm text-slate-700 leading-relaxed italic">
                       &ldquo;{ans.modelAnswer}&rdquo;
-                    </p>
+                    </Card>
                   </div>
                 )}
               </div>
             )}
-          </div>
+          </Card>
         ))}
       </div>
 
       {/* Summary */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
+      <Card padding="md" className="space-y-4">
         <h3 className="font-bold text-slate-900">Overall Summary</h3>
 
         <div>
@@ -649,7 +652,7 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
           ))}
         </div>
 
-        <div className="rounded-xl bg-brand-50 border border-brand-100 p-4">
+        <Card variant="brand" radius="xl" padding="sm" className="border-brand-100">
           <p className="mb-2 text-xs font-bold text-brand-700 uppercase tracking-wide">Next Steps</p>
           {report.summary.nextSteps.map((s, i) => (
             <div key={i} className="flex items-start gap-2 mb-1.5">
@@ -657,8 +660,8 @@ function ReportCard({ report, onRetry }: { report: Report; onRetry: () => void }
               <p className="text-sm text-slate-700">{s}</p>
             </div>
           ))}
-        </div>
-      </div>
+        </Card>
+      </Card>
 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button onClick={onRetry} variant="outline" className="flex-1">

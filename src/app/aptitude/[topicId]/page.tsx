@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AptitudeLessonClient } from "@/components/AptitudeLessonClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { findTopic, DIFFICULTY_COLOR, DIFFICULTY_LABEL } from "@/lib/aptitude-topics";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -24,7 +25,7 @@ export default function AptitudeTopicPage({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-3xl px-4 py-10">
+      <PageShell width="narrow">
         {/* Breadcrumb */}
         <nav className="mb-6 flex items-center gap-1 text-sm text-slate-400">
           <Link href="/aptitude" className="hover:text-brand-600 transition">Aptitude</Link>
@@ -51,7 +52,7 @@ export default function AptitudeTopicPage({ params }: Props) {
         </div>
 
         <AptitudeLessonClient topicId={params.topicId} topicTitle={topic.title} />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

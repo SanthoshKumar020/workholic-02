@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getDomainTopic, isTopicUnlocked, isTopicAccessible } from "@/lib/domains/catalog";
 import { DomainLessonClient } from "@/components/domains/DomainLessonClient";
 import { Bit } from "@/components/dsa/Mascot";
+import { PageShell } from "@/components/ui/PageShell";
 import type { DsaMode } from "@/lib/dsa/types";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
@@ -42,7 +43,7 @@ export default async function DomainTopicPage({ params }: { params: { domain: st
     return (
       <>
         <Navbar />
-        <main className="mx-auto max-w-md px-4 py-16 text-center">
+        <PageShell width="form" className="text-center">
           <div className="mb-3 text-5xl">{unlocked ? "👑" : "🔒"}</div>
           <Bit mood="think" size="lg" className="mx-auto" />
           <h1 className="mt-3 text-2xl font-extrabold text-slate-900">
@@ -55,7 +56,7 @@ export default async function DomainTopicPage({ params }: { params: { domain: st
             <Link href={`/domains/${domain.slug}`} className="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200">← Roadmap</Link>
             {unlocked && <Link href="/billing" className="rounded-xl bg-brand-gradient px-5 py-2.5 text-sm font-bold text-white shadow-md hover:opacity-90">Upgrade to Pro</Link>}
           </div>
-        </main>
+        </PageShell>
         <Footer />
       </>
     );
@@ -64,7 +65,7 @@ export default async function DomainTopicPage({ params }: { params: { domain: st
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <PageShell width="default">
         <DomainLessonClient
           domainSlug={domain.slug}
           domainName={domain.name}
@@ -75,7 +76,7 @@ export default async function DomainTopicPage({ params }: { params: { domain: st
           nextTopicSlug={nextTopic}
           initialMode={mode}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

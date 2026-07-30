@@ -105,14 +105,14 @@ notify pgrst, 'reload schema';
 
 -- ── Seeding a pilot college ──────────────────────────────────────────────────
 -- Run this once per signed college, then give the TPO the join code:
---
---   insert into public.institutions (name, slug, join_code, seat_limit, expires_at)
---   values ('RV College of Engineering', 'rvce', 'RVCE-2026', 600,
---           now() + interval '12 months');
---
+
+  insert into public.institutions (name, slug, join_code, seat_limit, expires_at)
+  values ('RV College of Engineering', 'rvce', 'RVCE-2026', 600,
+          now() + interval '12 months');
+
 -- Make the placement officer an admin after they sign up normally:
---
---   insert into public.institution_members (institution_id, user_id, role)
---   select i.id, u.id, 'admin'
---     from public.institutions i, auth.users u
---    where i.slug = 'rvce' and u.email = 'tpo@rvce.edu.in';
+
+  insert into public.institution_members (institution_id, user_id, role)
+  select i.id, u.id, 'admin'
+    from public.institutions i, auth.users u
+   where i.slug = 'rvce' and u.email = 'tpo@rvce.edu.in';

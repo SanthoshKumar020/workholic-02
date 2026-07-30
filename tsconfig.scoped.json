@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "incremental": false, "tsBuildInfoFile": "/tmp/tsc/scoped.tsbuildinfo" },
+  "include": ["next-env.d.ts", "src/components/ui/**/*.ts", "src/components/ui/**/*.tsx", "src/lib/utils.ts"]
+}

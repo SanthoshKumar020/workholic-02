@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata = {
   title: "Affiliate Disclosure — HYRISE",
@@ -23,7 +24,7 @@ export default function AffiliateDisclosurePage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-14">
+      <PageShell width="narrow">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">Affiliate disclosure</h1>
         <p className="mt-2 text-sm text-slate-400">Last updated: July 2026</p>
 
@@ -108,7 +109,7 @@ export default function AffiliateDisclosurePage() {
             </p>
           </section>
         </div>
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

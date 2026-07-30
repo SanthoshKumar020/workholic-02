@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PublicProfileSetupClient } from "@/components/PublicProfileSetupClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { getCurrentProfile } from "@/lib/plan";
 import { redirect } from "next/navigation";
 
@@ -30,7 +31,7 @@ export default async function SettingsPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-2xl px-4 py-10">
+      <PageShell width="narrow">
         <h1 className="mb-2 text-2xl font-bold text-slate-900">Settings</h1>
         <p className="mb-8 text-slate-500">Manage your public profile and shareable career certificates.</p>
         <PublicProfileSetupClient
@@ -45,7 +46,7 @@ export default async function SettingsPage() {
           userId={profile.id}
           profileName={profile.full_name ?? ""}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

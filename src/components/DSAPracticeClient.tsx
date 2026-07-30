@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import {
   ChevronDown, ChevronUp, CheckCircle, AlertCircle, RotateCcw,
   Lightbulb, Copy, Check, Eye, X, Code2,
@@ -145,7 +146,7 @@ export function DSAPracticeClient() {
 
   if (phase === "setup") return (
     <div className="space-y-5">
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md" className="overflow-hidden">
         <h3 className="mb-1 font-bold text-slate-900">Choose a Topic</h3>
         <p className="mb-4 text-sm text-slate-500">Pick the data structure or algorithm you want to practice.</p>
         <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -161,25 +162,19 @@ export function DSAPracticeClient() {
             </button>
           ))}
         </div>
-      </div>
+      </Card>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <Card padding="md" className="overflow-hidden">
         <h3 className="mb-3 font-bold text-slate-900">Difficulty</h3>
         <div className="grid grid-cols-3 gap-2">
-          {(["easy", "medium", "hard"] as const).map((d) => {
-            const cfg = DIFF_CONFIG[d];
-            const active = difficulty === d;
-            return (
-              <button key={d} type="button" onClick={() => setDifficulty(d)}
-                className={`rounded-xl border py-3 text-sm font-bold capitalize transition ${
-                  active ? `${cfg.bg} ${cfg.color} border-current ring-2 ${cfg.ring}` : "border-slate-200 bg-white text-slate-400 hover:bg-slate-50"
-                }`}>
-                {d === "easy" ? "🟢" : d === "medium" ? "🟡" : "🔴"} {d}
-              </button>
-            );
-          })}
+          {(["easy", "medium", "hard"] as const).map((d) => (
+            <Button key={d} type="button" variant="chip" onClick={() => setDifficulty(d)}
+              aria-pressed={difficulty === d} className="capitalize">
+              {d === "easy" ? "🟢" : d === "medium" ? "🟡" : "🔴"} {d}
+            </Button>
+          ))}
         </div>
-      </div>
+      </Card>
 
       {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
 
@@ -197,7 +192,7 @@ export function DSAPracticeClient() {
     return (
       <div className="space-y-4">
         {/* Problem card */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <Card className="overflow-hidden">
           {/* Header */}
           <div className="border-b border-slate-100 px-5 py-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -231,13 +226,13 @@ export function DSAPracticeClient() {
             <h4 className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">Examples</h4>
             <div className="space-y-3">
               {problem.examples.map((ex, i) => (
-                <div key={i} className="rounded-xl border border-slate-100 bg-slate-50 p-3">
+                <Card key={i} variant="muted" radius="xl" className="p-3">
                   <div className="space-y-1 font-mono text-xs">
                     <p><span className="font-bold text-slate-500">Input:</span> <span className="text-slate-800">{ex.input}</span></p>
                     <p><span className="font-bold text-slate-500">Output:</span> <span className="text-slate-800">{ex.output}</span></p>
                     {ex.explanation && <p className="text-slate-400 pt-0.5">{ex.explanation}</p>}
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
@@ -257,11 +252,11 @@ export function DSAPracticeClient() {
               </div>
             )}
           </div>
-        </div>
+        </Card>
 
         {/* Hints */}
         {problem.hints.length > 0 && (
-          <div className="overflow-hidden rounded-2xl border border-amber-100 bg-amber-50 p-4 shadow-sm">
+          <Card variant="warning" padding="sm" className="overflow-hidden border-amber-100 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Lightbulb className="h-4 w-4 text-amber-600" />
@@ -286,23 +281,19 @@ export function DSAPracticeClient() {
                   ))}
                 </ol>
               )}
-          </div>
+          </Card>
         )}
 
         {/* Code editor */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <Card className="overflow-hidden">
           {/* Editor toolbar */}
           <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-2.5">
             <div className="flex gap-1.5">
               {LANGUAGES.map((lang) => (
-                <button key={lang} type="button" onClick={() => setLanguage(lang)}
-                  className={`rounded-md px-2.5 py-1 text-xs font-semibold transition ${
-                    language === lang
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-500 hover:bg-slate-100"
-                  }`}>
+                <Button key={lang} type="button" variant="chip" size="sm"
+                  onClick={() => setLanguage(lang)} aria-pressed={language === lang}>
                   {lang}
-                </button>
+                </Button>
               ))}
             </div>
             <div className="flex items-center gap-2">
@@ -326,16 +317,16 @@ export function DSAPracticeClient() {
               className="w-full resize-none bg-transparent pl-12 pr-4 py-3 font-mono text-sm text-green-400 focus:outline-none leading-[1.625rem] placeholder:text-slate-600"
             />
           </div>
-        </div>
+        </Card>
 
         {/* Approach */}
-        <div className="overflow-hidden rounded-2xl border border-brand-100 bg-brand-50/40 p-4 shadow-sm">
+        <Card variant="brand" padding="sm" className="overflow-hidden border-brand-100 bg-brand-50/40 shadow-sm">
           <label className="mb-1 block text-sm font-bold text-slate-800">Explain your approach</label>
           <p className="mb-2 text-xs text-slate-500">Interviewers score you on this. Write what your algorithm does, not just the code.</p>
           <textarea rows={3} value={userApproach} onChange={(e) => setUserApproach(e.target.value)}
             placeholder="e.g. Use a two-pointer approach. Left pointer starts at 0, right pointer at the end. Move left right if sum is too small, move right left if sum is too big…"
             className="w-full rounded-xl border border-brand-100 bg-white px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 resize-none" />
-        </div>
+        </Card>
 
         {error && <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">{error}</p>}
 
@@ -360,7 +351,7 @@ export function DSAPracticeClient() {
 
         {/* Reveal answer panel */}
         {showReveal && problem.modelSolution && (
-          <div className="overflow-hidden rounded-2xl border border-green-200 bg-white shadow-lg">
+          <Card className="overflow-hidden border-green-200 shadow-lg">
             <div className="flex items-center justify-between border-b border-slate-100 bg-slate-900 px-4 py-3">
               <div className="flex items-center gap-2">
                 <Eye className="h-4 w-4 text-green-400" />
@@ -383,7 +374,7 @@ export function DSAPracticeClient() {
                 <p className="text-sm text-slate-700 leading-relaxed">{problem.modelExplanation}</p>
               </div>
             )}
-          </div>
+          </Card>
         )}
       </div>
     );
@@ -396,7 +387,7 @@ export function DSAPracticeClient() {
     return (
       <div className="space-y-4">
         {/* Problem header */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm flex items-center justify-between gap-3">
+        <Card padding="sm" className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Problem</p>
             <p className="font-bold text-slate-900 truncate">{problem.title}</p>
@@ -405,7 +396,7 @@ export function DSAPracticeClient() {
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold capitalize ${diff.bg} ${diff.color}`}>{problem.difficulty}</span>
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{problem.topic}</span>
           </div>
-        </div>
+        </Card>
 
         {/* Verdict banners */}
         <div className="grid gap-3 sm:grid-cols-2">
@@ -413,7 +404,8 @@ export function DSAPracticeClient() {
             { label: "Approach", ok: feedback.approachCorrect, detail: feedback.approachCorrect ? "Solid reasoning" : "Needs rethinking" },
             { label: "Solution", ok: feedback.solutionCorrect, detail: feedback.solutionCorrect ? "Code is correct" : "Has issues" },
           ].map((b) => (
-            <div key={b.label} className={`flex items-center gap-3 rounded-2xl border p-4 ${b.ok ? "border-green-200 bg-green-50" : "border-red-100 bg-red-50"}`}>
+            <Card key={b.label} variant={b.ok ? "success" : "danger"} padding="sm"
+              className={`flex items-center gap-3 ${b.ok ? "border-green-200 bg-green-50" : "border-red-100"}`}>
               {b.ok
                 ? <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100"><CheckCircle className="h-5 w-5 text-green-600" /></div>
                 : <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100"><AlertCircle className="h-5 w-5 text-red-500" /></div>}
@@ -421,12 +413,12 @@ export function DSAPracticeClient() {
                 <p className="text-xs text-slate-500">{b.label}</p>
                 <p className={`font-bold ${b.ok ? "text-green-700" : "text-red-600"}`}>{b.detail}</p>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
 
         {/* Complexity */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <Card padding="md" className="overflow-hidden">
           <h3 className="mb-3 font-bold text-slate-900">Complexity Analysis</h3>
           <div className="grid gap-3 sm:grid-cols-2 mb-3">
             {[
@@ -435,16 +427,17 @@ export function DSAPracticeClient() {
             ].map((c) => {
               const matches = c.yours === c.target;
               return (
-                <div key={c.label} className={`rounded-xl border px-3 py-2.5 ${matches ? "border-green-100 bg-green-50" : "border-amber-100 bg-amber-50"}`}>
+                <Card key={c.label} variant={matches ? "success" : "warning"} radius="xl"
+                  className={`px-3 py-2.5 ${matches ? "border-green-100 bg-green-50" : "border-amber-100"}`}>
                   <p className="text-xs font-bold text-slate-500">{c.label}</p>
                   <p className={`font-mono text-xl font-extrabold ${matches ? "text-green-700" : "text-amber-700"}`}>{c.yours}</p>
                   <p className="text-xs text-slate-400 mt-0.5">Target: <span className="font-semibold text-brand-600">{c.target}</span></p>
-                </div>
+                </Card>
               );
             })}
           </div>
-          <p className="rounded-xl bg-slate-50 border border-slate-100 px-3 py-2 text-sm text-slate-700">{feedback.complexityFeedback}</p>
-        </div>
+          <Card variant="muted" radius="xl" className="px-3 py-2 text-sm text-slate-700">{feedback.complexityFeedback}</Card>
+        </Card>
 
         {/* Feedback sections */}
         <div className="space-y-3">
@@ -453,15 +446,15 @@ export function DSAPracticeClient() {
             { title: "Code Quality",      text: feedback.codeQuality,      accent: "border-l-slate-400", bg: "bg-white" },
             { title: "Optimal Approach",  text: feedback.optimizedApproach, accent: "border-l-brand-400", bg: "bg-brand-50" },
           ].map((s) => (
-            <div key={s.title} className={`rounded-xl border border-slate-100 border-l-4 ${s.accent} ${s.bg} px-4 py-3`}>
+            <Card key={s.title} variant="muted" radius="xl" className={`border-l-4 ${s.accent} ${s.bg} px-4 py-3`}>
               <p className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-400">{s.title}</p>
               <p className="text-sm text-slate-700 leading-relaxed">{s.text}</p>
-            </div>
+            </Card>
           ))}
         </div>
 
         {/* Model solution */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <Card className="overflow-hidden">
           <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Code2 className="h-4 w-4 text-green-400" />
@@ -472,7 +465,7 @@ export function DSAPracticeClient() {
           <pre className="overflow-x-auto bg-slate-950 px-5 py-4 font-mono text-sm text-green-400 whitespace-pre-wrap leading-relaxed">
             {feedback.modelSolution}
           </pre>
-        </div>
+        </Card>
 
         {/* Three columns */}
         <div className="grid gap-3 sm:grid-cols-3">
@@ -481,7 +474,7 @@ export function DSAPracticeClient() {
             { title: "Strengths",     icon: "✅", items: feedback.strengths,      bg: "bg-green-50 border-green-100",  color: "text-green-700" },
             { title: "Interview Tips",icon: "🎯", items: feedback.interviewTips,  bg: "bg-blue-50 border-blue-100",    color: "text-blue-700"  },
           ].map((s) => (
-            <div key={s.title} className={`rounded-2xl border p-4 ${s.bg}`}>
+            <Card key={s.title} variant="flat" padding="sm" className={s.bg}>
               <p className={`mb-2 text-xs font-bold uppercase tracking-wide ${s.color}`}>{s.icon} {s.title}</p>
               <ul className="space-y-1.5">
                 {s.items?.map((item, i) => (
@@ -490,7 +483,7 @@ export function DSAPracticeClient() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           ))}
         </div>
 

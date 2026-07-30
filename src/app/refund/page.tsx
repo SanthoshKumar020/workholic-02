@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata = {
   title: "Refund Policy — HYRISE",
@@ -12,7 +13,7 @@ export default function RefundPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 py-16">
+      <PageShell width="narrow">
         <div className="mb-10">
           <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
             Legal
@@ -107,7 +108,7 @@ export default function RefundPage() {
           </section>
 
         </div>
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

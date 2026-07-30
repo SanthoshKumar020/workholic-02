@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { InterviewClient } from "@/components/InterviewClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FREE_FEATURE_LIMIT } from "@/lib/usage";
@@ -41,14 +42,16 @@ export default async function InterviewPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Mock Interview</h1>
-          <p className="mt-2 text-slate-500">
+      <PageShell
+        width="narrow"
+        title="Mock Interview"
+        description={
+          <>
             Practice with AI-generated questions. Get instant feedback on each answer.
             {!proUser ? " Free plan: 1 session per day, 5 sessions total." : " Pro: unlimited sessions."}
-          </p>
-        </div>
+          </>
+        }
+      >
         <InterviewClient
           plan={profile.plan}
           targetRole={profile.target_role || ""}
@@ -57,7 +60,7 @@ export default async function InterviewPage() {
           freeLimit={FREE_FEATURE_LIMIT}
           isPro={proUser}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

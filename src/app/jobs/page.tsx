@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { JobsClient } from "@/components/JobsClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { getCurrentProfile, isPro } from "@/lib/plan";
 
 export const dynamic = "force-dynamic";
@@ -13,14 +14,11 @@ export default async function JobsPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Job Search</h1>
-          <p className="mt-1 text-slate-600">
-            Upload your resume or fill in your details — find jobs that exactly match your role, location, and work mode.
-          </p>
-        </div>
-
+      <PageShell
+        width="default"
+        title="Job Search"
+        description="Upload your resume or fill in your details — find jobs that exactly match your role, location, and work mode."
+      >
         {pro ? (
           <JobsClient />
         ) : (
@@ -37,7 +35,7 @@ export default async function JobsPage() {
             </Link>
           </div>
         )}
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

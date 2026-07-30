@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
+import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata: Metadata = {
   title: "Contact — HYRISE",
@@ -12,7 +13,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-2xl px-4 py-16">
+      <PageShell width="narrow">
         <div className="mb-10">
           <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
             Contact
@@ -30,7 +31,7 @@ export default function ContactPage() {
         </div>
 
         <ContactForm />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

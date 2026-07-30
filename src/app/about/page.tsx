@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { PageShell } from "@/components/ui/PageShell";
 import Link from "next/link";
 
 export const metadata = {
@@ -11,7 +12,7 @@ export default function AboutPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 py-16">
+      <PageShell width="narrow">
         <div className="mb-10">
           <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
             About
@@ -80,7 +81,7 @@ export default function AboutPage() {
           </section>
 
         </div>
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

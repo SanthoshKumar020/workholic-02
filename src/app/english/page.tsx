@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getCurrentProfile, isUserPro } from "@/lib/plan";
 import { EnglishClient } from "@/components/EnglishClient";
+import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FREE_FEATURE_LIMIT } from "@/lib/usage";
@@ -28,13 +29,11 @@ export default async function EnglishPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">English for Professionals</h1>
-          <p className="mt-2 text-slate-500">
-            Learn workplace English through lessons, quizzes, and live conversation practice.
-          </p>
-        </div>
+      <PageShell
+        width="narrow"
+        title="English for Professionals"
+        description="Learn workplace English through lessons, quizzes, and live conversation practice."
+      >
         <EnglishClient
           plan={profile.plan}
           preferredLanguage={profile.preferred_language || "en"}
@@ -42,7 +41,7 @@ export default async function EnglishPage() {
           freeLimit={FREE_FEATURE_LIMIT}
           isPro={proUser}
         />
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

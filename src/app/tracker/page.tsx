@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ApplicationTrackerClient } from "@/components/ApplicationTrackerClient";
 import { ProHistoryGate } from "@/components/ui/ProHistoryGate";
+import { PageShell } from "@/components/ui/PageShell";
 import { getCurrentProfile, isPro } from "@/lib/plan";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -25,13 +26,11 @@ export default async function TrackerPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-7xl px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Application Tracker</h1>
-          <p className="mt-1 text-slate-500">
-            Track every application from submitted to offer. Get AI-drafted follow-up emails in one click.
-          </p>
-        </div>
+      <PageShell
+        width="wide"
+        title="Application Tracker"
+        description="Track every application from submitted to offer. Get AI-drafted follow-up emails in one click."
+      >
         {pro ? (
           <ApplicationTrackerClient initialApplications={data ?? []} />
         ) : (
@@ -40,7 +39,7 @@ export default async function TrackerPage() {
             blurb="Track every application from submitted to offer, with AI-drafted follow-ups. Upgrade to Pro to unlock your application history."
           />
         )}
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

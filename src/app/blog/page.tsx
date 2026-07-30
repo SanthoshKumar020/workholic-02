@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { PageShell } from "@/components/ui/PageShell";
 import { sortedPosts } from "@/lib/blog/posts";
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default function BlogIndexPage() {
   return (
     <>
       <Navbar />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12">
+      <PageShell width="default">
         <header className="mb-10 text-center">
           <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
             HYRISE Blog
@@ -81,7 +82,7 @@ export default function BlogIndexPage() {
             </Link>
           ))}
         </div>
-      </main>
+      </PageShell>
       <Footer />
     </>
   );

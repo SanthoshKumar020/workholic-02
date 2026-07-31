@@ -46,6 +46,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url("/mentor",            0.7, "weekly"),
     url("/communication",     0.7, "weekly"),
     url("/billing",           0.6, "monthly"),
+    // B2B front door — highest-value page to have indexed.
+    url("/for-colleges",      0.9, "monthly"),
+    url("/affiliate-disclosure", 0.3, "monthly"),
     url("/about",             0.7, "monthly"),
     url("/contact",           0.6, "monthly"),
     url("/privacy",           0.5, "monthly"),

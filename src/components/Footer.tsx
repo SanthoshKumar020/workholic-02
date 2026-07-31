@@ -26,6 +26,19 @@ const COMPANY_LINKS = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   { href: "/refund", label: "Refund Policy" },
+  { href: "/affiliate-disclosure", label: "Affiliate Disclosure" },
+];
+
+/**
+ * The B2B entry point. /for-colleges had no inbound link anywhere, which for
+ * a page whose whole job is to be found by a placement officer meant it might
+ * as well not exist — neither Google nor a TPO browsing the site could reach
+ * it.
+ */
+const INSTITUTION_LINKS = [
+  { href: "/for-colleges", label: "For Colleges" },
+  { href: "/for-colleges#pricing", label: "College Pricing" },
+  { href: "/join", label: "Join with a college code" },
 ];
 
 const LEGAL_LINKS = [
@@ -150,6 +163,24 @@ export function Footer() {
               </h3>
               <ul className="space-y-3">
                 {COMPANY_LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-6">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+                For Institutions
+              </h3>
+              <ul className="space-y-3">
+                {INSTITUTION_LINKS.map((l) => (
                   <li key={l.href}>
                     <Link
                       href={l.href}

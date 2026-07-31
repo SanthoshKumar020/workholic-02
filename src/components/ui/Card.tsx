@@ -135,7 +135,16 @@ CardFooter.displayName = "CardFooter";
  * version, and it keeps the heading level explicit so a page doesn't end up
  * with six `<h3>`s and no `<h2>`.
  */
-export interface SectionCardProps extends CardProps {
+export interface SectionCardProps extends Omit<CardProps, "title"> {
+  /**
+   * Note the `Omit` above. CardProps extends React.HTMLAttributes<HTMLDivElement>,
+   * which already declares `title?: string` — the native HTML tooltip
+   * attribute. Widening it to ReactNode here is not a legal extension
+   * (`null` isn't assignable to `string | undefined`), so the base member has
+   * to be dropped before redeclaring it. This is a rendered heading, not a
+   * tooltip, so losing the native attribute is correct rather than a
+   * workaround.
+   */
   title?: React.ReactNode;
   description?: React.ReactNode;
   /** Slot on the same row as the title — a link, badge or small button. */

@@ -99,7 +99,11 @@ export function PageHeader({
 }
 
 export interface PageShellProps
-  extends React.HTMLAttributes<HTMLElement>,
+  // `title` is omitted from the base because React.HTMLAttributes declares it
+  // as `string` (the native HTML tooltip attribute). Redeclaring it as
+  // ReactNode without dropping it first is not a legal extension and fails
+  // the build. Here it's a rendered page heading, not a tooltip.
+  extends Omit<React.HTMLAttributes<HTMLElement>, "title">,
     VariantProps<typeof pageShellVariants> {
   eyebrow?: React.ReactNode;
   /** Omit to render a shell with no header at all. */

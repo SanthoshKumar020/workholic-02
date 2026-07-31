@@ -17,7 +17,7 @@ const SUBSCRIBE_DAILY_LIMIT = 3;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 
 export async function POST(req: Request) {
-  const { allowed, retryAfter } = rateLimit(
+  const { allowed, retryAfter } = await rateLimit(
     clientKey(req, "subscribe"),
     SUBSCRIBE_DAILY_LIMIT
   );

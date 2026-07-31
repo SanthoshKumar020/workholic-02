@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   // Generous — this only exists to stop someone scripting junk into the table,
   // and the numbers have to stay trustworthy because they back a commercial
   // conversation.
-  const { allowed } = rateLimit(clientKey(request, "aff-click"), CLICK_LIMIT_PER_DAY);
+  const { allowed } = await rateLimit(clientKey(request, "aff-click"), CLICK_LIMIT_PER_DAY);
   if (!allowed) return NextResponse.json({ ok: true }); // Silently drop; never error at the user.
 
   let body: { partnerId?: string; skillLabel?: string; surface?: string };

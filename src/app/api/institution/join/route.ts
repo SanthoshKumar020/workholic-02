@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic";
 const JOIN_ATTEMPT_LIMIT = 20;
 
 export async function POST(request: Request) {
-  const { allowed, retryAfter } = rateLimit(clientKey(request, "inst-join"), JOIN_ATTEMPT_LIMIT);
+  const { allowed, retryAfter } = await rateLimit(clientKey(request, "inst-join"), JOIN_ATTEMPT_LIMIT);
   if (!allowed) {
     return NextResponse.json(
       { error: "Too many attempts today. Please try again tomorrow." },

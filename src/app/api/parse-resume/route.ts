@@ -15,7 +15,7 @@ const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB — matches the UI's stated limi
 const PARSE_DAILY_LIMIT = 25;
 
 export async function POST(req: NextRequest) {
-  const { allowed, retryAfter } = rateLimit(clientKey(req, "parse-resume"), PARSE_DAILY_LIMIT);
+  const { allowed, retryAfter } = await rateLimit(clientKey(req, "parse-resume"), PARSE_DAILY_LIMIT);
   if (!allowed) {
     return NextResponse.json(
       { error: "Too many uploads from this device today. Try again tomorrow." },

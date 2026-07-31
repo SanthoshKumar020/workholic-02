@@ -20,7 +20,7 @@ function shortId(): string {
 }
 
 export async function POST(request: Request) {
-  const { allowed, retryAfter } = rateLimit(clientKey(request, "share"), SHARE_DAILY_LIMIT);
+  const { allowed, retryAfter } = await rateLimit(clientKey(request, "share"), SHARE_DAILY_LIMIT);
   if (!allowed) {
     return NextResponse.json(
       { error: "Too many share links created today. Try again tomorrow." },

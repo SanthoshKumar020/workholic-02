@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
-import { callGroq } from "@/lib/groq";
-import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { callAi, AI_CAPACITY_MESSAGE } from "@/lib/ai";
+import { rateLimit, clientKey, rateLimitMessage } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,13 +22,12 @@ export async function POST(request: Request) {
   // This is the top-of-funnel lead magnet. Requiring login here was killing
   // conversion — the homepage explicitly promises "no login needed".
   if (!user) {
-    const { allowed, retryAfter } = rateLimit(clientKey(request, "ats-check"), ANON_DAILY_LIMIT);
+    const { allowed, retryAfter } = await rateLimit(clientKey(request, "ats-check"), ANON_DAILY_LIMIT);
     if (!allowed) {
       return NextResponse.json(
         {
           error: "anon_limit_reached",
-          message:
-            "You've used your free scans for today. Create a free account to keep checking — it takes 20 seconds.",
+          message: `${rateLimitMessage(retryAfter)} Create a free account to keep checking — it takes 20 seconds.`,
           retryAfter,
         },
         { status: 429, headers: { "Retry-After": String(retryAfter) } }
@@ -51,9 +50,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please provide resume text (at least 30 characters)." }, { status: 400 });
   }
 
+  // Uses the fallback chain (Groq → Gemini) rather than Groq alone. This is
+  // the endpoint most likely to be hit by a sudden burst — a Reddit thread or
+  // a college WhatsApp group — and Groq's free tier is 30 req/min. Everyone
+  // past that would otherwise see a broken tool on their first visit.
   let result: { atsScore?: number; improvements?: string[] };
   try {
-    result = await callGroq([
+    const { result: r, provider } = await callAi<{ atsScore?: number; improvements?: string[] }>([
       {
         role: "system",
         content: `You are an ATS (Applicant Tracking System) expert. Analyze the resume and return a score and improvement tips. Return JSON: { atsScore: 0-100, improvements: ["tip1", "tip2", "tip3", "tip4", "tip5"] }. Score based on: keyword density, formatting, contact info, measurable achievements, action verbs, section headers. Each tip must be specific and actionable and reference something actually present in (or missing from) this resume — never generic advice.`,
@@ -63,9 +66,14 @@ export async function POST(request: Request) {
         content: `Analyze this resume for ATS compatibility:\n\n${resumeText.slice(0, 4000)}`,
       },
     ]);
+    result = r;
+    if (provider !== "groq") console.info(`[ats-check] served by fallback provider: ${provider}`);
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "ATS check failed. Please try again.";
-    return NextResponse.json({ error: msg }, { status: 502 });
+    // Never leak a provider error string to the user — "Groq 429" means
+    // nothing to someone trying to fix their resume, and it reads as broken
+    // rather than busy.
+    console.error("[ats-check] all providers failed:", err instanceof Error ? err.message : err);
+    return NextResponse.json({ error: AI_CAPACITY_MESSAGE }, { status: 503 });
   }
 
   const atsScore =

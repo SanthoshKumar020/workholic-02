@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 const VIDEO_DAILY_LIMIT = 30;
 
 export async function GET(request: Request) {
-  const { allowed, retryAfter } = rateLimit(clientKey(request, "videos"), VIDEO_DAILY_LIMIT);
+  const { allowed, retryAfter } = await rateLimit(clientKey(request, "videos"), VIDEO_DAILY_LIMIT);
   if (!allowed) {
     return NextResponse.json(
       { error: "Video search limit reached for today." },

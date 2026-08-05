@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendEmail } from "@/lib/resend";
+import { STUDENT_PLAN } from "@/lib/pricing";
 import crypto from "crypto";
 
 export const runtime = "nodejs";
@@ -67,7 +68,15 @@ export async function POST(request: Request) {
 
     if (userId) {
       const admin = createAdminClient();
-      await admin.from("profiles").update({ plan: "pro" }).eq("id", userId);
+
+      // A one-time payment buys a fixed window, so the window has to be written
+      // down. Without `plan_expires_at` a single ₹299 would grant Pro forever —
+      // the recurring mandate used to provide the end date for free.
+      const expiresAt = new Date(Date.now() + STUDENT_PLAN.durationDays * 86_400_000);
+      await admin
+        .from("profiles")
+        .update({ plan: "pro", plan_expires_at: expiresAt.toISOString() })
+        .eq("id", userId);
 
       const { data: profile } = await admin
         .from("profiles")
@@ -76,10 +85,30 @@ export async function POST(request: Request) {
         .single();
 
       if (profile?.email) {
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+        const until = expiresAt.toLocaleDateString("en-IN", {
+          timeZone: "Asia/Kolkata",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
         await sendEmail({
           to: profile.email,
-          subject: "Welcome to HYRISE Pro 🎉",
-          html: `<p>Your upgrade is complete. All features are now unlocked. <a href="https://workholic-02-orpin.vercel.app/dashboard">Go to dashboard →</a></p>`,
+          subject: "You're on HYRISE Student 🎉",
+          // State the allowance and the end date up front. Both are things the
+          // customer will otherwise discover by surprise, and a surprise about
+          // what you paid for is a refund request.
+          html: `
+            <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#334155;line-height:1.7">
+              <p>Your payment went through — all 21 tools are unlocked.</p>
+              <p style="margin:20px 0;padding:16px 18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px">
+                <strong style="color:#0f172a">HYRISE Student</strong><br>
+                ${STUDENT_PLAN.aiActionsPerMonth} AI actions and ${STUDENT_PLAN.mockInterviewsPerMonth} mock interviews a month<br>
+                Runs until <strong>${until}</strong> — nothing renews, and there is nothing to cancel.
+              </p>
+              <p><a href="${appUrl}/dashboard" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;font-weight:700;padding:13px 24px;border-radius:12px">Go to your dashboard →</a></p>
+              <p style="font-size:13px;color:#64748b">Start with a mock interview — it's the tool people tell us moved the needle most.</p>
+            </div>`,
         });
       }
     }

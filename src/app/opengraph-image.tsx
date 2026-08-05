@@ -86,7 +86,7 @@ export default function OpengraphImage() {
           <span>·</span>
           <span>🇮🇳 Built in India</span>
           <span>·</span>
-          <span>₹30/mo Pro</span>
+          <span>₹299 / 90 days</span>
         </div>
       </div>
     ),

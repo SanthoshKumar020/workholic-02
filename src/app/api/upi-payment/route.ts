@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { STUDENT_PLAN } from "@/lib/pricing";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { makeApproveToken } from "@/lib/upi";
@@ -30,13 +31,17 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await request.json().catch(() => ({}));
-  const { fullName, transactionId, plan, amount } = body as {
-    fullName: string; transactionId: string; plan: string; amount: string;
-  };
+  const { fullName, transactionId } = body as { fullName: string; transactionId: string };
 
-  if (!fullName?.trim() || !transactionId?.trim() || !plan || !amount) {
+  if (!fullName?.trim() || !transactionId?.trim()) {
     return NextResponse.json({ error: "All fields are required." }, { status: 400 });
   }
+
+  // Plan and amount are derived, never taken from the request body. There is
+  // one plan at one price (§2.1), and letting the client name the amount it
+  // paid is how an approval email ends up quoting a number the payer chose.
+  const plan = "student";
+  const amount = String(STUDENT_PLAN.price);
 
   // Save the payment request with the SERVICE-ROLE client.
   //
@@ -97,7 +102,7 @@ export async function POST(request: Request) {
         <table style="width:100%;border-collapse:collapse;margin:24px 0;background:#f8fafc;border-radius:12px;overflow:hidden">
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Name</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${esc(fullName)}</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Email</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${esc(user.email)}</td></tr>
-          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Plan</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${plan === "yearly" ? "Yearly ₹311" : "Monthly ₹30"}</td></tr>
+          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Plan</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">HYRISE Student — ₹${STUDENT_PLAN.price} for ${STUDENT_PLAN.durationDays} days</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Amount</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">₹${esc(amount)}</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569">Transaction ID</td><td style="padding:12px 16px;color:#1e293b;font-family:monospace;font-size:15px;font-weight:700">${esc(transactionId)}</td></tr>
         </table>

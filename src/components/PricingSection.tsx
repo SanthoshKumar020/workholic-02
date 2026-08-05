@@ -3,57 +3,57 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { track } from "@/lib/analytics";
+import { STUDENT_PLAN, PRICE_ANCHOR } from "@/lib/pricing";
+
+/**
+ * Two plans, not three (§2.1).
+ *
+ * The old section offered Free, Pro Monthly and Pro Annual. Three columns to
+ * choose between is a decision, and a decision at the point of payment is a
+ * place to stop and think about it later. There is now one thing to buy.
+ *
+ * Both plans state explicit allowances. "Unlimited" was removed everywhere: it
+ * was untrue the moment a mock interview cost ₹3.60 against ₹24 of revenue, and
+ * a stated number reads as more generous than a word nobody believes.
+ */
 
 const FREE_FEATURES = [
-  "3 free AI uses per tool",
-  "ATS score checker",
-  "AI resume enhancement",
+  "1 free go at each of the 4 core tools",
+  "ATS score check with the full 6-point report",
+  "PDF export",
   "1 resume template",
-  "Export to PDF",
   "Dashboard & saved resumes",
 ];
 
-const PRO_MONTHLY_FEATURES = [
-  "Unlimited AI uses — all tools",
-  "All premium resume templates",
-  "AI Career Mentor + weekly plans",
-  "Voice mock interview + report card",
-  "Salary negotiation coach",
+const STUDENT_FEATURES = [
+  `${STUDENT_PLAN.aiActionsPerMonth} AI actions a month`,
+  `${STUDENT_PLAN.mockInterviewsPerMonth} mock interviews a month, with report cards`,
+  "All 21 tools",
+  "Every resume template",
+  "Company prep — TCS NQT, Infosys, Wipro, Cognizant & more",
+  "Aptitude, DSA and English practice",
   "Job search + daily email alerts",
-  "LinkedIn & Naukri profile optimizer",
-  "Cover letter generator",
-  "GD practice, English learning & more",
 ];
 
-const PRO_ANNUAL_FEATURES = [
-  ...PRO_MONTHLY_FEATURES,
-  "Save ₹49 vs monthly — best value",
-  "Priority support",
-];
-
-const COMPARE_ROWS: { feature: string; free: string | boolean; pro: boolean }[] = [
-  { feature: "ATS score checker",            free: "3 checks",     pro: true },
-  { feature: "AI resume enhancement",        free: "3 uses",       pro: true },
-  { feature: "Resume templates",             free: "1 template",   pro: true },
-  { feature: "PDF export",                   free: true,           pro: true },
-  { feature: "Job Match Analyzer",           free: "3 uses",       pro: true },
-  { feature: "Mock Interview + report card", free: "3 sessions",   pro: true },
-  { feature: "Learning roadmaps",            free: "3 uses",       pro: true },
-  { feature: "Aptitude prep",                free: "3 uses",       pro: true },
-  { feature: "Outreach generator",           free: "3 uses",       pro: true },
-  { feature: "GD practice",                  free: "3 uses",       pro: true },
-  { feature: "English learning",             free: "3 uses",       pro: true },
-  { feature: "AI Career Mentor",             free: false,          pro: true },
-  { feature: "Salary coach",                 free: false,          pro: true },
-  { feature: "Job search + email alerts",    free: false,          pro: true },
-  { feature: "LinkedIn / Naukri optimizer",  free: false,          pro: true },
-  { feature: "Cover letter generator",       free: false,          pro: true },
-  { feature: "Recruiter scan & tailoring",   free: false,          pro: true },
-  { feature: "Priority support",             free: false,          pro: true },
+const COMPARE_ROWS: { feature: string; free: string | boolean; paid: string | boolean }[] = [
+  { feature: "ATS score check", free: "1 check", paid: "Included in monthly actions" },
+  { feature: "AI resume rewrite", free: "1 use", paid: "Included in monthly actions" },
+  { feature: "Job match analyzer", free: "1 use", paid: "Included in monthly actions" },
+  { feature: "Mock interview + report card", free: "1 session", paid: `${STUDENT_PLAN.mockInterviewsPerMonth}/month` },
+  { feature: "Monthly AI actions", free: "—", paid: `${STUDENT_PLAN.aiActionsPerMonth}` },
+  { feature: "Resume templates", free: "1 template", paid: "All 7" },
+  { feature: "PDF export", free: true, paid: true },
+  { feature: "Aptitude, DSA & English practice", free: false, paid: true },
+  { feature: "Company-specific prep", free: false, paid: true },
+  { feature: "Cover letters & cold outreach", free: false, paid: true },
+  { feature: "AI career mentor & salary coach", free: false, paid: true },
+  { feature: "Job search + email alerts", free: false, paid: true },
+  { feature: "LinkedIn / Naukri optimizer", free: false, paid: true },
+  { feature: "Recruiter scan & tailoring", free: false, paid: true },
 ];
 
 export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const proHref = isLoggedIn ? "/billing" : "/signup";
+  const paidHref = isLoggedIn ? "/billing" : "/signup";
   const sectionRef = useRef<HTMLElement>(null);
 
   // Fire `pricing_viewed` once, when the section actually scrolls into view.
@@ -91,21 +91,20 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             Simple, <span className="text-gradient">honest pricing</span>
           </h2>
           <p className="mt-3 text-slate-600">
-            Start free forever. Upgrade to Pro when you&apos;re ready. Cancel anytime.
+            Start free. One payment when you&apos;re ready — no subscription, no auto-renewal, no
+            UPI mandate to set up.
           </p>
         </div>
 
-        {/* Three plan cards */}
-        <div className="mx-auto mt-12 grid max-w-5xl gap-5 sm:grid-cols-3">
-
+        {/* Two plan cards */}
+        <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
           {/* Free */}
           <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Free</p>
             <div className="mt-3 flex items-end gap-1">
               <span className="text-4xl font-extrabold text-slate-900">₹0</span>
-              <span className="mb-1 text-sm text-slate-400">/month</span>
             </div>
-            <p className="mt-1 text-xs text-slate-500">Forever free to start</p>
+            <p className="mt-1 text-xs text-slate-500">Free forever. No card, ever.</p>
             <hr className="my-5 border-slate-100" />
             <ul className="flex-1 space-y-3">
               {FREE_FEATURES.map((f) => (
@@ -123,82 +122,64 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             </Link>
           </div>
 
-          {/* Pro Monthly — Most Popular */}
+          {/* Student */}
           <div className="relative flex flex-col overflow-hidden rounded-2xl border-2 border-brand-500 bg-white p-7 shadow-lg">
             <div className="absolute inset-x-0 top-0 h-1 bg-brand-gradient" />
             <div className="flex items-start justify-between">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-600">Pro</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-brand-600">Student</p>
               <span className="rounded-full bg-brand-600 px-2.5 py-0.5 text-[10px] font-bold text-white">
-                Most popular
+                One payment
               </span>
             </div>
-            <div className="mt-3 flex items-end gap-1">
-              <span className="text-4xl font-extrabold text-slate-900">₹30</span>
-              <span className="mb-1 text-sm text-slate-400">/month</span>
+            <div className="mt-3 flex items-end gap-1.5">
+              <span className="text-4xl font-extrabold text-slate-900">{STUDENT_PLAN.priceLabel}</span>
+              <span className="mb-1 text-sm text-slate-400">for {STUDENT_PLAN.durationDays} days</span>
             </div>
-            <p className="mt-1 text-xs font-medium text-brand-600">Less than a cup of chai ☕</p>
+            <p className="mt-1 text-xs font-medium text-brand-600">{PRICE_ANCHOR}</p>
             <hr className="my-5 border-brand-100" />
             <ul className="flex-1 space-y-3">
-              {PRO_MONTHLY_FEATURES.map((f) => (
+              {STUDENT_FEATURES.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
                   <CheckIcon className="text-brand-500" /> {f}
                 </li>
               ))}
             </ul>
             <Link
-              href={proHref}
-              onClick={() => track("upgrade_clicked", { plan: "pro_monthly", loggedIn: isLoggedIn })}
+              href={paidHref}
+              onClick={() => track("upgrade_clicked", { plan: "student", loggedIn: isLoggedIn })}
               className="mt-7 block rounded-xl bg-brand-gradient px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
             >
-              {isLoggedIn ? "Upgrade to Pro — ₹30/mo" : "Get Pro — ₹30/mo"}
+              Get Student — {STUDENT_PLAN.priceLabel}
             </Link>
+            <p className="mt-3 text-center text-[11px] leading-relaxed text-slate-400">
+              Pay once by UPI. Nothing renews, and there is nothing to cancel.
+            </p>
           </div>
+        </div>
 
-          {/* Pro Annual — Best Value */}
-          <div className="relative flex flex-col overflow-hidden rounded-2xl border-2 border-violet-400 bg-gradient-to-b from-violet-50 to-white p-7 shadow-sm">
-            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-violet-500 to-brand-500" />
-            <div className="flex items-start justify-between">
-              <p className="text-xs font-bold uppercase tracking-widest text-violet-600">Pro Annual</p>
-              <span className="rounded-full bg-green-500 px-2.5 py-0.5 text-[10px] font-bold text-white">
-                Best value
-              </span>
-            </div>
-            <div className="mt-3 flex items-end gap-1">
-              <span className="text-4xl font-extrabold text-slate-900">₹311</span>
-              <span className="mb-1 text-sm text-slate-400">/year</span>
-            </div>
-            <p className="mt-1 text-xs font-medium text-violet-600">₹25.9/mo · save ₹49 vs monthly</p>
-            <hr className="my-5 border-violet-100" />
-            <ul className="flex-1 space-y-3">
-              {PRO_ANNUAL_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
-                  <CheckIcon className="text-violet-500" /> {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={proHref}
-              onClick={() => track("upgrade_clicked", { plan: "pro_annual", loggedIn: isLoggedIn })}
-              className="mt-7 block rounded-xl border-2 border-violet-500 bg-white px-4 py-2.5 text-center text-sm font-semibold text-violet-700 transition hover:bg-violet-50"
-            >
-              {isLoggedIn ? "Upgrade — ₹311/yr" : "Get Annual — ₹311/yr"}
+        {/* A college pays instead — this is now a real second audience (§3). */}
+        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5 text-center">
+          <p className="text-sm text-slate-600">
+            <strong className="text-slate-900">Are you a placement officer?</strong> Institutions
+            license HYRISE for a whole batch, and students pay nothing.{" "}
+            <Link href="/for-colleges" className="font-semibold text-brand-600 hover:underline">
+              See pricing for colleges →
             </Link>
-          </div>
+          </p>
         </div>
 
         {/* Comparison table */}
         <div className="mx-auto mt-16 max-w-3xl">
           <h3 className="mb-6 text-center text-lg font-bold text-slate-900">
-            Free vs Pro — full comparison
+            Free vs Student — full comparison
           </h3>
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            {/* Table header */}
             {/* Equal thirds gave the feature name the same width as a tick.
                 Weighted columns keep the label readable at 320px. */}
             <div className="grid grid-cols-[1.6fr_1fr_1fr] border-b border-slate-100 bg-slate-50 px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 sm:px-5 sm:text-xs">
               <span>Feature</span>
               <span className="text-center">Free</span>
-              <span className="text-center text-brand-600">Pro</span>
+              <span className="text-center text-brand-600">Student</span>
             </div>
             {COMPARE_ROWS.map((row, i) => (
               <div
@@ -208,18 +189,8 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
                 }`}
               >
                 <span className="pr-2 font-medium text-slate-700">{row.feature}</span>
-                <span className="text-center">
-                  {row.free === false ? (
-                    <span className="text-slate-300">—</span>
-                  ) : row.free === true ? (
-                    <GreenCheck />
-                  ) : (
-                    <span className="text-xs font-semibold text-amber-600">{row.free}</span>
-                  )}
-                </span>
-                <span className="text-center">
-                  {row.pro ? <GreenCheck /> : <span className="text-slate-300">—</span>}
-                </span>
+                <Cell value={row.free} />
+                <Cell value={row.paid} />
               </div>
             ))}
           </div>
@@ -232,6 +203,20 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
         </p>
       </div>
     </section>
+  );
+}
+
+function Cell({ value }: { value: string | boolean }) {
+  return (
+    <span className="text-center">
+      {value === false || value === "—" ? (
+        <span className="text-slate-300">—</span>
+      ) : value === true ? (
+        <GreenCheck />
+      ) : (
+        <span className="text-xs font-semibold text-slate-600">{value}</span>
+      )}
+    </span>
   );
 }
 

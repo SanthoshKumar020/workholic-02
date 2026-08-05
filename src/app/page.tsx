@@ -32,7 +32,7 @@ const FAQS = [
   },
   {
     q: "How much does HYRISE Pro cost?",
-    a: "Pro is ₹30 per month or ₹311 per year. It removes the usage limits on every AI tool and unlocks the premium resume templates, career mentor, job alerts, and the salary negotiation coach. The free plan stays free forever.",
+    a: "HYRISE Student is ₹299, paid once, for 90 days — there is no subscription and nothing renews. It gives you 50 AI actions and 10 mock interviews a month across all 21 tools, plus every resume template, the career mentor, job alerts and the salary coach. The free plan stays free forever.",
   },
   {
     q: "Will this guarantee me a job?",
@@ -355,7 +355,7 @@ export default async function LandingPage() {
             Your next job starts here.
           </h2>
           <p className="mx-auto mt-3 max-w-md text-slate-600">
-            Free forever to start. Pro is just ₹30/month — less than a cup of chai.
+            Free forever to start. Student is ₹299 once, for 90 days — one interview going well is worth a hundred times this.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <TrackedLink

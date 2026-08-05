@@ -22,6 +22,10 @@ const MODEL = "gemini-2.0-flash";
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 export type Message = { role: "system" | "user" | "assistant"; content: string };
+export type TokenUsage = { promptTokens?: number; completionTokens?: number };
+
+/** The model this module talks to — logged so cost can be attributed per model. */
+export const GEMINI_MODEL = MODEL;
 
 export function hasGeminiKey(): boolean {
   return Boolean(process.env.GEMINI_API_KEY?.trim());
@@ -54,8 +58,11 @@ function toGeminiPayload(messages: Message[], jsonMode: boolean) {
   };
 }
 
-/** Raw text completion. Throws on any non-2xx so the caller can fall through. */
-export async function geminiText(messages: Message[], jsonMode = false): Promise<string> {
+/** Raw text completion with token counts. Throws on non-2xx so callers fall through. */
+export async function geminiTextUsage(
+  messages: Message[],
+  jsonMode = false
+): Promise<{ text: string; usage: TokenUsage }> {
   const key = process.env.GEMINI_API_KEY?.trim();
   if (!key) throw new Error("GEMINI_API_KEY not configured");
 
@@ -74,12 +81,20 @@ export async function geminiText(messages: Message[], jsonMode = false): Promise
   const data = await res.json();
   const text: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error("Gemini returned no content");
-  return text;
+
+  const u = data?.usageMetadata;
+  return {
+    text,
+    usage: { promptTokens: u?.promptTokenCount, completionTokens: u?.candidatesTokenCount },
+  };
+}
+
+export async function geminiText(messages: Message[], jsonMode = false): Promise<string> {
+  return (await geminiTextUsage(messages, jsonMode)).text;
 }
 
 /** Same loose-JSON tolerance as the Groq path — models fence their output. */
-export async function geminiJson<T = unknown>(messages: Message[]): Promise<T> {
-  const raw = await geminiText(messages, true);
+function parseLooseJson<T>(raw: string): T {
   try {
     return JSON.parse(raw) as T;
   } catch {
@@ -92,4 +107,15 @@ export async function geminiJson<T = unknown>(messages: Message[]): Promise<T> {
       throw new Error("Gemini returned unparseable JSON");
     }
   }
+}
+
+export async function geminiJsonUsage<T = unknown>(
+  messages: Message[]
+): Promise<{ result: T; usage: TokenUsage }> {
+  const { text, usage } = await geminiTextUsage(messages, true);
+  return { result: parseLooseJson<T>(text), usage };
+}
+
+export async function geminiJson<T = unknown>(messages: Message[]): Promise<T> {
+  return (await geminiJsonUsage<T>(messages)).result;
 }

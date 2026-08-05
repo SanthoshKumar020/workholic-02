@@ -55,7 +55,7 @@ export default function AboutPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">Our principles</h2>
             <ul className="mt-3 list-disc space-y-2 pl-5">
-              <li><strong>Transparent pricing.</strong> Free plan always free. Pro is ₹30/month — no hidden fees, no annual lock-in.</li>
+              <li><strong>Transparent pricing.</strong> Free plan always free. Student is ₹299 for 90 days, paid once — no subscription, no auto-renewal, no hidden fees.</li>
               <li><strong>Privacy by default.</strong> We never sell your data. AI processing is server-side. We do not use your resume to train models.</li>
               <li><strong>Honest AI.</strong> We never claim AI outputs are perfect. Always review before sending. We are a tool, not a guarantee.</li>
               <li><strong>Built for India.</strong> Prices in ₹. Features tuned for the Indian job market, including Naukri and LinkedIn optimization.</li>

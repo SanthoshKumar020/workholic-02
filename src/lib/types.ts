@@ -6,6 +6,8 @@ export interface Profile {
   id: string;
   email: string | null;
   plan: Plan;
+  /** End of a one-time paid plan (§2.1). Null = free, or a manually granted plan. */
+  plan_expires_at: string | null;
   preferred_language: string;
   target_role: string | null;
   stripe_customer_id: string | null;

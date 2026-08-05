@@ -52,7 +52,7 @@ export default async function IslandPage({ params }: { params: { topic: string }
           <Gate
             emoji="👑"
             title={`${island.kidName} is a Pro island`}
-            body="Upgrade to Pro to explore every island, get unlimited hints from Bit, and unlock Daily Practice."
+            body="The Student plan opens every island, 50 AI actions a month of hints from Bit, and Daily Practice."
             cta={{ href: "/billing", label: "Upgrade to Pro" }}
           />
         ) : !getTopicModule(island.slug) ? (

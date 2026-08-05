@@ -14,6 +14,12 @@ export interface ResumePdfData {
   templateId: string;
   withPhoto?: boolean;
   photoDataUrl?: string;
+  /**
+   * Overrides a template's default accent color (hex). Only Executive,
+   * Modern, Teal, Corporate, and Impact use an accent color — Classic and
+   * Minimal are intentionally monochrome by design, so this is a no-op there.
+   */
+  accentOverride?: string;
 }
 
 // ─── Smart parser ────────────────────────────────────────────────────────────
@@ -194,7 +200,7 @@ function BulletRow({ text, color, size = 9.5 }: { text: string; color: string; s
 // ─── Template: Executive ─────────────────────────────────────────────────────
 
 function ExecutiveTemplate({ data }: { data: ResumePdfData }) {
-  const ACCENT = "#1e3a5f";
+  const ACCENT = data.accentOverride || "#1e3a5f";
   const TEXT = "#1f2937";
   const MUTED = "#4b5563";
   const { contact, sections } = parseResume(data.enhancedText);
@@ -433,7 +439,7 @@ function SidebarTemplate({ data, accent }: { data: ResumePdfData; accent: string
 // ─── Template: Corporate ─────────────────────────────────────────────────────
 
 function CorporateTemplate({ data }: { data: ResumePdfData }) {
-  const ACCENT = "#9b1c1c";
+  const ACCENT = data.accentOverride || "#9b1c1c";
   const DARK = "#1f2937";
   const MUTED = "#6b7280";
   const { contact, sections } = parseResume(data.enhancedText);
@@ -502,7 +508,7 @@ function CorporateTemplate({ data }: { data: ResumePdfData }) {
 // ─── Template: Impact ────────────────────────────────────────────────────────
 
 function ImpactTemplate({ data }: { data: ResumePdfData }) {
-  const ACCENT = "#1d4ed8";
+  const ACCENT = data.accentOverride || "#1d4ed8";
   const TEXT = "#1f2937";
   const MUTED = "#4b5563";
   const { contact, sections } = parseResume(data.enhancedText);
@@ -674,8 +680,8 @@ export function ResumePdfDocument(data: ResumePdfData) {
     case "classic":     return <ClassicTemplate data={data} />;
     case "executive":   return <ExecutiveTemplate data={data} />;
     case "minimal":     return <MinimalTemplate data={data} />;
-    case "modern":      return <SidebarTemplate data={data} accent="#4338ca" />;
-    case "teal":        return <SidebarTemplate data={data} accent="#0d9488" />;
+    case "modern":      return <SidebarTemplate data={data} accent={data.accentOverride || "#4338ca"} />;
+    case "teal":        return <SidebarTemplate data={data} accent={data.accentOverride || "#0d9488"} />;
     case "corporate":   return <CorporateTemplate data={data} />;
     case "impact":      return <ImpactTemplate data={data} />;
     default:            return <ClassicTemplate data={data} />;

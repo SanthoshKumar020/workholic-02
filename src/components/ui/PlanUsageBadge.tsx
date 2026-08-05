@@ -41,7 +41,7 @@ export function UpgradeWall({ limit, feature }: { limit: number; feature: string
         You&apos;ve used all {limit} free {feature} uses.
       </p>
       <p className="text-sm text-red-600">
-        Upgrade to Pro for unlimited access to all AI features.
+        The Student plan gives you 50 AI actions a month for ₹299.
       </p>
       <Link
         href="/billing"

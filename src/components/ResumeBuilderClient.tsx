@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Alert } from "@/components/ui/Alert";
 import { Combobox } from "@/components/ui/Combobox";
 import { AtsScoreRing } from "@/components/AtsScoreRing";
-import { TemplatePicker } from "@/components/TemplatePicker";
+import { ResumeAiStudio } from "@/components/ResumeAiStudio";
 import {
   Plus, Trash2, Upload, FileText, X, Loader2,
   ChevronDown, ChevronUp, User, Briefcase, GraduationCap,
@@ -478,37 +478,21 @@ export function ResumeBuilderClient({
           </Card>
         </div>
 
-        <Card variant="flat" padding="lg">
-          <h3 className="text-lg font-semibold text-slate-900">Enhanced resume</h3>
-          <pre className="mt-3 max-h-[32rem] overflow-auto whitespace-pre-wrap rounded-xl bg-slate-50 p-4 text-sm leading-relaxed text-slate-800">
-            {result.enhancedResume || "(No enhanced text returned.)"}
-          </pre>
-        </Card>
-
-        <Card variant="flat" padding="lg">
-          <h3 className="text-lg font-semibold text-slate-900">Choose a template &amp; download</h3>
-          <p className="mt-1 text-sm text-slate-500">Pick any free template and download your PDF instantly. Pro templates require an upgrade.</p>
-          <div className="mt-5">
-            <TemplatePicker
-              isPro={isPro}
-              fileBaseName={mode === "upload" ? (name || undefined) : undefined}
-              baseData={
-                mode === "upload"
-                  ? { name: "", targetRole, enhancedText: result.enhancedResume || "", atsScore: result.atsScore ?? null }
-                  : { name: name || "Your Name", targetRole, email, phone, location, linkedin, portfolio, enhancedText: result.enhancedResume || "", atsScore: result.atsScore ?? null }
-              }
-              onTemplateChange={(templateId) => {
-                if (result.resume?.id) {
-                  fetch("/api/resumes", {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: result.resume.id, template_id: templateId }),
-                  }).catch(() => {});
-                }
-              }}
-            />
-          </div>
-        </Card>
+        <ResumeAiStudio
+          key={result.resume?.id ?? "unsaved"}
+          initialText={result.enhancedResume || ""}
+          initialAtsScore={result.atsScore ?? null}
+          resumeId={result.resume?.id}
+          isPro={isPro}
+          name={mode === "upload" ? "" : name || "Your Name"}
+          targetRole={targetRole}
+          email={mode === "upload" ? undefined : email}
+          phone={mode === "upload" ? undefined : phone}
+          location={mode === "upload" ? undefined : location}
+          linkedin={mode === "upload" ? undefined : linkedin}
+          portfolio={mode === "upload" ? undefined : portfolio}
+          fileBaseName={mode === "upload" ? (name || undefined) : undefined}
+        />
 
         <Button variant="secondary" onClick={() => { setResult(null); setError(null); }}>
           Enhance another resume
@@ -627,7 +611,7 @@ export function ResumeBuilderClient({
           {error === "free_limit_reached" ? (
             <Card variant="danger" radius="xl" padding="sm" className="text-center">
               <p className="text-sm font-semibold text-red-700">You&apos;ve used all {freeLimit} free enhancements.</p>
-              <p className="mt-1 text-xs text-red-600">Upgrade to Pro for unlimited resume enhancements.</p>
+              <p className="mt-1 text-xs text-red-600">The Student plan lifts this — ₹299 for 90 days.</p>
               <a href="/billing" className="mt-3 inline-block rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition">
                 Upgrade to Pro →
               </a>
@@ -1176,7 +1160,7 @@ export function ResumeBuilderClient({
           {error === "free_limit_reached" ? (
             <Card variant="danger" padding="md" className="text-center">
               <p className="text-sm font-semibold text-red-700">You&apos;ve used all {freeLimit} free enhancements.</p>
-              <p className="mt-1 text-xs text-red-600">Upgrade to Pro for unlimited resume enhancements.</p>
+              <p className="mt-1 text-xs text-red-600">The Student plan lifts this — ₹299 for 90 days.</p>
               <a href="/billing" className="mt-3 inline-block rounded-lg bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition">
                 Upgrade to Pro →
               </a>

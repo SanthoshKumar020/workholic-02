@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           reply:
-            "You've used today's free hints from me! 🤖 Upgrade to Pro for unlimited help — or come back tomorrow and we'll keep going. 💜",
+            "You've used today's free hints from me! 🤖 The Student plan gives you 50 AI actions a month — or come back tomorrow and we'll keep going. 💜",
           limited: true,
         },
         { status: 200 },

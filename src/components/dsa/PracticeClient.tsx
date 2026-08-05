@@ -113,7 +113,7 @@ export function PracticeClient({
         <div className="h-3 overflow-hidden rounded-full bg-slate-100">
           <div className="h-full rounded-full bg-brand-gradient transition-all" style={{ width: `${pct}%` }} />
         </div>
-        <p className="mt-2 text-xs text-slate-400">{curated.length} guided problems below + unlimited AI challenges to reach {PROBLEM_GOAL}.</p>
+        <p className="mt-2 text-xs text-slate-400">{curated.length} guided problems below, plus AI challenges to reach {PROBLEM_GOAL}.</p>
       </div>
 
       <BitSays mood="happy">

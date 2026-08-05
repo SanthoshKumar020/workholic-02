@@ -7,6 +7,12 @@ const MODEL = "llama-3.3-70b-versatile";
 
 export type Message = { role: "system" | "user" | "assistant"; content: string };
 
+/** Token counts as reported by the provider. Absent if it didn't say. */
+export type TokenUsage = { promptTokens?: number; completionTokens?: number };
+
+/** The model this module talks to — logged so cost can be attributed per model. */
+export const GROQ_MODEL = MODEL;
+
 // ── Key rotation ──────────────────────────────────────────────────────────────
 //
 // Configure ANY of these (all are merged & de-duped):
@@ -102,7 +108,13 @@ function parseLoose(content: string): unknown {
   }
 }
 
-async function callGroqRaw(messages: Message[]): Promise<unknown> {
+/** OpenAI-shaped `usage` block, if the response carried one. */
+function readUsage(data: unknown): TokenUsage {
+  const u = (data as { usage?: { prompt_tokens?: number; completion_tokens?: number } })?.usage;
+  return { promptTokens: u?.prompt_tokens, completionTokens: u?.completion_tokens };
+}
+
+async function callGroqRaw(messages: Message[]): Promise<{ result: unknown; usage: TokenUsage }> {
   const res = await groqRequest({
     model: MODEL,
     messages,
@@ -117,26 +129,41 @@ async function callGroqRaw(messages: Message[]): Promise<unknown> {
       const fb = await groqRequest({ model: MODEL, messages, temperature: 0.4 });
       if (fb.ok) {
         const fd = await fb.json();
-        return parseLoose(fd.choices?.[0]?.message?.content ?? "{}");
+        return { result: parseLoose(fd.choices?.[0]?.message?.content ?? "{}"), usage: readUsage(fd) };
       }
     }
     throw new Error(`Groq API error ${res.status}: ${errText || res.statusText}`);
   }
 
   const data = await res.json();
-  return parseLoose(data.choices?.[0]?.message?.content ?? "{}");
+  return { result: parseLoose(data.choices?.[0]?.message?.content ?? "{}"), usage: readUsage(data) };
+}
+
+/** JSON completion, with the token counts needed to cost the call. */
+export async function callGroqUsage<T = unknown>(
+  messages: Message[]
+): Promise<{ result: T; usage: TokenUsage }> {
+  const { result, usage } = await callGroqRaw(messages);
+  return { result: result as T, usage };
 }
 
 export async function callGroq<T = unknown>(messages: Message[]): Promise<T> {
-  return callGroqRaw(messages) as Promise<T>;
+  return (await callGroqRaw(messages)).result as T;
 }
 
-export async function callGroqText(messages: Message[]): Promise<string> {
+/** Free-text completion, with token counts. */
+export async function callGroqTextUsage(
+  messages: Message[]
+): Promise<{ text: string; usage: TokenUsage }> {
   const res = await groqRequest({ model: MODEL, messages, temperature: 0.7 });
   if (!res.ok) {
     const text = await res.text().catch(() => res.statusText);
     throw new Error(`Groq API error ${res.status}: ${text}`);
   }
   const data = await res.json();
-  return data.choices?.[0]?.message?.content ?? "";
+  return { text: data.choices?.[0]?.message?.content ?? "", usage: readUsage(data) };
+}
+
+export async function callGroqText(messages: Message[]): Promise<string> {
+  return (await callGroqTextUsage(messages)).text;
 }

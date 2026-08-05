@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { cashfree } from "@/lib/cashfree";
+import { STUDENT_PLAN } from "@/lib/pricing";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/**
+ * One plan, one price, one payment (§2.1).
+ *
+ * The monthly/yearly split is gone. Recurring billing on ₹30 in India means a
+ * UPI autopay mandate, and setting one up was the single biggest drop-off in
+ * the funnel — mandates on small amounts fail often, and the setup screen is
+ * where people abandon. A one-time order removes that step entirely.
+ *
+ * The price is read from lib/pricing.ts rather than written here, so the amount
+ * charged can never drift from the amount advertised.
+ */
 export async function POST(request: Request) {
   const supabase = createClient();
   const {
@@ -12,9 +24,8 @@ export async function POST(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json().catch(() => ({}));
-  const plan: "monthly" | "yearly" = body.plan === "yearly" ? "yearly" : "monthly";
-  const amount = plan === "yearly" ? 311 : 30;
+  const plan = "student";
+  const amount = STUDENT_PLAN.price;
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -23,7 +34,7 @@ export async function POST(request: Request) {
     .single();
 
   if (profile?.plan === "pro") {
-    return NextResponse.json({ error: "You're already on the Pro plan." }, { status: 400 });
+    return NextResponse.json({ error: "You're already on a paid plan." }, { status: 400 });
   }
 
   const siteUrl =

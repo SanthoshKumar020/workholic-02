@@ -57,7 +57,7 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold text-slate-900">4. Free plan &amp; paid plans</h2>
             <ul className="mt-2 list-disc space-y-1.5 pl-5">
               <li>The free plan includes a limited number of AI feature uses as described on the pricing page. These limits are permanent and are not restored by deleting and recreating content.</li>
-              <li>Pro plan subscribers get unlimited access to all AI features for the subscription period.</li>
+              <li>The Student plan is a one-time payment granting 90 days of access, with a monthly allowance of 50 AI actions and 10 mock interviews. It does not renew automatically.</li>
               <li>Prices are displayed in Indian Rupees (₹). We reserve the right to change prices with 30 days&apos; notice.</li>
               <li>Refunds are handled on a case-by-case basis — contact us within 7 days of a charge if you believe you were billed in error.</li>
             </ul>

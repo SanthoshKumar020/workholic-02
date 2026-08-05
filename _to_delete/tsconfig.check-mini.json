@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "incremental": false, "tsBuildInfoFile": "/tmp/tsc/check-mini.tsbuildinfo", "skipLibCheck": true },
+  "include": [
+    "next-env.d.ts",
+    "src/app/api/resume-edit/route.ts",
+    "src/components/ResumeAiStudio.tsx",
+    "src/components/TemplatePicker.tsx"
+  ]
+}

@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { checkFreeLimit, recordUsage, limitReachedResponse } from "@/lib/usage";
-import { callAi, AI_CAPACITY_MESSAGE } from "@/lib/ai";
+import { capacityResponse } from "@/lib/ai";
+import { scoreResume, gateReport, primaryCta } from "@/lib/ats";
 import { rateLimit, clientKey, rateLimitMessage } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/** Anonymous visitors get this many free scans per 24h, per IP+UA. */
-const ANON_DAILY_LIMIT = 3;
-/** How many improvement tips an anonymous visitor sees before the signup wall. */
-const ANON_VISIBLE_TIPS = 2;
+/**
+ * Anonymous visitors get this many free scans per IP+UA per 24h.
+ *
+ * Two, not three (§1.1). The number exists to stop one burst exhausting a
+ * 1,000/day provider quota for everyone else, and a genuine visitor checks one
+ * resume, maybe a second draft. A third is almost always someone testing.
+ */
+const ANON_DAILY_LIMIT = 2;
 
 export async function POST(request: Request) {
   const supabase = createClient();
@@ -18,7 +24,7 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // ── Anonymous visitors: allowed, rate-limited, given a teaser ─────────────
+  // ── Anonymous visitors: allowed, rate-limited, given a partial report ──────
   // This is the top-of-funnel lead magnet. Requiring login here was killing
   // conversion — the homepage explicitly promises "no login needed".
   if (!user) {
@@ -34,11 +40,11 @@ export async function POST(request: Request) {
       );
     }
   } else {
-    const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "ats-check");
-    if (!allowed) return limitReachedResponse();
+    const limit = await checkFreeLimit(supabase, user.id, user.email, "ats-check");
+    if (!limit.allowed) return limitReachedResponse(limit);
   }
 
-  let body: { resumeText?: string };
+  let body: { resumeText?: string; email?: string };
   try {
     body = await request.json();
   } catch {
@@ -50,46 +56,43 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please provide resume text (at least 30 characters)." }, { status: 400 });
   }
 
-  // Uses the fallback chain (Groq → Gemini) rather than Groq alone. This is
-  // the endpoint most likely to be hit by a sudden burst — a Reddit thread or
-  // a college WhatsApp group — and Groq's free tier is 30 req/min. Everyone
-  // past that would otherwise see a broken tool on their first visit.
-  let result: { atsScore?: number; improvements?: string[] };
+  let report;
   try {
-    const { result: r, provider } = await callAi<{ atsScore?: number; improvements?: string[] }>([
-      {
-        role: "system",
-        content: `You are an ATS (Applicant Tracking System) expert. Analyze the resume and return a score and improvement tips. Return JSON: { atsScore: 0-100, improvements: ["tip1", "tip2", "tip3", "tip4", "tip5"] }. Score based on: keyword density, formatting, contact info, measurable achievements, action verbs, section headers. Each tip must be specific and actionable and reference something actually present in (or missing from) this resume — never generic advice.`,
-      },
-      {
-        role: "user",
-        content: `Analyze this resume for ATS compatibility:\n\n${resumeText.slice(0, 4000)}`,
-      },
-    ]);
-    result = r;
-    if (provider !== "groq") console.info(`[ats-check] served by fallback provider: ${provider}`);
+    report = await scoreResume(resumeText, { feature: "ats-check", userId: user?.id });
   } catch (err) {
-    // Never leak a provider error string to the user — "Groq 429" means
-    // nothing to someone trying to fix their resume, and it reads as broken
-    // rather than busy.
+    // Never leak a provider error string — "Groq 429" means nothing to someone
+    // trying to fix their resume, and it reads as broken rather than busy.
+    // `capacityResponse` offers to email the result instead of dead-ending.
     console.error("[ats-check] all providers failed:", err instanceof Error ? err.message : err);
-    return NextResponse.json({ error: AI_CAPACITY_MESSAGE }, { status: 503 });
+    return capacityResponse("ats-check");
   }
 
-  const atsScore =
-    typeof result?.atsScore === "number" ? Math.round(Math.min(100, Math.max(0, result.atsScore))) : 50;
-  const allTips = Array.isArray(result?.improvements) ? result.improvements.slice(0, 5) : [];
+  const cta = primaryCta(report);
 
+  // ── Signed in: the whole report, no gate ──────────────────────────────────
   if (user) {
     await recordUsage(supabase, user.id, "ats-check");
-    return NextResponse.json({ atsScore, improvements: allTips, lockedCount: 0 });
+    return NextResponse.json({ score: report.score, findings: report.findings, lockedCount: 0, cta });
   }
 
-  // Teaser: real score + the first couple of fixes; the rest need a free account.
+  // ── Anonymous: two categories in full, four named but locked (§5.2) ────────
+  const gated = gateReport(report);
+
+  // Stash the full report against the email-capture token so /api/ats-report
+  // can email all six categories without paying for a second inference run —
+  // and, more importantly, so the emailed report is the SAME analysis they are
+  // looking at. Re-running would produce slightly different wording and read
+  // as though we had made it up.
+  const { data: stash } = await createAdminClient()
+    .from("ats_pending_reports")
+    .insert({ report })
+    .select("id")
+    .single();
+
   return NextResponse.json({
-    atsScore,
-    improvements: allTips.slice(0, ANON_VISIBLE_TIPS),
-    lockedCount: Math.max(0, allTips.length - ANON_VISIBLE_TIPS),
+    ...gated,
+    cta,
     anonymous: true,
+    reportToken: stash?.id ?? null,
   });
 }

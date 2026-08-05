@@ -35,7 +35,7 @@ export default async function PracticePage({ params }: { params: { topic: string
           <div className="mb-3 text-5xl">👑</div>
           <Bit mood="think" size="lg" className="mx-auto" />
           <h1 className="mt-3 text-2xl font-extrabold text-slate-900">Practice is a Pro feature here</h1>
-          <p className="mt-2 text-slate-500">Upgrade to Pro to unlock guided problem-solving and unlimited AI challenges for every island.</p>
+          <p className="mt-2 text-slate-500">The Student plan unlocks guided problem-solving and AI challenges across every island.</p>
           <div className="mt-6 flex justify-center gap-3">
             <Link href="/dsa" className="rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-200">← Map</Link>
             <Link href="/billing" className="rounded-xl bg-brand-gradient px-5 py-2.5 text-sm font-bold text-white shadow-md hover:opacity-90">Upgrade to Pro</Link>

@@ -79,7 +79,7 @@ export function CareerChat({ isPro }: { isPro: boolean }) {
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {!isPro && (
               <div className="rounded-xl bg-amber-50 p-3 text-xs text-amber-800 border border-amber-200">
-                Career chat is a Pro feature. <a href="/billing" className="font-semibold underline">Upgrade</a> to get unlimited guidance.
+                Career chat is on the Student plan. <a href="/billing" className="font-semibold underline">₹299 for 90 days</a> unlocks it.
               </div>
             )}
             {messages.length === 0 && isPro && (

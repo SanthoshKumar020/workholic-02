@@ -13,8 +13,8 @@ export async function POST(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
 
-  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "english");
-  if (!allowed) return limitReachedResponse();
+  const limit = await checkFreeLimit(supabase, user.id, user.email, "english");
+  if (!limit.allowed) return limitReachedResponse(limit);
 
   let body: { mode?: string; level?: string; topic?: string; userMessage?: string; history?: Array<{role: string; content: string}> };
   try {

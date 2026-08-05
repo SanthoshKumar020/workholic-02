@@ -48,7 +48,7 @@ export default async function InterviewPage() {
         description={
           <>
             Practice with AI-generated questions. Get instant feedback on each answer.
-            {!proUser ? " Free plan: 1 session per day, 5 sessions total." : " Pro: unlimited sessions."}
+            {!proUser ? " Free plan: 1 mock interview." : " Student plan: 10 mock interviews a month."}
           </>
         }
       >

@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   // Check Pro
   const { data: profile } = await supabase.from("profiles").select("plan, target_role").eq("id", user.id).single();
   if (!isUserPro(profile?.plan, user.email)) {
-    return NextResponse.json({ error: "Career chat is a Pro feature. Upgrade to access unlimited career guidance." }, { status: 403 });
+    return NextResponse.json({ error: "Career chat is on the Student plan. ₹299 unlocks it for 90 days." }, { status: 403 });
   }
 
   let body: { message?: string; history?: ChatMessage[] };

@@ -11,8 +11,8 @@ export async function POST(request: Request) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Please log in." }, { status: 401 });
-  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "aptitude");
-  if (!allowed) return limitReachedResponse();
+  const limit = await checkFreeLimit(supabase, user.id, user.email, "aptitude");
+  if (!limit.allowed) return limitReachedResponse(limit);
 
   const body = (await request.json().catch(() => ({}))) as {
     topicId?: string;

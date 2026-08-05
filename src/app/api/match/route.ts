@@ -13,8 +13,8 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Please log in to use Match." }, { status: 401 });
-  const { allowed } = await checkFreeLimit(supabase, user.id, user.email, "match");
-  if (!allowed) return limitReachedResponse();
+  const limit = await checkFreeLimit(supabase, user.id, user.email, "match");
+  if (!limit.allowed) return limitReachedResponse(limit);
 
   let body: { resumeText?: string; jobDescription?: string };
   try {

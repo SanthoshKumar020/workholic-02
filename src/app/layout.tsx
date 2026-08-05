@@ -9,7 +9,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://hyrise.swache.in";
 const SITE_NAME = "HYRISE";
 const TAGLINE = "Your complete AI career platform in one place";
 const DESCRIPTION =
-  "Free AI resume builder, ATS score checker, mock interview coach, and job match analyzer. Land your next job faster — built in India, free to start. ₹30/mo Pro.";
+  "Free AI resume builder, ATS score checker, mock interview coach, and job match analyzer. Land your next job faster — built in India, free to start. ₹299 for 90 days.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),

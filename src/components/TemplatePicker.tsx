@@ -157,19 +157,42 @@ function TemplatePreview({ id, accent, layout }: { id: string; accent: string; l
   );
 }
 
+/** Templates whose accent color can be customized — Classic & Minimal are deliberately monochrome. */
+const ACCENT_CUSTOMIZABLE = new Set(["executive", "modern", "teal", "corporate", "impact"]);
+
+const ACCENT_PRESETS = [
+  { name: "Indigo", hex: "#4338ca" },
+  { name: "Navy", hex: "#1e3a5f" },
+  { name: "Teal", hex: "#0d9488" },
+  { name: "Emerald", hex: "#047857" },
+  { name: "Crimson", hex: "#9b1c1c" },
+  { name: "Blue", hex: "#1d4ed8" },
+  { name: "Slate", hex: "#334155" },
+  { name: "Amber", hex: "#b45309" },
+];
+
 export function TemplatePicker({
   isPro,
   baseData,
   onTemplateChange,
   fileBaseName,
+  accentOverride: accentOverrideProp,
+  onAccentChange,
 }: {
   isPro: boolean;
-  baseData: Omit<ResumePdfData, "templateId" | "withPhoto" | "photoDataUrl">;
+  baseData: Omit<ResumePdfData, "templateId" | "withPhoto" | "photoDataUrl" | "accentOverride">;
   onTemplateChange?: (templateId: string) => void;
   fileBaseName?: string;
+  /** Pass both to control the accent color from a parent (e.g. a chat-driven color change). Omit both for the picker to manage its own state. */
+  accentOverride?: string;
+  onAccentChange?: (hex: string | undefined) => void;
 }) {
   const [withPhoto, setWithPhoto] = useState(false);
   const [photoDataUrl, setPhotoDataUrl] = useState<string | undefined>();
+  const [accentOverrideState, setAccentOverrideState] = useState<string | undefined>();
+  const isControlled = onAccentChange !== undefined;
+  const accentOverride = isControlled ? accentOverrideProp : accentOverrideState;
+  const setAccentOverride = isControlled ? (onAccentChange as (hex: string | undefined) => void) : setAccentOverrideState;
 
   function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -206,6 +229,42 @@ export function TemplatePicker({
         )}
       </div>
 
+      {/* Accent color — applies to Executive, Modern, Teal, Corporate & Impact. Classic and Minimal stay monochrome by design. */}
+      <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50">
+        <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Accent color <span className="font-normal text-slate-400">(Executive, Modern, Teal, Corporate &amp; Impact)</span>
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          {ACCENT_PRESETS.map((p) => (
+            <button
+              key={p.hex}
+              type="button"
+              title={p.name}
+              aria-pressed={accentOverride === p.hex}
+              onClick={() => setAccentOverride(p.hex)}
+              className={`h-7 w-7 rounded-full border-2 transition ${accentOverride === p.hex ? "border-slate-900 dark:border-white" : "border-white dark:border-slate-800"} shadow`}
+              style={{ backgroundColor: p.hex }}
+            />
+          ))}
+          <input
+            type="color"
+            value={accentOverride ?? "#4338ca"}
+            onChange={(e) => setAccentOverride(e.target.value)}
+            className="h-7 w-9 cursor-pointer rounded border border-slate-300 bg-white p-0.5 dark:border-slate-600"
+            aria-label="Custom accent color"
+          />
+          {accentOverride && (
+            <button
+              type="button"
+              onClick={() => setAccentOverride(undefined)}
+              className="rounded-lg px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700"
+            >
+              Reset to default
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Template grid — each card is its own preview + download */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {TEMPLATES.map((t) => {
@@ -215,6 +274,7 @@ export function TemplatePicker({
             templateId: t.id,
             withPhoto,
             photoDataUrl: withPhoto ? photoDataUrl : undefined,
+            accentOverride: ACCENT_CUSTOMIZABLE.has(t.id) ? accentOverride : undefined,
           };
 
           return (
@@ -244,7 +304,7 @@ export function TemplatePicker({
 
               {/* Template preview thumbnail */}
               <div className="p-3 pb-0">
-                <TemplatePreview id={t.id} accent={t.accent} layout={t.layout} />
+                <TemplatePreview id={t.id} accent={(ACCENT_CUSTOMIZABLE.has(t.id) && accentOverride) || t.accent} layout={t.layout} />
               </div>
 
               {/* Card footer */}

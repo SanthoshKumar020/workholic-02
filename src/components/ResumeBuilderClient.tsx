@@ -15,6 +15,7 @@ import {
   Code2, FolderGit2, Award, Globe, Trophy, Heart, BookOpen, Users, Star,
 } from "lucide-react";
 import type { EnhanceResult } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 // ── Dropdown options ─────────────────────────────────────────────────────────
 const TARGET_ROLES = [
@@ -177,6 +178,7 @@ export function ResumeBuilderClient({
 }) {
   const [mode, setMode] = useState<Mode>("form");
   const [resumeUsedCount, setResumeUsedCount] = useState(resumesUsed);
+  const { t } = useLanguage();
 
   // Contact
   const [name, setName] = useState(defaultName);
@@ -442,14 +444,14 @@ export function ResumeBuilderClient({
           >
             <span>
               {resumeUsedCount >= freeLimit
-                ? `You've used all ${freeLimit} free enhancements.`
-                : `Free plan: ${resumeUsedCount} / ${freeLimit} enhancements used · ${freeLimit - resumeUsedCount} left`}
+                ? t("builder_free_exhausted", { limit: freeLimit })
+                : `${t("builder_free_used", { used: resumeUsedCount, limit: freeLimit })} · ${freeLimit - resumeUsedCount} left`}
             </span>
             <a
               href="/billing"
               className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-700"
             >
-              Upgrade to Pro
+              {t("builder_upgrade")}
             </a>
           </Card>
         )}
@@ -457,12 +459,12 @@ export function ResumeBuilderClient({
         <div className="grid gap-6 lg:grid-cols-3">
           <Card variant="flat" padding="lg" className="flex flex-col items-center justify-center">
             <AtsScoreRing score={result.atsScore ?? 0} />
-            <p className="mt-3 text-center text-sm font-medium text-slate-700">ATS Score</p>
+            <p className="mt-3 text-center text-sm font-medium text-slate-700">{t("builder_ats_score")}</p>
             <p className="mt-1 text-center text-xs text-slate-400">Estimated readability by applicant tracking systems</p>
           </Card>
 
           <Card variant="flat" padding="lg" className="lg:col-span-2">
-            <h3 className="text-lg font-semibold text-slate-900">Top improvements</h3>
+            <h3 className="text-lg font-semibold text-slate-900">{t("builder_top_improvements")}</h3>
             {improvements.length ? (
               <ul className="mt-3 space-y-2.5">
                 {improvements.map((tip, i) => (
@@ -495,7 +497,7 @@ export function ResumeBuilderClient({
         />
 
         <Button variant="secondary" onClick={() => { setResult(null); setError(null); }}>
-          Enhance another resume
+          {t("builder_enhance_another")}
         </Button>
       </div>
     );
@@ -514,7 +516,7 @@ export function ResumeBuilderClient({
           aria-pressed={mode === "form"}
           onClick={() => setMode("form")}
         >
-          Build from scratch
+          {t("builder_mode_form")}
         </Button>
         <Button
           type="button"
@@ -524,7 +526,7 @@ export function ResumeBuilderClient({
           aria-pressed={mode === "upload"}
           onClick={() => setMode("upload")}
         >
-          Upload &amp; enhance
+          {t("builder_mode_upload")}
         </Button>
       </Card>
 
@@ -537,11 +539,11 @@ export function ResumeBuilderClient({
         >
           <span>
             {resumeUsedCount >= freeLimit
-              ? `You've used all ${freeLimit} free enhancements.`
-              : `Free plan: ${resumeUsedCount} / ${freeLimit} resume enhancements used.`}
+              ? t("builder_free_exhausted", { limit: freeLimit })
+              : t("builder_free_used", { used: resumeUsedCount, limit: freeLimit })}
           </span>
           <a href="/billing" className="ml-4 shrink-0 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700 transition">
-            Upgrade to Pro
+            {t("builder_upgrade")}
           </a>
         </Card>
       )}

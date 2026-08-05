@@ -55,6 +55,7 @@ export async function POST(request: Request) {
           "- Tailor content toward the target role if provided.",
           "- Do NOT invent facts; only rephrase and restructure what is given.",
           "- Preserve all section headings, contact details, and structure from the original.",
+          "- The input resume text may be typed in English, Tamil script, or Thanglish (Tamil and English mixed together in Latin letters) — this is common for Indian candidates typing quickly. Understand it regardless of form, and always write the enhanced resume in professional English, since that's the standard Indian recruiters and ATS systems expect.",
           "",
           "You MUST respond with ONLY a valid JSON object — no markdown, no explanation, no code fences.",
           "JSON schema: { \"enhancedResume\": string, \"improvements\": string[], \"atsScore\": number }",

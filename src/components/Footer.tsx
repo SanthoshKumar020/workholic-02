@@ -1,32 +1,36 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { SOCIAL_LINKS, SOCIAL_META, type SocialKey } from "@/lib/social";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import type { TranslationKey } from "@/lib/i18n/translations";
 
-const PRODUCT_LINKS = [
-  { href: "/#ats", label: "Free ATS Checker" },
-  { href: "/builder", label: "Resume Builder" },
-  { href: "/#pricing", label: "Pricing" },
-  { href: "/jobs", label: "Job Alerts (Pro)" },
+const PRODUCT_LINKS: { href: string; key: TranslationKey }[] = [
+  { href: "/#ats", key: "footer_link_ats" },
+  { href: "/builder", key: "footer_link_builder" },
+  { href: "/#pricing", key: "footer_link_pricing" },
+  { href: "/jobs", key: "footer_link_jobs" },
 ];
 
-const RESOURCE_LINKS = [
-  { href: "/blog", label: "Career Blog" },
-  { href: "/resume-checker", label: "Resume Checker by Role" },
-  { href: "/interview-questions", label: "Interview Questions by Role" },
+const RESOURCE_LINKS: { href: string; key: TranslationKey }[] = [
+  { href: "/blog", key: "footer_link_blog" },
+  { href: "/resume-checker", key: "footer_link_resume_checker" },
+  { href: "/interview-questions", key: "footer_link_interview_questions" },
 ];
 
-const ACCOUNT_LINKS = [
-  { href: "/signup", label: "Create account" },
-  { href: "/login", label: "Log in" },
-  { href: "/billing", label: "Billing" },
-  { href: "/dashboard", label: "Dashboard" },
+const ACCOUNT_LINKS: { href: string; key: TranslationKey }[] = [
+  { href: "/signup", key: "footer_link_create_account" },
+  { href: "/login", key: "footer_link_login" },
+  { href: "/billing", key: "footer_link_billing" },
+  { href: "/dashboard", key: "footer_link_dashboard" },
 ];
 
-const COMPANY_LINKS = [
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-  { href: "/refund", label: "Refund Policy" },
-  { href: "/affiliate-disclosure", label: "Affiliate Disclosure" },
+const COMPANY_LINKS: { href: string; key: TranslationKey }[] = [
+  { href: "/about", key: "footer_link_about" },
+  { href: "/contact", key: "footer_link_contact" },
+  { href: "/refund", key: "footer_link_refund" },
+  { href: "/affiliate-disclosure", key: "footer_link_affiliate" },
 ];
 
 /**
@@ -35,18 +39,19 @@ const COMPANY_LINKS = [
  * as well not exist — neither Google nor a TPO browsing the site could reach
  * it.
  */
-const INSTITUTION_LINKS = [
-  { href: "/for-colleges", label: "For Colleges" },
-  { href: "/for-colleges#pricing", label: "College Pricing" },
-  { href: "/join", label: "Join with a college code" },
+const INSTITUTION_LINKS: { href: string; key: TranslationKey }[] = [
+  { href: "/for-colleges", key: "footer_link_for_colleges" },
+  { href: "/for-colleges#pricing", key: "footer_link_college_pricing" },
+  { href: "/join", key: "footer_link_join_college" },
 ];
 
-const LEGAL_LINKS = [
-  { href: "/privacy", label: "Privacy Policy" },
-  { href: "/terms", label: "Terms of Service" },
+const LEGAL_LINKS: { href: string; key: TranslationKey }[] = [
+  { href: "/privacy", key: "footer_link_privacy" },
+  { href: "/terms", key: "footer_link_terms" },
 ];
 
 export function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="mt-auto border-t border-slate-200 bg-white">
       {/* Main footer grid */}
@@ -60,7 +65,7 @@ export function Footer() {
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
-              AI-powered career platform to help you land your next job faster. Resume enhancement, mock interviews, job matching, and more — free to start.
+              {t("footer_tagline")}
             </p>
 
             {/* Social links */}
@@ -91,7 +96,7 @@ export function Footer() {
               </div>
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-widest text-brand-500">
-                  A product by
+                  {t("footer_product_by")}
                 </p>
                 <p className="text-sm font-bold text-brand-800">Swache Technologies (OPC) Private Limited</p>
               </div>
@@ -102,7 +107,7 @@ export function Footer() {
           <div className="space-y-8">
             <div>
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Product
+                {t("footer_section_product")}
               </h3>
               <ul className="space-y-3">
                 {PRODUCT_LINKS.map((l) => (
@@ -111,7 +116,7 @@ export function Footer() {
                       href={l.href}
                       className="text-sm text-slate-600 transition hover:text-brand-600"
                     >
-                      {l.label}
+                      {t(l.key)}
                     </Link>
                   </li>
                 ))}
@@ -120,7 +125,7 @@ export function Footer() {
 
             <div>
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Resources
+                {t("footer_section_resources")}
               </h3>
               <ul className="space-y-3">
                 {RESOURCE_LINKS.map((l) => (
@@ -129,7 +134,7 @@ export function Footer() {
                       href={l.href}
                       className="text-sm text-slate-600 transition hover:text-brand-600"
                     >
-                      {l.label}
+                      {t(l.key)}
                     </Link>
                   </li>
                 ))}
@@ -141,7 +146,7 @@ export function Footer() {
           <div className="space-y-8">
             <div>
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Account
+                {t("footer_section_account")}
               </h3>
               <ul className="space-y-3">
                 {ACCOUNT_LINKS.map((l) => (
@@ -150,7 +155,7 @@ export function Footer() {
                       href={l.href}
                       className="text-sm text-slate-600 transition hover:text-brand-600"
                     >
-                      {l.label}
+                      {t(l.key)}
                     </Link>
                   </li>
                 ))}
@@ -159,7 +164,7 @@ export function Footer() {
 
             <div>
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Company
+                {t("footer_section_company")}
               </h3>
               <ul className="space-y-3">
                 {COMPANY_LINKS.map((l) => (
@@ -168,7 +173,7 @@ export function Footer() {
                       href={l.href}
                       className="text-sm text-slate-600 transition hover:text-brand-600"
                     >
-                      {l.label}
+                      {t(l.key)}
                     </Link>
                   </li>
                 ))}
@@ -177,7 +182,7 @@ export function Footer() {
 
             <div className="mt-6">
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                For Institutions
+                {t("footer_section_institutions")}
               </h3>
               <ul className="space-y-3">
                 {INSTITUTION_LINKS.map((l) => (
@@ -186,7 +191,7 @@ export function Footer() {
                       href={l.href}
                       className="text-sm text-slate-600 transition hover:text-brand-600"
                     >
-                      {l.label}
+                      {t(l.key)}
                     </Link>
                   </li>
                 ))}
@@ -195,7 +200,7 @@ export function Footer() {
 
             <div className="mt-6">
               <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Legal
+                {t("footer_section_legal")}
               </h3>
               <ul className="space-y-3">
                 {LEGAL_LINKS.map((l) => (
@@ -204,7 +209,7 @@ export function Footer() {
                       href={l.href}
                       className="text-sm text-slate-600 transition hover:text-brand-600"
                     >
-                      {l.label}
+                      {t(l.key)}
                     </Link>
                   </li>
                 ))}
@@ -219,8 +224,7 @@ export function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-slate-400 sm:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="font-medium text-slate-500">Swache Technologies (OPC) Private Limited</span>. All rights
-            reserved.
+            <span className="font-medium text-slate-500">Swache Technologies (OPC) Private Limited</span>. {t("footer_rights")}
           </p>
           {/* CIN display is a statutory requirement for an Indian company
               under s.12(3)(c) of the Companies Act 2013, not an optional

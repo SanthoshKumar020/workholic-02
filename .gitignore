@@ -35,3 +35,10 @@ yarn-error.log*
 # This repo is pushed to a public GitHub remote; committing personal data
 # here would publish it. Keep the trackers local.
 /outreach/
+
+# Claude Code / Cowork local tool settings — not part of the app.
+/.claude/
+
+# Scratch folder for files that couldn't be deleted via the remote device
+# bridge (it can move files but not unlink them) — pending manual deletion.
+/_to_delete/

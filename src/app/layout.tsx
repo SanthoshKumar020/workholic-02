@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CareerChatWrapper } from "@/components/CareerChatWrapper";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Analytics } from "@/components/Analytics";
+import { LanguageProvider, LANG_COOKIE } from "@/lib/i18n/LanguageProvider";
+import type { Locale } from "@/lib/i18n/translations";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://hyrise.swache.in";
 const SITE_NAME = "HYRISE";
@@ -108,8 +111,14 @@ const jsonLd = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Read the saved language preference server-side so the very first render
+  // is already in the right language — avoids a flash of English before a
+  // saved Tamil preference kicks in on the client.
+  const cookieLocale = cookies().get(LANG_COOKIE)?.value;
+  const initialLocale: Locale = cookieLocale === "ta" ? "ta" : "en";
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={initialLocale === "ta" ? "ta" : "en"} suppressHydrationWarning>
       <head>
         {/* JSON-LD structured data for rich Google results */}
         <script
@@ -119,9 +128,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen flex flex-col bg-[#f8f9ff] text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
         <ThemeProvider>
-          {children}
-          <Toaster position="bottom-right" richColors />
-          <CareerChatWrapper />
+          <LanguageProvider initialLocale={initialLocale}>
+            {children}
+            <Toaster position="bottom-right" richColors />
+            <CareerChatWrapper />
+          </LanguageProvider>
         </ThemeProvider>
         <Analytics />
       </body>

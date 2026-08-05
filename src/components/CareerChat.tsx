@@ -46,7 +46,7 @@ export function CareerChat({ isPro }: { isPro: boolean }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand-gradient shadow-lg transition hover:scale-105 hover:shadow-glow-sm"
+        className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand-gradient shadow-lg transition hover:scale-105 hover:shadow-glow-sm sm:bottom-6 sm:right-6"
         aria-label="Open career chat"
       >
         <MessageCircle className="h-6 w-6 text-white" />
@@ -55,7 +55,17 @@ export function CareerChat({ isPro }: { isPro: boolean }) {
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50 w-80 sm:w-96 flex flex-col rounded-2xl border border-slate-200 bg-white shadow-xl transition-all ${minimized ? "h-14" : "h-[480px]"}`}>
+    // At `w-80` fixed with `right-6`, this widget's left edge sat off the left
+    // edge of the screen on any phone narrower than ~370px (320 + 24 > 320),
+    // clipping half the panel. It now sizes to the viewport with a margin on
+    // mobile and only takes its fixed 320/384px width from `sm` up, where
+    // there's room. Height is capped by viewport too, not just a flat 480px,
+    // so it never taller than the visible screen on a short phone.
+    <div
+      className={`fixed inset-x-4 bottom-4 z-50 flex max-w-96 flex-col rounded-2xl border border-slate-200 bg-white shadow-xl transition-all sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-96 ${
+        minimized ? "h-14" : "h-[min(480px,70vh)]"
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between rounded-t-2xl bg-brand-gradient px-4 py-3">
         <div className="flex items-center gap-2">

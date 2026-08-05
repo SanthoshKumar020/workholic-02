@@ -10,6 +10,8 @@ import {
   Sparkles, Send, Undo2, RotateCcw, Lock,
   ArrowRight, Target, CheckCircle2, History,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { VoiceInstructionButton } from "@/components/VoiceInstructionButton";
 
 /**
  * The AI Resume Studio — everything that happens AFTER a resume has been
@@ -117,6 +119,7 @@ export function ResumeAiStudio({
   const [accentOverride, setAccentOverride] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
   const [upgradeNeeded, setUpgradeNeeded] = useState(false);
+  const { t } = useLanguage();
 
   function pushHistory(label: string) {
     setHistory((h) => [...h, { text, atsScore, label }]);
@@ -156,8 +159,8 @@ export function ResumeAiStudio({
     return data;
   }
 
-  async function sendInstruction() {
-    const instr = instruction.trim();
+  async function sendInstruction(overrideText?: string) {
+    const instr = (overrideText ?? instruction).trim();
     if (!instr || editing) return;
     setError(null);
     setUpgradeNeeded(false);
@@ -170,7 +173,7 @@ export function ResumeAiStudio({
       setMessages((m) => [
         ...m,
         { role: "user", content: instr },
-        { role: "assistant", content: `Done — switched the accent color to ${colorIntent.name}. See it in Template & Download below.` },
+        { role: "assistant", content: t("studio_color_applied", { color: colorIntent.name }) },
       ]);
       setInstruction("");
       return;
@@ -224,27 +227,27 @@ export function ResumeAiStudio({
       <Card variant="flat" padding="lg">
         <div className="mb-1 flex items-center justify-between">
           <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-            <Sparkles className="h-5 w-5 text-brand-500" /> AI Resume Studio
+            <Sparkles className="h-5 w-5 text-brand-500" /> {t("studio_title")}
           </h3>
           {history.length > 0 && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5">
               <Button variant="ghost" size="sm" onClick={undo}>
-                <Undo2 className="h-3.5 w-3.5" /> Undo
+                <Undo2 className="h-3.5 w-3.5" /> {t("studio_undo")}
               </Button>
               <Button variant="ghost" size="sm" onClick={resetToOriginal}>
-                <RotateCcw className="h-3.5 w-3.5" /> Reset
+                <RotateCcw className="h-3.5 w-3.5" /> {t("studio_reset")}
               </Button>
             </div>
           )}
         </div>
         <p className="mb-4 text-sm text-slate-500">
-          Tell the AI what to change, or paste a job description to tailor this resume for ATS match — everything below reflects your latest edit.
+          {t("studio_subtitle")}
         </p>
 
         <div className="grid gap-4 lg:grid-cols-3">
           <Card variant="muted" padding="md" className="flex flex-col items-center justify-center">
             <AtsScoreRing score={atsScore ?? 0} size={110} />
-            {history.length > 0 && <p className="mt-2 text-xs text-slate-400">{history.length} edit{history.length === 1 ? "" : "s"} applied</p>}
+            {history.length > 0 && <p className="mt-2 text-xs text-slate-400">{t("studio_edits_applied", { count: history.length })}</p>}
           </Card>
 
           <div className="relative lg:col-span-2">
@@ -253,17 +256,17 @@ export function ResumeAiStudio({
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
                   <Lock className="h-5 w-5 text-amber-600" />
                 </div>
-                <p className="text-sm font-semibold text-slate-800">Chat editing &amp; JD tailoring are Pro features</p>
-                <p className="max-w-xs text-xs text-slate-500">Rewrite by prompt and auto-tailor to any job description, unlimited templates, and more.</p>
+                <p className="text-sm font-semibold text-slate-800">{t("studio_locked_title")}</p>
+                <p className="max-w-xs text-xs text-slate-500">{t("studio_locked_body")}</p>
                 <a href="/billing" className="rounded-lg bg-amber-500 px-4 py-1.5 text-xs font-bold text-white hover:bg-amber-600">
-                  Upgrade to Pro
+                  {t("studio_upgrade_cta")}
                 </a>
               </div>
             )}
 
             <Card variant="muted" padding="md" className={!isPro ? "pointer-events-none select-none opacity-60" : undefined}>
-              <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
-                <Sparkles className="h-4 w-4 text-brand-500" /> Tell the AI what to change
+              <div className="mb-2 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-800">
+                <Sparkles className="h-4 w-4 text-brand-500" /> {t("studio_chat_title")}
               </div>
 
               {messages.length > 0 && (
@@ -295,17 +298,24 @@ export function ResumeAiStudio({
                 ))}
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <input
                   type="text"
                   value={instruction}
                   onChange={(e) => setInstruction(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter" && !editing) sendInstruction(); }}
-                  placeholder="e.g. Add a Certifications section for AWS and Google Cloud"
-                  className="flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100"
+                  placeholder={t("studio_chat_placeholder")}
+                  className="min-w-[12rem] flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100"
                 />
-                <Button onClick={sendInstruction} loading={editing} disabled={!instruction.trim()}>
-                  <Send className="h-4 w-4" /> {editing ? "Applying…" : "Send"}
+                <VoiceInstructionButton
+                  disabled={editing}
+                  onConfirmed={(spokenText) => {
+                    // Auto-run once the user confirms by voice — no typing or click needed.
+                    sendInstruction(spokenText);
+                  }}
+                />
+                <Button onClick={() => sendInstruction()} loading={editing} disabled={!instruction.trim()}>
+                  <Send className="h-4 w-4" /> {editing ? t("studio_applying") : t("studio_send")}
                 </Button>
               </div>
             </Card>
@@ -317,7 +327,7 @@ export function ResumeAiStudio({
         )}
         {upgradeNeeded && (
           <p className="mt-2 text-sm text-slate-600">
-            <a href="/billing" className="font-semibold text-brand-600 hover:text-brand-700">Upgrade to Pro</a> to unlock chat editing and job-description tailoring.
+            <a href="/billing" className="font-semibold text-brand-600 hover:text-brand-700">{t("studio_upgrade_cta")}</a>{t("studio_upgrade_needed_suffix")}
           </p>
         )}
       </Card>
@@ -325,18 +335,18 @@ export function ResumeAiStudio({
       {/* Job-description tailoring */}
       <Card variant="flat" padding="lg" className="relative overflow-hidden">
         <div className="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900">
-          <Target className="h-5 w-5 text-brand-500" /> Tailor to a job description
+          <Target className="h-5 w-5 text-brand-500" /> {t("studio_tailor_title")}
         </div>
         <p className="mb-4 text-sm text-slate-500">
-          Paste the full job posting — the AI rewrites your summary and bullets to match its language and keywords, without inventing anything you didn&apos;t already do.
+          {t("studio_tailor_body")}
         </p>
 
         {!isPro && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-white/85 backdrop-blur-[2px] px-4 text-center">
             <Lock className="h-6 w-6 text-amber-600" />
-            <p className="text-sm font-semibold text-slate-800">JD tailoring is a Pro feature</p>
+            <p className="text-sm font-semibold text-slate-800">{t("studio_jd_locked")}</p>
             <a href="/billing" className="rounded-lg bg-amber-500 px-4 py-1.5 text-xs font-bold text-white hover:bg-amber-600">
-              Upgrade to Pro
+              {t("studio_upgrade_cta")}
             </a>
           </div>
         )}
@@ -346,23 +356,23 @@ export function ResumeAiStudio({
             rows={6}
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Paste the job description — responsibilities, requirements, tech stack…"
+            placeholder={t("studio_tailor_placeholder")}
           />
-          <Button onClick={tailorToJd} loading={tailoring} disabled={jobDescription.trim().length < 30} className="mt-3 w-full sm:w-auto">
-            <Target className="h-4 w-4" /> {tailoring ? "Tailoring…" : "Tailor my resume to this JD"}
+          <Button onClick={() => tailorToJd()} loading={tailoring} disabled={jobDescription.trim().length < 30} className="mt-3 w-full sm:w-auto">
+            <Target className="h-4 w-4" /> {tailoring ? t("studio_tailoring") : t("studio_tailor_button")}
           </Button>
 
           {tailorInfo && (
             <div className="mt-5 space-y-4">
-              <div className="flex items-center gap-4">
-                <ScoreBar label="Before" score={tailorInfo.atsScoreBefore} tone="before" />
-                <ArrowRight className="h-5 w-5 shrink-0 text-brand-400" />
-                <ScoreBar label="After tailoring" score={tailorInfo.atsScoreAfter} tone="after" />
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+                <ScoreBar label={t("studio_before")} score={tailorInfo.atsScoreBefore} tone="before" />
+                <ArrowRight className="hidden h-5 w-5 shrink-0 text-brand-400 sm:block" />
+                <ScoreBar label={t("studio_after")} score={tailorInfo.atsScoreAfter} tone="after" />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 {tailorInfo.matchedKeywords.length > 0 && (
                   <Card variant="success" padding="sm">
-                    <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-green-700">Matched keywords</h4>
+                    <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-green-700">{t("studio_matched_keywords")}</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {tailorInfo.matchedKeywords.map((k) => (
                         <span key={k} className="rounded-full border border-green-200 bg-white px-2.5 py-0.5 text-xs font-semibold text-green-800">{k}</span>
@@ -372,7 +382,7 @@ export function ResumeAiStudio({
                 )}
                 {tailorInfo.addedKeywords.length > 0 && (
                   <Card variant="warning" padding="sm">
-                    <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-700">Add yourself, if true</h4>
+                    <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-amber-700">{t("studio_added_keywords")}</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {tailorInfo.addedKeywords.map((k) => (
                         <span key={k} className="rounded-full border border-amber-200 bg-white px-2.5 py-0.5 text-xs font-semibold text-amber-800">{k}</span>
@@ -389,7 +399,7 @@ export function ResumeAiStudio({
       {/* Live resume preview */}
       <Card variant="flat" padding="lg">
         <div className="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-900">
-          <History className="h-5 w-5 text-slate-400" /> Current resume text
+          <History className="h-5 w-5 text-slate-400" /> {t("studio_current_text")}
         </div>
         <pre className="max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-xl bg-slate-50 p-4 text-sm leading-relaxed text-slate-800">
           {text || "(No resume text yet.)"}
@@ -399,9 +409,9 @@ export function ResumeAiStudio({
       {/* Template, color & download */}
       <Card variant="flat" padding="lg">
         <div className="mb-1 flex items-center gap-2 text-lg font-semibold text-slate-900">
-          <CheckCircle2 className="h-5 w-5 text-green-500" /> Choose a template &amp; download
+          <CheckCircle2 className="h-5 w-5 text-green-500" /> {t("studio_template_title")}
         </div>
-        <p className="mb-5 text-sm text-slate-500">Pick a template and accent color, then download instantly — this always uses your latest edited version.</p>
+        <p className="mb-5 text-sm text-slate-500">{t("studio_template_body")}</p>
         <TemplatePicker
           isPro={isPro}
           fileBaseName={fileBaseName}

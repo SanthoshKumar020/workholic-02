@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": { "incremental": false, "tsBuildInfoFile": "/tmp/tsc/check-mini2.tsbuildinfo" },
-  "include": [
-    "next-env.d.ts",
-    "src/app/builder/page.tsx",
-    "src/components/ResumeBuilderClient.tsx"
-  ]
-}

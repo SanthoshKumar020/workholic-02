@@ -1,0 +1,40 @@
+name: Capacity queue drain
+
+# This used to be a Vercel cron job (schedule "*/15 * * * *" in vercel.json),
+# but Vercel's Hobby plan only allows cron jobs to run once a day — anything
+# more frequent fails at deploy time. This job needs to run every 15 minutes
+# (see src/app/api/cron/capacity-drain/route.ts for why: it drains AI
+# requests queued during a provider outage, and the app promises those users
+# a result "usually within the hour"), so it now runs here instead and just
+# calls the same endpoint over HTTPS.
+#
+# Requires a repository secret CRON_SECRET matching the CRON_SECRET env var
+# already set in Vercel (Settings → Secrets and variables → Actions).
+# Optionally set an APP_URL secret too if the production URL ever changes
+# from https://hyrise.swache.in.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: capacity-drain-cron
+  cancel-in-progress: false
+
+jobs:
+  drain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Call /api/cron/capacity-drain
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          APP_URL: ${{ secrets.APP_URL || 'https://hyrise.swache.in' }}
+        run: |
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::error::CRON_SECRET repository secret is not set. Add it under Settings > Secrets and variables > Actions, matching the CRON_SECRET env var in Vercel."
+            exit 1
+          fi
+          curl -sS -f -X GET "$APP_URL/api/cron/capacity-drain" \
+            -H "Authorization: Bearer $CRON_SECRET"

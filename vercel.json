@@ -25,10 +25,6 @@
       "schedule": "0 3 * * *"
     },
     {
-      "path": "/api/cron/capacity-drain",
-      "schedule": "*/15 * * * *"
-    },
-    {
       "path": "/api/cron/ats-sequence",
       "schedule": "0 5 * * *"
     }

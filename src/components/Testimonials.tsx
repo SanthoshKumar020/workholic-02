@@ -201,7 +201,7 @@ export function Testimonials() {
             </Link>
           </div>
           <p className="mt-6 text-xs text-slate-400">
-            Built by Swache Technologies (OPC) Pvt Ltd, Bangalore 🇮🇳
+            Built by Santo square automation 🇮🇳
           </p>
         </div>
       )}

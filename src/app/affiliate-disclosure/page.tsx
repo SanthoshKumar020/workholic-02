@@ -104,8 +104,7 @@ export default function AffiliateDisclosurePage() {
               .
             </p>
             <p className="mt-4 text-sm text-slate-500">
-              HYRISE is operated by Swache Technologies (OPC) Private Limited, L 303, Rohan Upavan,
-              Kyalasanahalli, Kothanur, Bangalore North, Karnataka 560077, India.
+              HYRISE is operated by Santo square automation, India.
             </p>
           </section>
         </div>

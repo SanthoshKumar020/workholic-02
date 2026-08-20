@@ -152,7 +152,7 @@ export default async function DashboardPage() {
                 </span>
               </div>
               <p className="mt-1.5 text-sm text-white/80">
-                {resumes.length} {resumes.length === 1 ? "resume" : "resumes"} · {sessionCount ?? 0} interview sessions · Powered by Swache Technologies
+                {resumes.length} {resumes.length === 1 ? "resume" : "resumes"} · {sessionCount ?? 0} interview sessions · Powered by Santo square automation
               </p>
             </div>
             <div className="flex items-center gap-3">

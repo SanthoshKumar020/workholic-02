@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   // 2009 and Bing treats it as a spam signal, so it did nothing here except
   // date the site to anyone technical viewing source. Keywords belong in the
   // H1, the body copy and the URL — all of which this site already does.
-  authors: [{ name: "Swache Technologies (OPC) Private Limited" }],
-  creator: "Swache Technologies (OPC) Private Limited",
+  authors: [{ name: "Santo square automation" }],
+  creator: "Santo square automation",
   category: "careers",
   alternates: { canonical: APP_URL },
   robots: {
@@ -91,17 +91,9 @@ const jsonLd = {
   // ratings come from actual, on-page, user-submitted reviews.
   publisher: {
     "@type": "Organization",
-    name: "Swache Technologies (OPC) Private Limited",
+    name: "Santo square automation",
     url: APP_URL,
     email: "admin@swache.in",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "L 303, Rohan Upavan, Kyalasanahalli, Kothanur",
-      addressLocality: "Bangalore North",
-      addressRegion: "Karnataka",
-      postalCode: "560077",
-      addressCountry: "IN",
-    },
     contactPoint: {
       "@type": "ContactPoint",
       email: "admin@swache.in",

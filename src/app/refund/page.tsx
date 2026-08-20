@@ -96,10 +96,7 @@ export default function RefundPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">Contact</h2>
             <p className="mt-2">
-              Swache Technologies (OPC) Private Limited{" "}
-              <br />
-              Corporate Address: L 303, Rohan Upavan, Kyalasanahalli, Kothanur,
-              Bangalore North, Karnataka 560077{" "}
+              Santo square automation{" "}
               <br />
               <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
                 admin@swache.in

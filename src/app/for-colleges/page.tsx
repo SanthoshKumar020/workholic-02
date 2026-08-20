@@ -346,7 +346,7 @@ export default function ForCollegesPage() {
               </a>
             </p>
             <p className="mt-6 text-xs leading-relaxed text-slate-400">
-              HYRISE is built by Swache Technologies (OPC) Private Limited, Bangalore. We help
+              HYRISE is built by Santo square automation. We help
               students present themselves better and prepare properly — we do not guarantee
               placements, and you should be sceptical of anyone who does.
             </p>

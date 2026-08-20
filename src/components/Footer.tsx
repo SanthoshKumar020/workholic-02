@@ -98,7 +98,7 @@ export function Footer() {
                 <p className="text-[10px] font-medium uppercase tracking-widest text-brand-500">
                   {t("footer_product_by")}
                 </p>
-                <p className="text-sm font-bold text-brand-800">Swache Technologies (OPC) Private Limited</p>
+                <p className="text-sm font-bold text-brand-800">Santo square automation</p>
               </div>
             </div>
           </div>
@@ -224,7 +224,7 @@ export function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-slate-400 sm:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="font-medium text-slate-500">Swache Technologies (OPC) Private Limited</span>. {t("footer_rights")}
+            <span className="font-medium text-slate-500">Santo square automation</span>. {t("footer_rights")}
           </p>
           {/* CIN display is a statutory requirement for an Indian company
               under s.12(3)(c) of the Companies Act 2013, not an optional
@@ -233,7 +233,6 @@ export function Footer() {
               registered) in Vercel; both are public information, so they are
               safe as NEXT_PUBLIC_ vars. */}
           <p className="text-center">
-            Regd. office: L 303, Rohan Upavan, Kyalasanahalli, Kothanur, Bangalore North, Karnataka 560077 ·{" "}
             <a href="mailto:admin@swache.in" className="text-slate-500 hover:text-brand-600 hover:underline">
               admin@swache.in
             </a>

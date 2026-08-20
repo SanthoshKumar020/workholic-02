@@ -27,7 +27,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">1. Who we are</h2>
             <p className="mt-2">
-              HYRISE is an AI-powered career platform operated by <strong>Swache Technologies (OPC) Private Limited</strong>,
+              HYRISE is an AI-powered career platform operated by <strong>Santo square automation</strong>,
               India. Our website is <strong>hyrise.swache.in</strong>. If you have questions about this
               policy, contact us at{" "}
               <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
@@ -129,10 +129,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">10. Contact</h2>
             <p className="mt-2">
-              Swache Technologies (OPC) Private Limited{" "}
-              <br />
-              Corporate Address: L 303, Rohan Upavan, Kyalasanahalli, Kothanur,
-              Bangalore North, Karnataka 560077{" "}
+              Santo square automation{" "}
               <br />
               <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
                 admin@swache.in

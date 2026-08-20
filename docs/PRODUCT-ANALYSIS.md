@@ -1,6 +1,6 @@
 # HYRISE — full product analysis
 
-_July 2026. hyrise.swache.in · Swache Technologies (OPC) Pvt Ltd_
+_July 2026. hyrise.swache.in · Santo square automation_
 
 Written from the codebase, the live site, and a session's worth of auditing —
 security, UI/UX, gamification and growth. Where I found something broken I've

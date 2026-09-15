@@ -77,38 +77,38 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <section ref={sectionRef} id="pricing" className="relative overflow-hidden py-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/4 top-0 h-80 w-80 rounded-full bg-brand-100/50 blur-3xl" />
-        <div className="absolute right-1/4 bottom-0 h-80 w-80 rounded-full bg-violet-100/40 blur-3xl" />
+        <div className="absolute left-1/4 top-0 h-80 w-80 rounded-full bg-[#5e6ad2]/25 blur-3xl" />
+        <div className="absolute right-1/4 bottom-0 h-80 w-80 rounded-full bg-fuchsia-600/15 blur-3xl" />
       </div>
 
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-[#d0d6e0]">
             Pricing
           </span>
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-            Simple, <span className="text-gradient">honest pricing</span>
+          <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Simple, <span className="zdark-gradient-text">honest pricing</span>
           </h2>
-          <p className="mt-3 text-slate-600">
+          <p className="mt-3 text-[#8a8f98]">
             Start free. One payment when you&apos;re ready — no subscription, no auto-renewal, no
             UPI mandate to set up.
           </p>
         </div>
 
         {/* Two plan cards */}
-        <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
+        <div className="mx-auto mt-12 grid grid-cols-1 max-w-3xl gap-5 sm:grid-cols-2">
           {/* Free */}
-          <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Free</p>
+          <div className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 shadow-sm">
+            <p className="text-xs font-bold uppercase tracking-widest text-[#62666d]">Free</p>
             <div className="mt-3 flex items-end gap-1">
-              <span className="text-4xl font-extrabold text-slate-900">₹0</span>
+              <span className="text-4xl font-extrabold text-white">₹0</span>
             </div>
-            <p className="mt-1 text-xs text-slate-500">Free forever. No card, ever.</p>
-            <hr className="my-5 border-slate-100" />
+            <p className="mt-1 text-xs text-[#62666d]">Free forever. No card, ever.</p>
+            <hr className="my-5 border-white/[0.08]" />
             <ul className="flex-1 space-y-3">
               {FREE_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+                <li key={f} className="flex items-start gap-2 text-sm text-[#8a8f98]">
                   <CheckIcon className="text-emerald-500" /> {f}
                 </li>
               ))}
@@ -116,30 +116,30 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             <Link
               href="/signup"
               onClick={() => track("signup_cta_clicked", { source: "pricing_free" })}
-              className="mt-7 block rounded-xl border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+              className="mt-7 block rounded-xl border border-white/15 bg-white/[0.03] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/[0.07]"
             >
               Create free account
             </Link>
           </div>
 
           {/* Student */}
-          <div className="relative flex flex-col overflow-hidden rounded-2xl border-2 border-brand-500 bg-white p-7 shadow-lg">
+          <div className="relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#5e6ad2]/50 bg-gradient-to-b from-[#5e6ad2]/15 to-white/[0.03] p-7 shadow-lg">
             <div className="absolute inset-x-0 top-0 h-1 bg-brand-gradient" />
             <div className="flex items-start justify-between">
-              <p className="text-xs font-bold uppercase tracking-widest text-brand-600">Student</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#828fff]">Student</p>
               <span className="rounded-full bg-brand-600 px-2.5 py-0.5 text-[10px] font-bold text-white">
                 One payment
               </span>
             </div>
             <div className="mt-3 flex items-end gap-1.5">
-              <span className="text-4xl font-extrabold text-slate-900">{STUDENT_PLAN.priceLabel}</span>
-              <span className="mb-1 text-sm text-slate-400">for {STUDENT_PLAN.durationDays} days</span>
+              <span className="text-4xl font-extrabold text-white">{STUDENT_PLAN.priceLabel}</span>
+              <span className="mb-1 text-sm text-[#62666d]">for {STUDENT_PLAN.durationDays} days</span>
             </div>
-            <p className="mt-1 text-xs font-medium text-brand-600">{PRICE_ANCHOR}</p>
-            <hr className="my-5 border-brand-100" />
+            <p className="mt-1 text-xs font-medium text-[#828fff]">{PRICE_ANCHOR}</p>
+            <hr className="my-5 border-white/[0.08]" />
             <ul className="flex-1 space-y-3">
               {STUDENT_FEATURES.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+                <li key={f} className="flex items-start gap-2 text-sm text-[#8a8f98]">
                   <CheckIcon className="text-brand-500" /> {f}
                 </li>
               ))}
@@ -151,18 +151,18 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
             >
               Get Student — {STUDENT_PLAN.priceLabel}
             </Link>
-            <p className="mt-3 text-center text-[11px] leading-relaxed text-slate-400">
+            <p className="mt-3 text-center text-[11px] leading-relaxed text-[#62666d]">
               Pay once by UPI. Nothing renews, and there is nothing to cancel.
             </p>
           </div>
         </div>
 
         {/* A college pays instead — this is now a real second audience (§3). */}
-        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5 text-center">
-          <p className="text-sm text-slate-600">
-            <strong className="text-slate-900">Are you a placement officer?</strong> Institutions
+        <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-white/[0.08] bg-white/[0.03] px-6 py-5 text-center">
+          <p className="text-sm text-[#8a8f98]">
+            <strong className="text-white">Are you a placement officer?</strong> Institutions
             license ZENVY for a whole batch, and students pay nothing.{" "}
-            <Link href="/for-colleges" className="font-semibold text-brand-600 hover:underline">
+            <Link href="/for-colleges" className="font-semibold text-[#828fff] hover:underline">
               See pricing for colleges →
             </Link>
           </p>
@@ -170,25 +170,25 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         {/* Comparison table */}
         <div className="mx-auto mt-16 max-w-3xl">
-          <h3 className="mb-6 text-center text-lg font-bold text-slate-900">
+          <h3 className="mb-6 text-center text-lg font-bold text-white">
             Free vs Student — full comparison
           </h3>
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] shadow-sm">
             {/* Equal thirds gave the feature name the same width as a tick.
                 Weighted columns keep the label readable at 320px. */}
-            <div className="grid grid-cols-[1.6fr_1fr_1fr] border-b border-slate-100 bg-slate-50 px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 sm:px-5 sm:text-xs">
+            <div className="grid grid-cols-[1.6fr_1fr_1fr] border-b border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-[#62666d] sm:px-5 sm:text-xs">
               <span>Feature</span>
               <span className="text-center">Free</span>
-              <span className="text-center text-brand-600">Student</span>
+              <span className="text-center text-[#828fff]">Student</span>
             </div>
             {COMPARE_ROWS.map((row, i) => (
               <div
                 key={row.feature}
                 className={`grid grid-cols-[1.6fr_1fr_1fr] items-center px-4 py-3.5 text-sm sm:px-5 ${
-                  i % 2 === 0 ? "bg-white" : "bg-slate-50/50"
+                  i % 2 === 0 ? "bg-transparent" : "bg-white/[0.02]"
                 }`}
               >
-                <span className="pr-2 font-medium text-slate-700">{row.feature}</span>
+                <span className="pr-2 font-medium text-[#d0d6e0]">{row.feature}</span>
                 <Cell value={row.free} />
                 <Cell value={row.paid} />
               </div>
@@ -196,9 +196,9 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
           </div>
         </div>
 
-        <p className="mx-auto mt-10 max-w-xl text-center text-xs text-slate-400">
+        <p className="mx-auto mt-10 max-w-xl text-center text-xs text-[#62666d]">
           ZENVY by{" "}
-          <span className="font-semibold text-slate-500">Santo Square Automation</span>. We help
+          <span className="font-semibold text-[#62666d]">Santo Square Automation</span>. We help
           you improve your resume — we do not guarantee interviews, offers, or employment outcomes.
         </p>
       </div>
@@ -210,11 +210,11 @@ function Cell({ value }: { value: string | boolean }) {
   return (
     <span className="text-center">
       {value === false || value === "—" ? (
-        <span className="text-slate-300">—</span>
+        <span className="text-[#62666d]">—</span>
       ) : value === true ? (
         <GreenCheck />
       ) : (
-        <span className="text-xs font-semibold text-slate-600">{value}</span>
+        <span className="text-xs font-semibold text-[#8a8f98]">{value}</span>
       )}
     </span>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CareerChatWrapper } from "@/components/CareerChatWrapper";
@@ -10,6 +11,18 @@ import type { Locale } from "@/lib/i18n/translations";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://zenvy.vercel.app";
 const SITE_NAME = "ZENVY";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
 const TAGLINE = "Your complete AI career platform in one place";
 const DESCRIPTION =
   "Free AI resume builder, ATS score checker, mock interview coach, and job match analyzer. Land your next job faster — built in India, free to start. ₹299 for 90 days.";
@@ -118,7 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#f8f9ff] text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+      <body className={`${inter.variable} ${jetbrains.variable} min-h-screen flex flex-col bg-[#f8f9ff] font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100`}>
         <ThemeProvider>
           <LanguageProvider initialLocale={initialLocale}>
             {children}

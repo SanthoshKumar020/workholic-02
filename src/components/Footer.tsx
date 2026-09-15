@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { SOCIAL_LINKS, SOCIAL_META, type SocialKey } from "@/lib/social";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { TranslationKey } from "@/lib/i18n/translations";
@@ -53,18 +52,21 @@ const LEGAL_LINKS: { href: string; key: TranslationKey }[] = [
 export function Footer() {
   const { t } = useLanguage();
   return (
-    <footer className="mt-auto border-t border-slate-200 bg-white">
+    <footer className="mt-auto border-t border-white/[0.07] bg-[#08090a]">
       {/* Main footer grid */}
       <div className="mx-auto max-w-6xl px-4 py-14">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center group">
-              <Image src="/logo.png" alt="ZENVY" width={120} height={40} className="h-9 w-auto object-contain" />
+            <Link href="/" className="inline-flex items-center gap-2 group">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-[#5e6ad2] to-[#8b5cf6] text-base font-bold text-white">
+                Z
+              </span>
+              <span className="text-lg font-semibold tracking-tight text-white">ZENVY</span>
             </Link>
 
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-[#8a8f98]">
               {t("footer_tagline")}
             </p>
 
@@ -80,7 +82,7 @@ export function Footer() {
                     rel="noopener noreferrer"
                     aria-label={SOCIAL_META[k].label}
                     title={SOCIAL_META[k].label}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#8a8f98] transition hover:border-[#828fff]/50 hover:bg-white/[0.06] hover:text-white"
                   >
                     <span className="text-xs font-bold uppercase">{k[0]}</span>
                   </a>
@@ -88,17 +90,17 @@ export function Footer() {
             </div>
 
             {/* Company attribution */}
-            <div className="mt-6 inline-flex items-center gap-2 rounded-xl border border-brand-100 bg-brand-50 px-4 py-2.5">
+            <div className="mt-6 inline-flex items-center gap-2 rounded-xl border border-[#5e6ad2]/30 bg-[#5e6ad2]/10 px-4 py-2.5">
               <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-gradient">
                 <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-white">
                   <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h2zm4-3a1 1 0 00-1 1v1h2V4a1 1 0 00-1-1zm0 6a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd" />
                 </svg>
               </div>
               <div>
-                <p className="text-[10px] font-medium uppercase tracking-widest text-brand-500">
+                <p className="text-[10px] font-medium uppercase tracking-widest text-[#828fff]">
                   {t("footer_product_by")}
                 </p>
-                <p className="text-sm font-bold text-brand-800">Santo Square Automation</p>
+                <p className="text-sm font-bold text-white">Santo Square Automation</p>
               </div>
             </div>
           </div>
@@ -106,7 +108,7 @@ export function Footer() {
           {/* Product + Resources links */}
           <div className="space-y-8">
             <div>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#62666d]">
                 {t("footer_section_product")}
               </h3>
               <ul className="space-y-3">
@@ -114,7 +116,7 @@ export function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                      className="text-sm text-[#8a8f98] transition hover:text-white"
                     >
                       {t(l.key)}
                     </Link>
@@ -124,7 +126,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#62666d]">
                 {t("footer_section_resources")}
               </h3>
               <ul className="space-y-3">
@@ -132,7 +134,7 @@ export function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                      className="text-sm text-[#8a8f98] transition hover:text-white"
                     >
                       {t(l.key)}
                     </Link>
@@ -145,7 +147,7 @@ export function Footer() {
           {/* Account + Legal links */}
           <div className="space-y-8">
             <div>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#62666d]">
                 {t("footer_section_account")}
               </h3>
               <ul className="space-y-3">
@@ -153,7 +155,7 @@ export function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                      className="text-sm text-[#8a8f98] transition hover:text-white"
                     >
                       {t(l.key)}
                     </Link>
@@ -163,7 +165,7 @@ export function Footer() {
             </div>
 
             <div>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#62666d]">
                 {t("footer_section_company")}
               </h3>
               <ul className="space-y-3">
@@ -171,7 +173,7 @@ export function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                      className="text-sm text-[#8a8f98] transition hover:text-white"
                     >
                       {t(l.key)}
                     </Link>
@@ -181,7 +183,7 @@ export function Footer() {
             </div>
 
             <div className="mt-6">
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#62666d]">
                 {t("footer_section_institutions")}
               </h3>
               <ul className="space-y-3">
@@ -189,7 +191,7 @@ export function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                      className="text-sm text-[#8a8f98] transition hover:text-white"
                     >
                       {t(l.key)}
                     </Link>
@@ -199,7 +201,7 @@ export function Footer() {
             </div>
 
             <div className="mt-6">
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
+              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#62666d]">
                 {t("footer_section_legal")}
               </h3>
               <ul className="space-y-3">
@@ -207,7 +209,7 @@ export function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-600 transition hover:text-brand-600"
+                      className="text-sm text-[#8a8f98] transition hover:text-white"
                     >
                       {t(l.key)}
                     </Link>
@@ -220,11 +222,11 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-slate-100 bg-slate-50">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-slate-400 sm:flex-row">
+      <div className="border-t border-white/[0.06] bg-black/40">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-[#62666d] sm:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="font-medium text-slate-500">Santo Square Automation</span>. {t("footer_rights")}
+            <span className="font-medium text-[#8a8f98]">Santo Square Automation</span>. {t("footer_rights")}
           </p>
           {/* CIN display is a statutory requirement for an Indian company
               under s.12(3)(c) of the Companies Act 2013, not an optional
@@ -233,7 +235,7 @@ export function Footer() {
               registered) in Vercel; both are public information, so they are
               safe as NEXT_PUBLIC_ vars. */}
           <p className="text-center">
-            <a href="mailto:kumarsanthosh2743@gmail.com" className="text-slate-500 hover:text-brand-600 hover:underline">
+            <a href="mailto:kumarsanthosh2743@gmail.com" className="text-[#8a8f98] hover:text-white hover:underline">
               kumarsanthosh2743@gmail.com
             </a>
             {process.env.NEXT_PUBLIC_COMPANY_CIN && (

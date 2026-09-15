@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
@@ -58,22 +57,20 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
     pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/80">
+    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08090a]/85 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-[#08090a]/70">
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
         {/* Logo */}
         <Link
           href={isLoggedIn ? "/dashboard" : "/"}
           onClick={close}
-          className="flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+          className="flex shrink-0 items-center gap-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
         >
-          <Image
-            src="/logo.png"
-            alt="ZENVY"
-            width={200}
-            height={64}
-            className="h-9 w-auto object-contain sm:h-11 lg:h-12"
-            priority
-          />
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-[#5e6ad2] to-[#8b5cf6] text-base font-bold text-white shadow-glow-sm">
+            Z
+          </span>
+          <span className="text-lg font-semibold tracking-tight text-white">
+            ZENVY
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -81,7 +78,7 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
           {!isLoggedIn && (
             <Link
               href="/#pricing"
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-[#8a8f98] transition hover:bg-white/[0.06] hover:text-white"
             >
               {t("nav_pricing")}
             </Link>
@@ -96,8 +93,8 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
                   aria-current={isActive(l.href) ? "page" : undefined}
                   className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
                     isActive(l.href)
-                      ? "bg-brand-50 text-brand-700"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                      ? "bg-[#5e6ad2]/15 text-white"
+                      : "text-[#8a8f98] hover:bg-white/[0.06] hover:text-white"
                   }`}
                 >
                   {t(l.key)}
@@ -105,7 +102,7 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
               ))}
               <LanguageSwitcher className="ml-1.5" />
               <form action="/auth/signout" method="post" className="ml-1.5">
-                <button className="rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50">
+                <button className="rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-[#d0d6e0] shadow-sm transition hover:bg-white/[0.07]">
                   {t("nav_sign_out")}
                 </button>
               </form>
@@ -115,7 +112,7 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
               <LanguageSwitcher className="mr-1" />
               <Link
                 href="/login"
-                className="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-lg px-3.5 py-2 text-sm font-medium text-[#8a8f98] transition hover:bg-white/[0.06] hover:text-white"
               >
                 {t("nav_login")}
               </Link>
@@ -134,7 +131,7 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
           onClick={() => setOpen(!open)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className="flex items-center justify-center rounded-lg border border-slate-200 p-2.5 text-slate-600 transition hover:bg-slate-50 lg:hidden"
+          className="flex items-center justify-center rounded-lg border border-white/10 p-2.5 text-[#d0d6e0] transition hover:bg-white/[0.07] lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -142,13 +139,13 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       {/* Mobile dropdown */}
       {open && (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-slate-100 bg-white px-4 pb-6 pt-2 shadow-lg lg:hidden">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/[0.07] bg-[#0c0d10] px-4 pb-6 pt-2 shadow-lg lg:hidden">
           <div className="flex flex-col gap-0.5">
             {!isLoggedIn && (
               <Link
                 href="/#pricing"
                 onClick={close}
-                className="rounded-xl px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                className="rounded-xl px-3 py-3 text-sm font-medium text-[#d0d6e0] transition hover:bg-white/[0.06]"
               >
                 {t("nav_pricing")}
               </Link>
@@ -164,20 +161,20 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
                     aria-current={isActive(l.href) ? "page" : undefined}
                     className={`rounded-xl px-3 py-3 text-sm font-medium transition ${
                       isActive(l.href)
-                        ? "bg-brand-50 text-brand-700"
-                        : "text-slate-700 hover:bg-slate-50"
+                        ? "bg-[#5e6ad2]/15 text-white"
+                        : "text-[#d0d6e0] hover:bg-white/[0.06]"
                     }`}
                   >
                     {t(l.key)}
                   </Link>
                 ))}
-                <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
-                  <span className="text-xs font-medium text-slate-400">{t("nav_language")}</span>
+                <div className="mt-3 flex items-center justify-between border-t border-white/[0.07] pt-3">
+                  <span className="text-xs font-medium text-[#62666d]">{t("nav_language")}</span>
                   <LanguageSwitcher />
                 </div>
-                <div className="mt-3 border-t border-slate-100 pt-3">
+                <div className="mt-3 border-t border-white/[0.07] pt-3">
                   <form action="/auth/signout" method="post">
-                    <button className="w-full rounded-xl border border-slate-200 px-3 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+                    <button className="w-full rounded-xl border border-white/10 px-3 py-3 text-left text-sm font-medium text-[#d0d6e0] transition hover:bg-white/[0.06]">
                       {t("nav_sign_out")}
                     </button>
                   </form>
@@ -185,15 +182,15 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
               </>
             ) : (
               <>
-                <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
-                  <span className="text-xs font-medium text-slate-400">{t("nav_language")}</span>
+                <div className="mt-3 flex items-center justify-between border-t border-white/[0.07] pt-3">
+                  <span className="text-xs font-medium text-[#62666d]">{t("nav_language")}</span>
                   <LanguageSwitcher />
                 </div>
                 <div className="mt-3 flex flex-col gap-2">
                   <Link
                     href="/login"
                     onClick={close}
-                    className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    className="rounded-xl border border-white/10 px-4 py-3 text-center text-sm font-medium text-[#d0d6e0] transition hover:bg-white/[0.06]"
                   >
                     {t("nav_login")}
                   </Link>

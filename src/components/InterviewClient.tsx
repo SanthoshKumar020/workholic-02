@@ -465,7 +465,7 @@ function InterviewScreen({
               <div className="flex flex-wrap gap-2 text-xs">
                 {detectFillers(transcript + interimTranscript).map((fw) => (
                   <span key={fw} className="rounded-full bg-red-50 border border-red-200 px-2 py-0.5 font-medium text-red-600">
-                    "{fw}" detected
+                    &ldquo;{fw}&rdquo; detected
                   </span>
                 ))}
               </div>

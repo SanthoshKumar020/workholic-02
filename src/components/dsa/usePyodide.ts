@@ -6,7 +6,6 @@
 const PY_VERSION = "0.26.4";
 const BASE = `https://cdn.jsdelivr.net/pyodide/v${PY_VERSION}/full/`;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PyodideInstance = any;
 
 let pyodidePromise: Promise<PyodideInstance> | null = null;

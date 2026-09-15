@@ -34,7 +34,7 @@ export function IslandClient({
   initialMode: DsaMode;
   initialStars: number;
 }) {
-  const module = getTopicModule(island.slug);
+  const topicModule = getTopicModule(island.slug);
   const [mode, setModeState] = useState<DsaMode>(initialMode);
   const [showCodeBeginner, setShowCodeBeginner] = useState(false);
   const [easyRead, setEasyRead] = useState(false);
@@ -57,7 +57,7 @@ export function IslandClient({
     } catch {}
   };
 
-  if (!module) {
+  if (!topicModule) {
     return (
       <div className="mx-auto max-w-2xl py-16">
         <BitSays mood="think" size="lg">
@@ -70,7 +70,7 @@ export function IslandClient({
     );
   }
 
-  const demo = module.demos[demoIdx];
+  const demo = topicModule.demos[demoIdx];
   const steps = demo.buildSteps();
   const codeVisible = mode === "interview" || (mode === "beginner" && showCodeBeginner);
 
@@ -153,14 +153,14 @@ export function IslandClient({
 
         {/* 1. STORY */}
         <Section id="story" emoji="📖" title="The Story">
-          <StoryLayer mode={mode} lines={module.lesson.story} readAloud={readAloud} techName={island.techName} />
+          <StoryLayer mode={mode} lines={topicModule.lesson.story} readAloud={readAloud} techName={island.techName} />
         </Section>
 
         {/* 2. SEE IT */}
         <Section id="see" emoji="👀" title="See it move">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex gap-1.5">
-              {module.demos.map((d, i) => (
+              {topicModule.demos.map((d, i) => (
                 <Button
                   key={d.key}
                   variant="chip"
@@ -186,7 +186,7 @@ export function IslandClient({
             key={demo.key}
             steps={steps}
             pythonCode={demo.pythonCode}
-            renderState={(state, highlight) => <module.StructureView state={state} highlight={highlight} mode={mode} />}
+            renderState={(state, highlight) => <topicModule.StructureView state={state} highlight={highlight} mode={mode} />}
             mode={mode}
             codeVisible={codeVisible}
             quizEnabled={quizMe}
@@ -196,12 +196,12 @@ export function IslandClient({
 
         {/* 3. TRY IT */}
         <Section id="try" emoji="🎮" title="Your turn — try it!">
-          {module.Game ? (
+          {topicModule.Game ? (
             <>
               <BitSays mood="happy" className="mb-4">
                 Now you try it yourself — I&apos;ll cheer you on!
               </BitSays>
-              <module.Game onWin={(s) => setGameStars((g) => Math.max(g, s))} />
+              <topicModule.Game onWin={(s) => setGameStars((g) => Math.max(g, s))} />
             </>
           ) : (
             <div className="rounded-3xl border border-brand-100 bg-gradient-to-b from-brand-50/60 to-white p-6">
@@ -224,7 +224,7 @@ export function IslandClient({
           <Section id="code" emoji="💻" title="The real code">
             <CodeLayer
               mode={mode}
-              module={module}
+              module={topicModule}
               showCodeBeginner={showCodeBeginner}
               onShowCode={() => setShowCodeBeginner(true)}
             />
@@ -233,7 +233,7 @@ export function IslandClient({
 
         {/* 5. MASTER IT */}
         <Section id="recall" emoji="⭐" title="Master it">
-          <RecallCheck island={island} module={module} gameStars={gameStars} />
+          <RecallCheck island={island} module={topicModule} gameStars={gameStars} />
         </Section>
 
         {/* Practice */}

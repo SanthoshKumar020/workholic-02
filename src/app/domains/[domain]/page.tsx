@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { domain: string } }) {
   const d = getDomain(params.domain);
-  return { title: d ? `${d.name} Roadmap — HYRISE` : "Domain" };
+  return { title: d ? `${d.name} Roadmap — ZENVY` : "Domain" };
 }
 
 export default async function DomainPage({ params }: { params: { domain: string } }) {

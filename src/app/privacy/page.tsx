@@ -3,8 +3,8 @@ import { Footer } from "@/components/Footer";
 import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata = {
-  title: "Privacy Policy — HYRISE",
-  description: "How HYRISE collects, uses, and protects your personal data.",
+  title: "Privacy Policy — ZENVY",
+  description: "How ZENVY collects, uses, and protects your personal data.",
 };
 
 const LAST_UPDATED = "27 June 2026";
@@ -27,11 +27,11 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">1. Who we are</h2>
             <p className="mt-2">
-              HYRISE is an AI-powered career platform operated by <strong>Santo square automation</strong>,
-              India. Our website is <strong>hyrise.swache.in</strong>. If you have questions about this
+              ZENVY is an AI-powered career platform operated by <strong>Santo Square Automation</strong>,
+              India. Our website is <strong>zenvy.vercel.app</strong>. If you have questions about this
               policy, contact us at{" "}
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>.
             </p>
           </section>
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">3. How we use your data</h2>
             <ul className="mt-2 list-disc space-y-1.5 pl-5">
-              <li>To provide and improve the HYRISE platform and its AI features.</li>
+              <li>To provide and improve the ZENVY platform and its AI features.</li>
               <li>To process your resume and career documents through our AI pipeline (Groq API, server-side only — see §4).</li>
               <li>To send transactional emails (job alerts you opt into, account notifications).</li>
               <li>To enforce plan limits and manage your subscription.</li>
@@ -81,8 +81,8 @@ export default function PrivacyPage() {
               Your account data and saved resumes are retained as long as your account is active.
               You can delete your account and all associated data at any time from your account settings,
               or by emailing us at{" "}
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>. We will process deletion requests within 30 days.
             </p>
           </section>
@@ -100,8 +100,8 @@ export default function PrivacyPage() {
             <p className="mt-2">
               You have the right to access, correct, or delete your personal data. To exercise
               these rights, email us at{" "}
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>. We aim to respond within 14 business days.
             </p>
           </section>
@@ -112,8 +112,8 @@ export default function PrivacyPage() {
               We use industry-standard security measures including encrypted connections (HTTPS),
               hashed passwords, and row-level security on our database. No system is 100% secure —
               if you discover a vulnerability, please disclose it responsibly to{" "}
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>.
             </p>
           </section>
@@ -129,10 +129,10 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">10. Contact</h2>
             <p className="mt-2">
-              Santo square automation{" "}
+              Santo Square Automation{" "}
               <br />
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>
             </p>
           </section>

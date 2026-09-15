@@ -33,9 +33,9 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const c = getCompany(params.company);
-  if (!c) return { title: "Company Interview Questions — HYRISE" };
+  if (!c) return { title: "Company Interview Questions — ZENVY" };
 
-  const title = `${c.name} Interview Questions & Process 2026 | HYRISE`;
+  const title = `${c.name} Interview Questions & Process 2026 | ZENVY`;
   const description = `${c.name} interview process: ${c.avgRounds} rounds (${c.interviewProcess
     .map((s) => s.name)
     .slice(0, 3)
@@ -77,8 +77,8 @@ export default function CompanyPage({ params }: Props) {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Companies", item: "https://hyrise.swache.in/companies" },
-        { "@type": "ListItem", position: 2, name: c.name, item: `https://hyrise.swache.in/companies/${c.id}` },
+        { "@type": "ListItem", position: 1, name: "Companies", item: "https://zenvy.vercel.app/companies" },
+        { "@type": "ListItem", position: 2, name: c.name, item: `https://zenvy.vercel.app/companies/${c.id}` },
       ],
     },
     {
@@ -360,7 +360,7 @@ export default function CompanyPage({ params }: Props) {
         <p className="mt-10 text-xs text-slate-400">
           Process details reflect publicly reported hiring patterns and change over time. Salary figures are
           indicative ranges, not offers. Always confirm the current process with {c.name}&apos;s careers page or
-          your recruiter. HYRISE does not guarantee interviews, offers, or employment.
+          your recruiter. ZENVY does not guarantee interviews, offers, or employment.
         </p>
       </main>
       <Footer />

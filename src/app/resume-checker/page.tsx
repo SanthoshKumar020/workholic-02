@@ -6,7 +6,7 @@ import { SEO_ROLES, roleCategories } from "@/lib/seo/roles";
 import { COMPANIES } from "@/lib/company-data";
 
 export const metadata: Metadata = {
-  title: "Free ATS Resume Checker by Role | HYRISE",
+  title: "Free ATS Resume Checker by Role | ZENVY",
   description: `Free ATS resume checker tailored to your role. Score your resume, see the keywords recruiters scan for, and fix it with AI — for ${SEO_ROLES.length} roles.`,
   alternates: { canonical: "/resume-checker" },
 };

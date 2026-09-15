@@ -8,7 +8,7 @@ import { COMPANIES } from "@/lib/company-data";
 
 export const dynamic = "force-dynamic";
 
-const BASE_URL = "https://hyrise.swache.in";
+const BASE_URL = "https://zenvy.vercel.app";
 
 function url(path: string, priority: number, changefreq: "daily" | "weekly" | "monthly"): MetadataRoute.Sitemap[number] {
   return {

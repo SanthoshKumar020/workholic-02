@@ -68,7 +68,7 @@ export function NavbarShell({ isLoggedIn }: { isLoggedIn: boolean }) {
         >
           <Image
             src="/logo.png"
-            alt="HYRISE"
+            alt="ZENVY"
             width={200}
             height={64}
             className="h-9 w-auto object-contain sm:h-11 lg:h-12"

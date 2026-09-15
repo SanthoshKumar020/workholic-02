@@ -8,7 +8,7 @@ import { PageShell } from "@/components/ui/PageShell";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Placement Dashboard — HYRISE",
+  title: "Placement Dashboard — ZENVY",
   robots: { index: false, follow: false },
 };
 

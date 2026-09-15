@@ -81,7 +81,7 @@ export async function POST(request: Request) {
   if (user.email && payload.enabled) {
     await sendEmail({
       to: user.email,
-      subject: "Your HYRISE job alerts are on",
+      subject: "Your ZENVY job alerts are on",
       html: `<p>You'll receive <strong>daily</strong> job alerts${
         payload.role ? ` for <strong>${payload.role}</strong>` : ""
       } at <strong>${send_time} IST</strong>. You can change this anytime from the Jobs page.</p>`,

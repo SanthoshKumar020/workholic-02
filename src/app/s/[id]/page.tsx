@@ -178,7 +178,7 @@ export default async function SharedScanPage({ params }: { params: { id: string 
         </div>
 
         <p className="mt-6 text-center text-xs text-slate-400">
-          Shared from HYRISE · Scores are an estimate of ATS readability, not a hiring prediction.
+          Shared from ZENVY · Scores are an estimate of ATS readability, not a hiring prediction.
         </p>
       </PageShell>
 

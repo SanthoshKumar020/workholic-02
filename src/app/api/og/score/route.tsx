@@ -113,7 +113,7 @@ export async function GET(request: Request) {
               H
             </div>
             <span style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.5px", color: "#0f172a" }}>
-              HYRISE
+              ZENVY
             </span>
             <span style={{ fontSize: "20px", color: "#94a3b8" }}>ATS Resume Score</span>
           </div>
@@ -153,7 +153,7 @@ export async function GET(request: Request) {
               alignSelf: "flex-start",
             }}
           >
-            Check yours free — hyrise.swache.in
+            Check yours free — zenvy.vercel.app
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export const metadata = { title: "DSA Practice — HYRISE" };
+export const metadata = { title: "DSA Practice — ZENVY" };
 
 export default async function DSAPracticePage() {
   const profile = await getCurrentProfile();

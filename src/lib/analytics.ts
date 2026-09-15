@@ -5,7 +5,7 @@
  * here is a silent no-op, so the app works exactly as before):
  *
  *   NEXT_PUBLIC_GA_ID            e.g. "G-XXXXXXXXXX"   (Google Analytics 4, free)
- *   NEXT_PUBLIC_PLAUSIBLE_DOMAIN e.g. "hyrise.swache.in" (Plausible / self-hosted)
+ *   NEXT_PUBLIC_PLAUSIBLE_DOMAIN e.g. "zenvy.vercel.app" (Plausible / self-hosted)
  *
  * Keep the event vocabulary small and funnel-shaped. The whole point is to be
  * able to answer one question: where do visitors fall out between landing on

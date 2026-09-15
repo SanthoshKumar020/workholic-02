@@ -227,7 +227,7 @@ export function limitReachedResponse(result?: LimitResult) {
   return Response.json(
     {
       error: "plan_limit_reached",
-      message: `You've used all ${result.limit} ${what} in your plan this month. Your allowance rolls over as older usage ages out — or write to admin@swache.in if you need more.`,
+      message: `You've used all ${result.limit} ${what} in your plan this month. Your allowance rolls over as older usage ages out — or write to kumarsanthosh2743@gmail.com if you need more.`,
       used: result.used,
       limit: result.limit,
     },

@@ -171,7 +171,7 @@ export async function awardXp(userId: string, amount = 0): Promise<void> {
  * Credit a day's activity without XP.
  *
  * Most of the app — job search, tracker, mentor, tailor, salary coach,
- * recruiter scan — awards no XP, so a user could work in HYRISE all day and
+ * recruiter scan — awards no XP, so a user could work in ZENVY all day and
  * get no streak credit at all. Call this from those paths so the streak
  * reflects genuine use rather than only the handful of gamified surfaces.
  */

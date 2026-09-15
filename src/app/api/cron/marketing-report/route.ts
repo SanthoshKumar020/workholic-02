@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Weekly HYRISE marketing / SEO report.
+ * Weekly ZENVY marketing / SEO report.
  *
  * Triggered by Vercel Cron (see vercel.json / cron config) or manually:
  *   GET /api/cron/marketing-report  (Authorization: Bearer <CRON_SECRET>)
@@ -47,14 +47,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
   const ownerEmail = process.env.MARKETING_REPORT_EMAIL;
 
   const health = await checkSitemapHealth(appUrl);
 
   const html = `
   <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px">
-    <h2 style="color:#4f46e5">HYRISE · Weekly Growth Report</h2>
+    <h2 style="color:#4f46e5">ZENVY · Weekly Growth Report</h2>
     <p style="color:#475569">${new Date().toLocaleDateString("en-IN")}</p>
     <ul style="color:#334155;line-height:1.8">
       <li>🗺️ Sitemap: <b>${health.total}</b> URLs (sampled ${health.sampled ?? health.total})</li>
@@ -68,7 +68,7 @@ export async function GET(request: Request) {
   if (ownerEmail) {
     const r = await sendEmail({
       to: ownerEmail,
-      subject: `📈 HYRISE weekly growth report — ${health.total} URLs, ${health.broken.length} broken`,
+      subject: `📈 ZENVY weekly growth report — ${health.total} URLs, ${health.broken.length} broken`,
       html,
     });
     return NextResponse.json({ sent: !r.skipped, health });

@@ -102,7 +102,7 @@ export async function GET(request: Request) {
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8fafc;padding:24px 0">
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;padding:28px">
     <tr><td>
-      <p style="margin:0;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8">HYRISE · last 24 hours</p>
+      <p style="margin:0;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8">ZENVY · last 24 hours</p>
       <p style="margin:4px 0 20px;font-size:13px;color:#94a3b8">${new Date().toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "full" })}</p>
 
       ${
@@ -148,8 +148,8 @@ export async function GET(request: Request) {
 
   const to = process.env.MARKETING_REPORT_EMAIL;
   const subject = alarms.length
-    ? `⚠️ HYRISE daily — ${alarms.join(" · ")}`
-    : `HYRISE daily — ${n(signups)} signups, ${d.calls} AI calls, ₹${Number(d.spend_rupees ?? 0).toFixed(2)}`;
+    ? `⚠️ ZENVY daily — ${alarms.join(" · ")}`
+    : `ZENVY daily — ${n(signups)} signups, ${d.calls} AI calls, ₹${Number(d.spend_rupees ?? 0).toFixed(2)}`;
 
   if (!to) {
     return NextResponse.json({

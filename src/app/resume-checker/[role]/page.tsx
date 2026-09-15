@@ -19,8 +19,8 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const role = getSeoRole(params.role);
-  if (!role) return { title: "Resume Checker — HYRISE" };
-  const title = `ATS Resume Checker for ${role.name}s — Free Score | HYRISE`;
+  if (!role) return { title: "Resume Checker — ZENVY" };
+  const title = `ATS Resume Checker for ${role.name}s — Free Score | ZENVY`;
   const description = `Free ATS resume checker for ${role.name}s. Score your resume against ${role.name} keywords like ${role.skills.slice(0, 3).join(", ")}, see what's missing, and fix it with AI.`;
   return {
     title,

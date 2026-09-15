@@ -71,7 +71,7 @@ export async function POST(request: Request) {
   //
   // The recipient is ALWAYS the authenticated user's own verified address.
   // This previously honoured `body.email`, which let any caller send
-  // HYRISE-branded mail from our verified Resend domain to an arbitrary
+  // ZENVY-branded mail from our verified Resend domain to an arbitrary
   // address — a free phishing relay, and a fast way to get the sending domain
   // blacklisted. Never take a recipient from the request body.
   if (body.sendEmail && jobs.length > 0) {
@@ -84,10 +84,10 @@ export async function POST(request: Request) {
           .map((j) => `<li><a href="${j.url}">${j.title}</a> @ ${j.company} (${j.location})</li>`)
           .join("");
         await resend.emails.send({
-          from: "HYRISE <jobs@HYRISE.app>",
+          from: "ZENVY <jobs@ZENVY.app>",
           to: emailTo,
           subject: `🔍 ${jobs.length} remote jobs matching "${keywords || role}"`,
-          html: `<h2>Your job matches</h2><ul>${listHtml}</ul><p><a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs">View all on HYRISE</a></p>`,
+          html: `<h2>Your job matches</h2><ul>${listHtml}</ul><p><a href="${process.env.NEXT_PUBLIC_APP_URL}/jobs">View all on ZENVY</a></p>`,
         });
       } catch {
         // Email failure is non-fatal

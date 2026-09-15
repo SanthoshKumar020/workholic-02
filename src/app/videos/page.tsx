@@ -5,7 +5,7 @@ import { VideosClient } from "@/components/VideosClient";
 import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 
-export const metadata = { title: "Learning Videos — HYRISE" };
+export const metadata = { title: "Learning Videos — ZENVY" };
 
 export default async function VideosPage() {
   const profile = await getCurrentProfile();

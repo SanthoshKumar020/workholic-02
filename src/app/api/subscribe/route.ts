@@ -12,7 +12,7 @@ const SUBSCRIBE_DAILY_LIMIT = 3;
  * Stricter than `includes("@")`. This endpoint is anonymous and writes with the
  * service-role key, and /api/cron/newsletter later emails everything in the
  * table from our verified domain — so junk rows here turn the weekly cron into
- * a mailbomb sent in HYRISE's name.
+ * a mailbomb sent in ZENVY's name.
  */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 

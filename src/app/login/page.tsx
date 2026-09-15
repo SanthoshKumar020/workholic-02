@@ -14,7 +14,7 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-md">
         <Link href="/" className="mb-8 flex justify-center">
-          <Image src="/logo.png" alt="HYRISE" width={180} height={58} className="h-14 w-auto object-contain" priority />
+          <Image src="/logo.png" alt="ZENVY" width={180} height={58} className="h-14 w-auto object-contain" priority />
         </Link>
 
         <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">

@@ -3,8 +3,8 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { translations, interpolate, type Locale, type TranslationKey } from "./translations";
 
-export const LANG_COOKIE = "hyrise_lang";
-const LANG_STORAGE_KEY = "hyrise_lang";
+export const LANG_COOKIE = "zenvy_lang";
+const LANG_STORAGE_KEY = "zenvy_lang";
 
 interface LanguageContextValue {
   locale: Locale;
@@ -16,7 +16,7 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 /**
- * Wraps the app. `initialLocale` is read server-side (from the `hyrise_lang`
+ * Wraps the app. `initialLocale` is read server-side (from the `zenvy_lang`
  * cookie) in the root layout and passed in here so the very first paint is
  * already in the right language — no flash of English before a saved Tamil
  * preference kicks in.

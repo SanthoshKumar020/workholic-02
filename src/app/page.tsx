@@ -31,12 +31,12 @@ const FAQS = [
     a: "Your file never leaves your device. The text is extracted in your browser, and only that text is sent to our server to be analysed, then returned to you. If you are not logged in we do not store it at all — it exists only for the length of the request. If you have an account, saved resumes are private to your login and you can delete them at any time. The analysis runs on Groq, which processes outside India; we never sell your data or share it with advertisers or course partners.",
   },
   {
-    q: "How much does HYRISE Pro cost?",
-    a: "HYRISE Student is ₹299, paid once, for 90 days — there is no subscription and nothing renews. It gives you 50 AI actions and 10 mock interviews a month across all 21 tools, plus every resume template, the career mentor, job alerts and the salary coach. The free plan stays free forever.",
+    q: "How much does ZENVY Pro cost?",
+    a: "ZENVY Student is ₹299, paid once, for 90 days — there is no subscription and nothing renews. It gives you 50 AI actions and 10 mock interviews a month across all 21 tools, plus every resume template, the career mentor, job alerts and the salary coach. The free plan stays free forever.",
   },
   {
     q: "Will this guarantee me a job?",
-    a: "No, and be sceptical of any tool that claims otherwise. HYRISE improves how your resume is written and parsed, and helps you prepare for interviews. Hiring decisions are still made by people.",
+    a: "No, and be sceptical of any tool that claims otherwise. ZENVY improves how your resume is written and parsed, and helps you prepare for interviews. Hiring decisions are still made by people.",
   },
   {
     q: "Which file formats can I upload?",

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/plan";
 import { OnboardingClient } from "@/components/OnboardingClient";
 
-export const metadata = { title: "Get Started — HYRISE" };
+export const metadata = { title: "Get Started — ZENVY" };
 
 export default async function OnboardingPage() {
   const profile = await getCurrentProfile();

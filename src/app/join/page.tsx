@@ -8,8 +8,8 @@ import { PageShell } from "@/components/ui/PageShell";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Join your college — HYRISE",
-  description: "Enter the code from your placement cell to unlock HYRISE for your batch.",
+  title: "Join your college — ZENVY",
+  description: "Enter the code from your placement cell to unlock ZENVY for your batch.",
 };
 
 /**

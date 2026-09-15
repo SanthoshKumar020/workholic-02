@@ -13,7 +13,12 @@ import { Resend } from "resend";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+/** Lazily constructed so a missing key fails at request time, never at build. */
+function getResend(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 /**
  * Manual UPI payment approval.
@@ -141,17 +146,17 @@ export async function POST(request: Request) {
   if (!req) return page("<h2>Payment request not found.</h2>", 404);
   if (req.status !== "pending") return page(`<h2>Already ${esc(req.status)}.</h2>`, 409);
 
-  const fromAddress = process.env.EMAIL_FROM ?? "HYRISE <onboarding@resend.dev>";
-  const supportEmail = process.env.SUPPORT_EMAIL ?? "admin@swache.in";
+  const fromAddress = process.env.EMAIL_FROM ?? "ZENVY <onboarding@resend.dev>";
+  const supportEmail = process.env.SUPPORT_EMAIL ?? "kumarsanthosh2743@gmail.com";
 
   // ── Reject ────────────────────────────────────────────────────────────────
   if (action === "reject") {
     await db.from("payment_requests").update({ status: "rejected" }).eq("id", id);
 
-    await resend.emails.send({
+    await getResend().emails.send({
       from: fromAddress,
       to: [req.user_email],
-      subject: "Your HYRISE payment could not be verified",
+      subject: "Your ZENVY payment could not be verified",
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
           <h2 style="color:#dc2626">Payment not verified</h2>
@@ -159,7 +164,7 @@ export async function POST(request: Request) {
           <p>We could not verify your UPI payment with transaction ID <strong>${esc(req.transaction_id)}</strong>.</p>
           <p>Reply to this email or write to <a href="mailto:${esc(supportEmail)}">${esc(supportEmail)}</a>
              with your payment screenshot and we'll sort it out.</p>
-          <p>— HYRISE Team</p>
+          <p>— ZENVY Team</p>
         </div>
       `,
     });
@@ -188,11 +193,11 @@ export async function POST(request: Request) {
 
   await db.from("payment_requests").update({ status: "approved" }).eq("id", id);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hyrise.swache.in";
-  await resend.emails.send({
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zenvy.vercel.app";
+  await getResend().emails.send({
     from: fromAddress,
     to: [req.user_email],
-    subject: "You're now a Pro member — HYRISE",
+    subject: "You're now a Pro member — ZENVY",
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
         <h2 style="color:#16a34a">Welcome to Pro</h2>
@@ -205,7 +210,7 @@ export async function POST(request: Request) {
           Go to dashboard →
         </a>
         <p style="color:#64748b;font-size:14px">Transaction ID: ${esc(req.transaction_id)}</p>
-        <p>— HYRISE Team</p>
+        <p>— ZENVY Team</p>
       </div>
     `,
   });

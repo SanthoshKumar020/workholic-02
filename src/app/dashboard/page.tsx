@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Dashboard — HYRISE" };
+export const metadata = { title: "Dashboard — ZENVY" };
 
 /**
  * Tools grouped by the job-hunt stage they belong to.
@@ -152,7 +152,7 @@ export default async function DashboardPage() {
                 </span>
               </div>
               <p className="mt-1.5 text-sm text-white/80">
-                {resumes.length} {resumes.length === 1 ? "resume" : "resumes"} · {sessionCount ?? 0} interview sessions · Powered by Santo square automation
+                {resumes.length} {resumes.length === 1 ? "resume" : "resumes"} · {sessionCount ?? 0} interview sessions · Powered by Santo Square Automation
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -183,7 +183,7 @@ export default async function DashboardPage() {
         {!pro && (
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
             <p className="text-sm text-slate-600">
-              <span className="font-semibold text-slate-800">Is your college a HYRISE partner?</span>{" "}
+              <span className="font-semibold text-slate-800">Is your college a ZENVY partner?</span>{" "}
               Enter your placement cell&apos;s code to unlock everything free.
             </p>
             <Link

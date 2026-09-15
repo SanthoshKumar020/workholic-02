@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * HYRISE 30-day growth content calendar generator.
+ * ZENVY 30-day growth content calendar generator.
  *
- * Outputs a DRAFT posting schedule (social + blog) grounded in HYRISE's real
+ * Outputs a DRAFT posting schedule (social + blog) grounded in ZENVY's real
  * features. Everything is human-reviewed before posting — this script only
  * *drafts*, it never auto-posts spam. Tune the themes array to your niches.
  *
@@ -13,10 +13,10 @@
  * accounts (see README in scripts/). Do NOT mass-DM or scrape contacts.
  */
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://hyrise.swache.in";
-const VIDEO_URL = `${APP_URL}/marketing/hyrise-explainer.mp4`;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://zenvy.vercel.app";
+const VIDEO_URL = `${APP_URL}/marketing/zenvy-explainer.mp4`;
 
-// Themes map to real HYRISE features — keeps content authentic.
+// Themes map to real ZENVY features — keeps content authentic.
 const FEATURES = [
   { name: "ATS Score Checker", hook: "Recruiters reject 75% of resumes before a human reads them. Check your ATS score free in 10 seconds.", link: "/#ats" },
   { name: "AI Resume Builder", hook: "Turn 'responsible for reports' into 'Owned weekly reporting that cut review time 30%.'", link: "/builder" },
@@ -76,7 +76,7 @@ const cal = buildCalendar();
 if (process.argv.includes("--json")) {
   console.log(JSON.stringify(cal, null, 2));
 } else {
-  console.log(`\n📅 HYRISE 30-day growth calendar (starts ${cal[0].date})`);
+  console.log(`\n📅 ZENVY 30-day growth calendar (starts ${cal[0].date})`);
   console.log("─".repeat(70));
   for (const c of cal) {
     console.log(`${String(c.day).padStart(2)} ${c.weekday}  ${c.type.padEnd(16)} ${c.asset}`);

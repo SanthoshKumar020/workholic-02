@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 
-export const metadata = { title: "Outreach Generator — HYRISE" };
+export const metadata = { title: "Outreach Generator — ZENVY" };
 export const dynamic = "force-dynamic";
 
 export default async function OutreachPage() {

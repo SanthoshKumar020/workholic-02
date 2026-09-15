@@ -135,7 +135,7 @@ function buildEmailHtml(
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;margin:0;padding:24px">
   <div style="max-width:600px;margin:0 auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
     <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:28px 32px">
-      <p style="margin:0;font-size:22px;font-weight:800;color:white">HYRISE Jobs</p>
+      <p style="margin:0;font-size:22px;font-weight:800;color:white">ZENVY Jobs</p>
       <p style="margin:6px 0 0 0;font-size:14px;color:#c7d2fe">Your ${send_time} IST daily alert · ${jobs.length} new ${role || "jobs"} found</p>
     </div>
     <div style="padding:24px 32px">
@@ -148,7 +148,7 @@ function buildEmailHtml(
         </a>
       </div>
       <p style="margin-top:24px;font-size:11px;color:#94a3b8;text-align:center">
-        You're receiving this because you enabled daily job alerts on HYRISE.<br>
+        You're receiving this because you enabled daily job alerts on ZENVY.<br>
         <a href="${appUrl}/jobs" style="color:#6366f1">Manage alert settings</a>
       </p>
     </div>
@@ -170,7 +170,7 @@ export async function GET(request: Request) {
 
   const supabase = createAdminClient();
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
 
   // Find the current IST hour slot (e.g. "09:00")
   const istHour = currentISTHour();
@@ -195,7 +195,7 @@ export async function GET(request: Request) {
       // Resolve the recipient from the PROFILE, not from the alert row.
       // `job_alerts.email` is writable by the user under a row-level-only RLS
       // policy, so a user could point their alert at any address and have us
-      // deliver HYRISE-branded mail there daily.
+      // deliver ZENVY-branded mail there daily.
       const { data: owner } = await supabase
         .from("profiles")
         .select("email")
@@ -214,7 +214,7 @@ export async function GET(request: Request) {
       const html = buildEmailHtml(jobs, alert.role ?? alert.keywords ?? "", appUrl, istHour);
 
       await resend.emails.send({
-        from: "HYRISE Jobs <jobs@hyrise.swache.in>",
+        from: "ZENVY Jobs <jobs@zenvy.vercel.app>",
         to: recipient,
         subject: `🔍 ${jobs.length} ${alert.role || "job"} listings — your ${istHour} IST alert`,
         html,

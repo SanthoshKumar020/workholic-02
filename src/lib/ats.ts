@@ -233,7 +233,7 @@ export function reportEmailHtml(report: AtsReport, opts: { appUrl: string; unsub
       }
 
       <p style="margin:28px 0 0;font-size:12px;line-height:1.6;color:#94a3b8">
-        HYRISE improves how your resume is written and parsed. Hiring decisions are still made by people — be sceptical of anyone who promises otherwise.
+        ZENVY improves how your resume is written and parsed. Hiring decisions are still made by people — be sceptical of anyone who promises otherwise.
         ${opts.unsubscribeUrl ? `<br><a href="${opts.unsubscribeUrl}" style="color:#94a3b8">Unsubscribe</a>` : ""}
       </p>
     </td></tr>

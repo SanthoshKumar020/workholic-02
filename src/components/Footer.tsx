@@ -61,7 +61,7 @@ export function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center group">
-              <Image src="/logo.png" alt="HYRISE" width={120} height={40} className="h-9 w-auto object-contain" />
+              <Image src="/logo.png" alt="ZENVY" width={120} height={40} className="h-9 w-auto object-contain" />
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
@@ -98,7 +98,7 @@ export function Footer() {
                 <p className="text-[10px] font-medium uppercase tracking-widest text-brand-500">
                   {t("footer_product_by")}
                 </p>
-                <p className="text-sm font-bold text-brand-800">Santo square automation</p>
+                <p className="text-sm font-bold text-brand-800">Santo Square Automation</p>
               </div>
             </div>
           </div>
@@ -224,7 +224,7 @@ export function Footer() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-slate-400 sm:flex-row">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="font-medium text-slate-500">Santo square automation</span>. {t("footer_rights")}
+            <span className="font-medium text-slate-500">Santo Square Automation</span>. {t("footer_rights")}
           </p>
           {/* CIN display is a statutory requirement for an Indian company
               under s.12(3)(c) of the Companies Act 2013, not an optional
@@ -233,8 +233,8 @@ export function Footer() {
               registered) in Vercel; both are public information, so they are
               safe as NEXT_PUBLIC_ vars. */}
           <p className="text-center">
-            <a href="mailto:admin@swache.in" className="text-slate-500 hover:text-brand-600 hover:underline">
-              admin@swache.in
+            <a href="mailto:kumarsanthosh2743@gmail.com" className="text-slate-500 hover:text-brand-600 hover:underline">
+              kumarsanthosh2743@gmail.com
             </a>
             {process.env.NEXT_PUBLIC_COMPANY_CIN && (
               <> · CIN: {process.env.NEXT_PUBLIC_COMPANY_CIN}</>

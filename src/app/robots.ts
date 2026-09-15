@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://hyrise.swache.in/sitemap.xml",
+    sitemap: "https://zenvy.vercel.app/sitemap.xml",
   };
 }

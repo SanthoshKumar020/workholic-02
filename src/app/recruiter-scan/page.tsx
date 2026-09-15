@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { PageShell } from "@/components/ui/PageShell";
 import { ProGate } from "@/components/ui/ProGate";
 
-export const metadata = { title: "Recruiter Scan — HYRISE" };
+export const metadata = { title: "Recruiter Scan — ZENVY" };
 
 export default async function RecruiterScanPage() {
   const profile = await getCurrentProfile();

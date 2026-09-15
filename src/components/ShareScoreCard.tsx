@@ -132,7 +132,7 @@ export function ShareScoreCard({
 
         <a
           href={imageUrl}
-          download={`hyrise-ats-score-${score}.png`}
+          download={`zenvy-ats-score-${score}.png`}
           onClick={() => track("share_clicked", { channel: "download_image", source })}
           className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
         >

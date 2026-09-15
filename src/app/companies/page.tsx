@@ -11,7 +11,7 @@ import {
 } from "@/lib/company-data";
 
 export const metadata: Metadata = {
-  title: "Company Interview Questions & Process — India 2026 | HYRISE",
+  title: "Company Interview Questions & Process — India 2026 | ZENVY",
   description:
     "Interview process, rounds, difficulty and prep timeline for TCS, Infosys, Wipro, Accenture, Cognizant, Capgemini, Flipkart, Swiggy, Razorpay, CRED, Google, Amazon, Microsoft and Meta.",
   keywords: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/companies" },
   openGraph: {
-    title: "Company Interview Questions & Process — India 2026 | HYRISE",
+    title: "Company Interview Questions & Process — India 2026 | ZENVY",
     description:
       "Round-by-round interview processes, difficulty and prep timelines for 14 companies that hire heavily in India.",
     url: "/companies",
@@ -41,7 +41,7 @@ export default function CompaniesHub() {
       "@type": "ListItem",
       position: i + 1,
       name: `${c.name} interview questions and process`,
-      url: `https://hyrise.swache.in/companies/${c.id}`,
+      url: `https://zenvy.vercel.app/companies/${c.id}`,
     })),
   };
 

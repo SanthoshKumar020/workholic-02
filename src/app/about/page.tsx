@@ -4,8 +4,8 @@ import { PageShell } from "@/components/ui/PageShell";
 import Link from "next/link";
 
 export const metadata = {
-  title: "About — HYRISE",
-  description: "Learn about HYRISE — the AI career platform built to help job seekers in India land their next job faster.",
+  title: "About — ZENVY",
+  description: "Learn about ZENVY — the AI career platform built to help job seekers in India land their next job faster.",
 };
 
 export default function AboutPage() {
@@ -21,7 +21,7 @@ export default function AboutPage() {
             Built for job seekers who are serious about landing their next role
           </h1>
           <p className="mt-3 text-slate-600 leading-relaxed">
-            HYRISE is an AI-powered career platform that puts enterprise-level resume tools in the
+            ZENVY is an AI-powered career platform that puts enterprise-level resume tools in the
             hands of every job seeker — for free to start, and at a price that makes sense.
           </p>
         </div>
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <div className="space-y-10 text-sm leading-relaxed text-slate-700">
 
           <section>
-            <h2 className="text-lg font-bold text-slate-900">Why we built HYRISE</h2>
+            <h2 className="text-lg font-bold text-slate-900">Why we built ZENVY</h2>
             <p className="mt-3">
               Most job seekers spend hours tweaking their resume, writing cover letters, and
               preparing for interviews — with little guidance on whether any of it is working.
@@ -37,7 +37,7 @@ export default function AboutPage() {
               reads them, and most people don&apos;t even know their resume is being filtered.
             </p>
             <p className="mt-3">
-              HYRISE fixes that. We use the Groq AI API (llama-3.3-70b) to score your resume
+              ZENVY fixes that. We use the Groq AI API (llama-3.3-70b) to score your resume
               against ATS systems, rewrite it with stronger language, match it to specific job
               descriptions, and coach you through mock interviews — all in one place.
             </p>
@@ -46,9 +46,9 @@ export default function AboutPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">The team</h2>
             <p className="mt-3">
-              HYRISE is built by <strong>Santo square automation</strong>, a software product
+              ZENVY is built by <strong>Santo Square Automation</strong>, a software product
               company based in India. We build tools that make complex workflows simple and
-              accessible — HYRISE is our flagship product for job seekers.
+              accessible — ZENVY is our flagship product for job seekers.
             </p>
           </section>
 
@@ -69,8 +69,8 @@ export default function AboutPage() {
             </p>
             <p className="mt-2">
               Email:{" "}
-              <a href="mailto:admin@swache.in" className="font-semibold text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="font-semibold text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>
             </p>
             <p className="mt-1">Or use the{" "}

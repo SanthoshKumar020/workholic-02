@@ -1,7 +1,7 @@
-// ── HYRISE social presence ─────────────────────────────────────────────────
+// ── ZENVY social presence ─────────────────────────────────────────────────
 // Each icon appears in the footer ONLY when its env var is set. That default
 // is deliberate: these previously fell back to guessed handles
-// (linkedin.com/company/hyrise, x.com/hyrise, …). If an account doesn't exist,
+// (linkedin.com/company/zenvy, x.com/zenvy, …). If an account doesn't exist,
 // a visitor clicking it lands on a 404 — or on a stranger's profile with your
 // brand name. An absent icon costs nothing; a dead one costs trust.
 //
@@ -28,10 +28,10 @@ export const SOCIAL_META: Record<
   SocialKey,
   { label: string; handle: string }
 > = {
-  linkedin: { label: "LinkedIn", handle: "linkedin.com/company/hyrise" },
-  twitter: { label: "X (Twitter)", handle: "x.com/hyrise" },
-  instagram: { label: "Instagram", handle: "instagram.com/hyrise.careers" },
-  youtube: { label: "YouTube", handle: "youtube.com/@hyrise" },
+  linkedin: { label: "LinkedIn", handle: "linkedin.com/company/zenvy" },
+  twitter: { label: "X (Twitter)", handle: "x.com/zenvy" },
+  instagram: { label: "Instagram", handle: "instagram.com/zenvy.careers" },
+  youtube: { label: "YouTube", handle: "youtube.com/@zenvy" },
   whatsapp: { label: "WhatsApp", handle: "wa.me" },
 };
 

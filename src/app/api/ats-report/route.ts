@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
  *
  * ── Why this is the highest-leverage endpoint on the site ───────────────────
  * The ATS result screen is the most motivated a stranger will ever be about
- * HYRISE: they have just been told a number about themselves and want to know
+ * ZENVY: they have just been told a number about themselves and want to know
  * why. Before this existed, that moment ended in a dead end and the person was
  * gone with no way to reach them. This is the only place we convert attention
  * into a relationship.
@@ -25,7 +25,7 @@ export const dynamic = "force-dynamic";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 const CAPTURE_DAILY_LIMIT = 5;
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
 
 export async function POST(request: Request) {
   const { allowed, retryAfter } = await rateLimit(clientKey(request, "ats-report"), CAPTURE_DAILY_LIMIT);

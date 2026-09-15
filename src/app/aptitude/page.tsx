@@ -9,7 +9,7 @@ import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Aptitude Prep — HYRISE",
+  title: "Aptitude Prep — ZENVY",
   description: "Master aptitude, speed maths tricks, and logical reasoning with AI-powered lessons and quizzes.",
 };
 export const dynamic = "force-dynamic";

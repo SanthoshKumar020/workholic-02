@@ -8,7 +8,12 @@ import { Resend } from "resend";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+/** Lazily constructed so a missing key fails at request time, never at build. */
+function getResend(): Resend {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 /**
  * Escape user-controlled values before interpolating them into the admin
@@ -74,7 +79,7 @@ export async function POST(request: Request) {
   // reject. Both links now open a confirmation page rather than acting on GET.
   let approveUrl: string;
   let rejectUrl: string;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hyrise.swache.in";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zenvy.vercel.app";
   try {
     approveUrl = `${siteUrl}/api/upi-approve?id=${paymentReq.id}&action=approve&token=${makeApproveToken(paymentReq.id, "approve")}`;
     rejectUrl = `${siteUrl}/api/upi-approve?id=${paymentReq.id}&action=reject&token=${makeApproveToken(paymentReq.id, "reject")}`;
@@ -89,20 +94,20 @@ export async function POST(request: Request) {
 
   // Send admin notification email
   const adminEmail =
-    (process.env.SUPER_ADMIN_EMAILS ?? "").split(",")[0].trim() || "admin@swache.in";
-  await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "HYRISE <onboarding@resend.dev>",
+    (process.env.SUPER_ADMIN_EMAILS ?? "").split(",")[0].trim() || "kumarsanthosh2743@gmail.com";
+  await getResend().emails.send({
+    from: process.env.EMAIL_FROM ?? "ZENVY <onboarding@resend.dev>",
     to: [adminEmail],
     subject: `💰 New UPI Payment — ${fullName} (${plan})`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
         <h2 style="color:#1e293b;margin-bottom:4px">New UPI Payment Request</h2>
-        <p style="color:#64748b;margin-top:0">Someone paid for HYRISE Pro. Verify and approve below.</p>
+        <p style="color:#64748b;margin-top:0">Someone paid for ZENVY Pro. Verify and approve below.</p>
 
         <table style="width:100%;border-collapse:collapse;margin:24px 0;background:#f8fafc;border-radius:12px;overflow:hidden">
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Name</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${esc(fullName)}</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Email</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">${esc(user.email)}</td></tr>
-          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Plan</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">HYRISE Student — ₹${STUDENT_PLAN.price} for ${STUDENT_PLAN.durationDays} days</td></tr>
+          <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Plan</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">ZENVY Student — ₹${STUDENT_PLAN.price} for ${STUDENT_PLAN.durationDays} days</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0">Amount</td><td style="padding:12px 16px;color:#1e293b;border-bottom:1px solid #e2e8f0">₹${esc(amount)}</td></tr>
           <tr><td style="padding:12px 16px;font-weight:600;color:#475569">Transaction ID</td><td style="padding:12px 16px;color:#1e293b;font-family:monospace;font-size:15px;font-weight:700">${esc(transactionId)}</td></tr>
         </table>

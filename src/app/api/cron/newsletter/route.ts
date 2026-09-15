@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Weekly HYRISE newsletter — runs on Vercel Cron (see vercel.json).
+ * Weekly ZENVY newsletter — runs on Vercel Cron (see vercel.json).
  *
  * What it does (all legitimate, opt-in):
  *  - Reads subscribers from `email_subscribers` (people who used the homepage
@@ -27,14 +27,14 @@ interface Subscriber {
 }
 
 function buildNewsletterHtml(post: (typeof BLOG_POSTS)[number], appUrl: string) {
-  const videoUrl = `${appUrl}/marketing/hyrise-explainer.mp4`;
+  const videoUrl = `${appUrl}/marketing/zenvy-explainer.mp4`;
   return `
   <!DOCTYPE html>
   <html>
   <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;margin:0;padding:24px">
     <div style="max-width:600px;margin:0 auto;background:white;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
       <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:28px 32px">
-        <p style="margin:0;font-size:22px;font-weight:800;color:white">HYRISE</p>
+        <p style="margin:0;font-size:22px;font-weight:800;color:white">ZENVY</p>
         <p style="margin:6px 0 0 0;font-size:14px;color:#c7d2fe">Your weekly career boost</p>
       </div>
       <div style="padding:24px 32px">
@@ -43,15 +43,15 @@ function buildNewsletterHtml(post: (typeof BLOG_POSTS)[number], appUrl: string) 
         <p style="margin:8px 0 16px 0;font-size:14px;color:#475569">${post.description}</p>
         <a href="${appUrl}/blog/${post.slug}" style="display:inline-block;background:#4f46e5;color:white;padding:10px 24px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none">Read the guide →</a>
 
-        <p style="margin:28px 0 8px 0;font-size:15px;font-weight:700;color:#1e293b">🎥 Watch: 30-second HYRISE explainer</p>
+        <p style="margin:28px 0 8px 0;font-size:15px;font-weight:700;color:#1e293b">🎥 Watch: 30-second ZENVY explainer</p>
         <a href="${videoUrl}" style="color:#6366f1;font-size:14px">▶ Play the video</a>
 
         <div style="margin-top:24px;padding:16px;background:#f8fafc;border-radius:12px">
-          <p style="margin:0;font-size:13px;color:#475569"><strong>Know someone job-hunting?</strong> Forward this email — sharing HYRISE helps more people land interviews. 💜</p>
+          <p style="margin:0;font-size:13px;color:#475569"><strong>Know someone job-hunting?</strong> Forward this email — sharing ZENVY helps more people land interviews. 💜</p>
         </div>
 
         <p style="margin-top:24px;font-size:11px;color:#94a3b8;text-align:center">
-          You're receiving this because you subscribed to HYRISE career tips.<br>
+          You're receiving this because you subscribed to ZENVY career tips.<br>
           <a href="${appUrl}/unsubscribe?email={{EMAIL}}" style="color:#6366f1">Unsubscribe</a>
         </p>
       </div>
@@ -71,7 +71,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "RESEND_API_KEY not configured." }, { status: 500 });
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
   const supabase = createAdminClient();
 
   // Latest blog post (by date desc)
@@ -100,7 +100,7 @@ export async function GET(request: Request) {
       const personalized = html.replace("{{EMAIL}}", encodeURIComponent(s.email));
       await sendEmail({
         to: s.email,
-        subject: `📈 ${latest.title} — your HYRISE weekly`,
+        subject: `📈 ${latest.title} — your ZENVY weekly`,
         html: personalized,
       });
       // mark sent

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * HYRISE SEO / health monitor (standalone, no DB needed).
+ * ZENVY SEO / health monitor (standalone, no DB needed).
  *
  * What it does:
  *  - Fetches your sitemap.xml and checks every URL returns HTTP 200
@@ -18,7 +18,7 @@
  * content calendar (scripts/content-calendar.mjs) to actually earn users.
  */
 
-const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://hyrise.swache.in";
+const BASE = process.env.NEXT_PUBLIC_APP_URL || "https://zenvy.vercel.app";
 
 async function fetchSitemap() {
   const res = await fetch(`${BASE}/sitemap.xml`);
@@ -55,7 +55,7 @@ async function googleIndexCount() {
     const domain = new URL(BASE).hostname;
     const r = await fetch(
       `https://www.google.com/search?q=site:${domain}&num=1`,
-      { headers: { "User-Agent": "Mozilla/5.0 (compatible; HYRISEBot/1.0)" } }
+      { headers: { "User-Agent": "Mozilla/5.0 (compatible; ZENVYBot/1.0)" } }
     );
     const html = await r.text();
     const m = html.match(/About\s+([\d,]+)\s+results/i) || html.match(/([\d,]+)\s+results/i);
@@ -66,7 +66,7 @@ async function googleIndexCount() {
 }
 
 async function main() {
-  console.log(`\n🔎 HYRISE SEO monitor — ${new Date().toISOString()}`);
+  console.log(`\n🔎 ZENVY SEO monitor — ${new Date().toISOString()}`);
   console.log(`Base: ${BASE}\n`);
 
   let urls = [];

@@ -1,6 +1,6 @@
-# HYRISE — full product analysis
+# ZENVY — full product analysis
 
-_July 2026. hyrise.swache.in · Santo square automation_
+_July 2026. zenvy.vercel.app · Santo Square Automation_
 
 Written from the codebase, the live site, and a session's worth of auditing —
 security, UI/UX, gamification and growth. Where I found something broken I've

@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 
-export const metadata = { title: "Mock Interview — HYRISE" };
+export const metadata = { title: "Mock Interview — ZENVY" };
 
 export default async function InterviewPage() {
   const profile = await getCurrentProfile();

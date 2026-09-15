@@ -7,7 +7,7 @@ import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export const metadata = { title: "DSA Adventure — HYRISE" };
+export const metadata = { title: "DSA Adventure — ZENVY" };
 export const dynamic = "force-dynamic";
 
 export default async function DSAMapPage() {

@@ -28,7 +28,7 @@ export const dynamic = "force-dynamic";
  * the internet's emails go unread.
  */
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
 
 /** stage → how many days after capture this email goes out. */
 const SCHEDULE: Record<number, number> = { 1: 2, 2: 5, 3: 10 };
@@ -51,7 +51,7 @@ const shell = (email: string, inner: string) => `
     <tr><td style="color:#334155;font-size:15px;line-height:1.7">
       ${inner}
       <p style="margin:28px 0 0;font-size:11px;line-height:1.6;color:#94a3b8">
-        You're getting this because you ran a free ATS check on HYRISE.
+        You're getting this because you ran a free ATS check on ZENVY.
         <a href="${APP_URL}/api/unsubscribe?email=${encodeURIComponent(email)}" style="color:#94a3b8">Unsubscribe</a>.
       </p>
     </td></tr>
@@ -129,13 +129,13 @@ function dayFive(lead: Lead): { subject: string; html: string } {
 
 function dayTen(lead: Lead): { subject: string; html: string } {
   return {
-    subject: `HYRISE Student — ${STUDENT_PLAN.priceLabel} for ${STUDENT_PLAN.durationDays} days`,
+    subject: `ZENVY Student — ${STUDENT_PLAN.priceLabel} for ${STUDENT_PLAN.durationDays} days`,
     html: shell(
       lead.email,
       `<p>Hi,</p>
        <p>You ran an ATS check with us ten days ago. If it was useful, here is what the paid plan adds — and if it wasn't, ignore this and there'll be nothing further.</p>
        <p style="margin:20px 0;padding:18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px">
-         <strong style="color:#0f172a;font-size:16px">HYRISE Student — ${STUDENT_PLAN.priceLabel}</strong>
+         <strong style="color:#0f172a;font-size:16px">ZENVY Student — ${STUDENT_PLAN.priceLabel}</strong>
          <span style="color:#64748b"> · one payment, ${STUDENT_PLAN.durationDays} days, no auto-renewal</span>
          <br><br>
          <span style="color:#475569">

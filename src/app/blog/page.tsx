@@ -6,7 +6,7 @@ import { PageShell } from "@/components/ui/PageShell";
 import { sortedPosts } from "@/lib/blog/posts";
 
 export const metadata: Metadata = {
-  title: "Career Blog — Resume, ATS & Interview Guides | HYRISE",
+  title: "Career Blog — Resume, ATS & Interview Guides | ZENVY",
   description:
     "Practical, no-fluff guides on beating the ATS, formatting your resume, writing cover letters, and acing interviews.",
   alternates: { canonical: "/blog" },
@@ -29,7 +29,7 @@ export default function BlogIndexPage() {
       <PageShell width="default">
         <header className="mb-10 text-center">
           <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-            HYRISE Blog
+            ZENVY Blog
           </span>
           <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             Career guides that actually get you hired

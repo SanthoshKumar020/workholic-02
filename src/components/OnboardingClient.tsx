@@ -107,7 +107,7 @@ export function OnboardingClient({ profile }: { profile: Profile }) {
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
           <div className="mb-6 flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-gradient text-white font-bold text-sm">H</div>
-            <span className="font-bold text-slate-900">HYRISE</span>
+            <span className="font-bold text-slate-900">ZENVY</span>
           </div>
 
           <h1 className="text-2xl font-bold text-slate-900">Let&apos;s personalise your experience</h1>

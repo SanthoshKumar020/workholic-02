@@ -106,7 +106,7 @@ export function BillingClient({ isPro, planExpiresAt }: { isPro: boolean; planEx
             </span>
           </div>
           <a
-            href="mailto:admin@swache.in?subject=HYRISE%20Student%20—%20question%20about%20my%20plan"
+            href="mailto:kumarsanthosh2743@gmail.com?subject=ZENVY%20Student%20—%20question%20about%20my%20plan"
             className="mt-5 flex w-full items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
           >
             Question about your plan?
@@ -121,7 +121,7 @@ export function BillingClient({ isPro, planExpiresAt }: { isPro: boolean; planEx
             <div className="absolute inset-x-0 top-0 h-1 bg-brand-gradient" />
 
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-slate-900">HYRISE Student</h2>
+              <h2 className="text-xl font-bold text-slate-900">ZENVY Student</h2>
               <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-white">
                 One payment
               </span>

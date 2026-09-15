@@ -6,7 +6,7 @@ import { SEO_ROLES, roleCategories } from "@/lib/seo/roles";
 import { COMPANIES } from "@/lib/company-data";
 
 export const metadata: Metadata = {
-  title: "Mock Interview Questions by Role | HYRISE",
+  title: "Mock Interview Questions by Role | ZENVY",
   description: `Common interview questions for ${SEO_ROLES.length} roles — behavioral, technical, and role-specific. Practice with a free AI mock interview that scores your answers.`,
   alternates: { canonical: "/interview-questions" },
 };

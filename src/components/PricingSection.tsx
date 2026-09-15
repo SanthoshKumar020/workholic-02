@@ -161,7 +161,7 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
         <div className="mx-auto mt-8 max-w-3xl rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5 text-center">
           <p className="text-sm text-slate-600">
             <strong className="text-slate-900">Are you a placement officer?</strong> Institutions
-            license HYRISE for a whole batch, and students pay nothing.{" "}
+            license ZENVY for a whole batch, and students pay nothing.{" "}
             <Link href="/for-colleges" className="font-semibold text-brand-600 hover:underline">
               See pricing for colleges →
             </Link>
@@ -197,8 +197,8 @@ export function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
 
         <p className="mx-auto mt-10 max-w-xl text-center text-xs text-slate-400">
-          HYRISE by{" "}
-          <span className="font-semibold text-slate-500">Santo square automation</span>. We help
+          ZENVY by{" "}
+          <span className="font-semibold text-slate-500">Santo Square Automation</span>. We help
           you improve your resume — we do not guarantee interviews, offers, or employment outcomes.
         </p>
       </div>

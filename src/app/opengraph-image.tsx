@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "HYRISE — Your complete AI career platform";
+export const alt = "ZENVY — Your complete AI career platform";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -44,7 +44,7 @@ export default function OpengraphImage() {
             H
           </div>
           <div style={{ fontSize: "34px", fontWeight: 800, letterSpacing: "-1px" }}>
-            HYRISE
+            ZENVY
           </div>
         </div>
 

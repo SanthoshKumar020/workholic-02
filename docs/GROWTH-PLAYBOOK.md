@@ -1,6 +1,6 @@
-# HYRISE — Zero-Budget Growth Playbook
+# ZENVY — Zero-Budget Growth Playbook
 
-_Written July 2026. Assumes: live at hyrise.swache.in, near-zero traffic, no ad spend._
+_Written July 2026. Assumes: live at zenvy.vercel.app, near-zero traffic, no ad spend._
 
 ---
 
@@ -42,7 +42,7 @@ Supabase SQL editor before deploying, or `/api/share` will 500.
 1. Create a **Google Analytics 4** property → put the `G-XXXXXXXXXX` ID in
    `NEXT_PUBLIC_GA_ID` on Vercel → redeploy.
 2. Verify the site in **Google Search Console** → put the code in
-   `NEXT_PUBLIC_GOOGLE_VERIFICATION` → submit `https://hyrise.swache.in/sitemap.xml`.
+   `NEXT_PUBLIC_GOOGLE_VERIFICATION` → submit `https://zenvy.vercel.app/sitemap.xml`.
 3. Open the site in an incognito window, upload a resume, and confirm you get a
    score without logging in. This is your entire funnel — test it weekly.
 4. Run a **PageSpeed Insights** check on the homepage. Anything under 70 on
@@ -175,7 +175,7 @@ carries UTM tags so you can measure it.
 
 - Join 20–30 Telegram/WhatsApp job-alert groups (search "off campus drive",
   "fresher jobs India"). Be a helpful member for two weeks before you ever
-  mention HYRISE.
+  mention ZENVY.
 - Make the score card worth forwarding: a person who scored 78/100 should get a
   message their friends will actually open.
 - **Highest-ROI product change in this document:** turn the ATS result into a

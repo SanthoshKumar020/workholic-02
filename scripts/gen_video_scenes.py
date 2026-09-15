@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate branded HYRISE marketing scenes (PNG) for the explainer video."""
+"""Generate branded ZENVY marketing scenes (PNG) for the explainer video."""
 import os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
@@ -67,7 +67,7 @@ for (bx, by, br, col) in [(300, 250, 280, (255,255,255,40)), (1600, 850, 320, (2
     blur = blob.filter(ImageFilter.GaussianBlur(60)).convert("RGB")
     im = Image.blend(im, blur, 1.0)
 logo(d, W//2, 300, 1.6)
-centered(d, "HYRISE", 470, 96, WHITE, bold=True)
+centered(d, "ZENVY", 470, 96, WHITE, bold=True)
 centered(d, "Your complete AI career platform", 600, 52, LIGHT, bold=False)
 centered(d, "Resume scoring · Mock interviews · Job matching", 680, 34, (200,200,255), bold=False)
 im.save(os.path.join(OUT, "scene1_hero.png"))
@@ -133,7 +133,7 @@ centered(d, "Your next job starts here.", 560, 72, WHITE, bold=True)
 bw, bh = 460, 96; bx, by = (W-bw)//2, 690
 d.rounded_rectangle([bx, by, bx+bw, by+bh], radius=48, fill=WHITE)
 centered(d, "Start free →", by+30, 44, BRAND, bold=True)
-centered(d, "hyrise.swache.in", 860, 40, LIGHT, bold=False)
+centered(d, "zenvy.vercel.app", 860, 40, LIGHT, bold=False)
 im.save(os.path.join(OUT, "scene5_cta.png"))
 
 print("scenes written to", os.path.abspath(OUT))

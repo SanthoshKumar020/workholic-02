@@ -4,10 +4,10 @@ import { Footer } from "@/components/Footer";
 import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata = {
-  title: "Affiliate Disclosure — HYRISE",
+  title: "Affiliate Disclosure — ZENVY",
   description:
-    "How HYRISE handles partner links: what we earn, how recommendations are chosen, and what we will never do.",
-  alternates: { canonical: "https://hyrise.swache.in/affiliate-disclosure" },
+    "How ZENVY handles partner links: what we earn, how recommendations are chosen, and what we will never do.",
+  alternates: { canonical: "https://zenvy.vercel.app/affiliate-disclosure" },
 };
 
 /**
@@ -30,7 +30,7 @@ export default function AffiliateDisclosurePage() {
 
         <div className="mt-8 space-y-6 text-[15px] leading-relaxed text-slate-700">
           <p>
-            Some links on HYRISE are partner (affiliate) links. If you click one and buy
+            Some links on ZENVY are partner (affiliate) links. If you click one and buy
             something, we may receive a commission from that company. You pay exactly the same
             price either way — a partner link never costs you more, and never unlocks a worse
             deal than going direct.
@@ -86,7 +86,7 @@ export default function AffiliateDisclosurePage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">Why we do this at all</h2>
             <p className="mt-2">
-              HYRISE is free to start and Pro costs a small monthly amount. Partner commissions
+              ZENVY is free to start and Pro costs a small monthly amount. Partner commissions
               help keep the free tier genuinely useful rather than a trial stub. We would rather
               tell you plainly that we earn from some links than quietly bury it — if a
               recommendation ever feels like an advert rather than help, that&apos;s a bug and
@@ -98,13 +98,13 @@ export default function AffiliateDisclosurePage() {
             <h2 className="text-lg font-bold text-slate-900">Questions</h2>
             <p className="mt-2">
               Write to{" "}
-              <a href="mailto:admin@swache.in" className="font-semibold text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="font-semibold text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>
               .
             </p>
             <p className="mt-4 text-sm text-slate-500">
-              HYRISE is operated by Santo square automation, India.
+              ZENVY is operated by Santo Square Automation, India.
             </p>
           </section>
         </div>

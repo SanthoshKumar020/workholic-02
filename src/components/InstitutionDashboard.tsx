@@ -269,7 +269,7 @@ export function InstitutionDashboard() {
           </div>
 
           <p className="mt-6 text-xs leading-relaxed text-slate-400">
-            All figures are batch aggregates. HYRISE does not show individual student scores,
+            All figures are batch aggregates. ZENVY does not show individual student scores,
             resumes, or interview feedback to institutions — students share that data with us for
             their own career preparation, not for assessment.
           </p>

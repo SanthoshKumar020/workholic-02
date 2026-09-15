@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { PageShell } from "@/components/ui/PageShell";
 import { ProGate } from "@/components/ui/ProGate";
 
-export const metadata = { title: "Communication Coach — HYRISE" };
+export const metadata = { title: "Communication Coach — ZENVY" };
 
 export default async function CommunicationPage() {
   const profile = await getCurrentProfile();

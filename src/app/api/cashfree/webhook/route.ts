@@ -85,7 +85,7 @@ export async function POST(request: Request) {
         .single();
 
       if (profile?.email) {
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
         const until = expiresAt.toLocaleDateString("en-IN", {
           timeZone: "Asia/Kolkata",
           day: "numeric",
@@ -94,7 +94,7 @@ export async function POST(request: Request) {
         });
         await sendEmail({
           to: profile.email,
-          subject: "You're on HYRISE Student 🎉",
+          subject: "You're on ZENVY Student 🎉",
           // State the allowance and the end date up front. Both are things the
           // customer will otherwise discover by surprise, and a surprise about
           // what you paid for is a refund request.
@@ -102,7 +102,7 @@ export async function POST(request: Request) {
             <div style="font-family:sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#334155;line-height:1.7">
               <p>Your payment went through — all 21 tools are unlocked.</p>
               <p style="margin:20px 0;padding:16px 18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px">
-                <strong style="color:#0f172a">HYRISE Student</strong><br>
+                <strong style="color:#0f172a">ZENVY Student</strong><br>
                 ${STUDENT_PLAN.aiActionsPerMonth} AI actions and ${STUDENT_PLAN.mockInterviewsPerMonth} mock interviews a month<br>
                 Runs until <strong>${until}</strong> — nothing renews, and there is nothing to cancel.
               </p>

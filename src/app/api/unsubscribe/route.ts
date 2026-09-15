@@ -31,7 +31,7 @@ export async function GET(request: Request) {
       `<!DOCTYPE html><html><body style="font-family:sans-serif;text-align:center;padding:64px;color:#0f172a">
          <h2 style="margin-bottom:8px">${title}</h2>
          <p style="color:#64748b">${body}</p>
-         <p style="margin-top:28px"><a href="/" style="color:#4f46e5;font-weight:600">Back to HYRISE</a></p>
+         <p style="margin-top:28px"><a href="/" style="color:#4f46e5;font-weight:600">Back to ZENVY</a></p>
        </body></html>`,
       { headers: { "Content-Type": "text/html" } }
     );
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
   );
   const failed = page(
     "Something went wrong",
-    "Please email admin@swache.in and we'll remove you manually."
+    "Please email kumarsanthosh2743@gmail.com and we'll remove you manually."
   );
 
   const supabase = createAdminClient();

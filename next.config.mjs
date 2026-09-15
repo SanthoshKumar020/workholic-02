@@ -7,7 +7,7 @@ const nextConfig = {
   },
   // Proxy the admin panel (a separate app) under /admin on this same domain.
   // Set ADMIN_ORIGIN in Vercel to the admin deployment's URL, e.g.
-  //   ADMIN_ORIGIN=https://hyrise-admin.vercel.app
+  //   ADMIN_ORIGIN=https://zenvy-admin.vercel.app
   // Until it's set, these rewrites are skipped (no effect locally).
   async rewrites() {
     const adminOrigin = process.env.ADMIN_ORIGIN?.replace(/\/$/, "");

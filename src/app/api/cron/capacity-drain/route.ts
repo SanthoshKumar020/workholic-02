@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
  */
 const BATCH_SIZE = 25;
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
 
 export async function GET(request: Request) {
   const cronSecret = process.env.CRON_SECRET;

@@ -92,7 +92,7 @@ function composeNudge(p: NudgeProfile, away: number, appUrl: string) {
     subject: "Your resume is still waiting",
     heading: "Pick up where you left off",
     body: "Your saved resume is here whenever you want it. A quick ATS re-check takes about 20 seconds and tells you what to fix next.",
-    cta: "Open HYRISE",
+    cta: "Open ZENVY",
     href: `${appUrl}/dashboard`,
   };
 }
@@ -111,7 +111,7 @@ function buildHtml(n: ReturnType<typeof composeNudge>, appUrl: string, userId: s
         <a href="${esc(n.href)}" style="display:inline-block;background:#4f46e5;color:#fff;padding:12px 26px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none">${esc(n.cta)} →</a>
       </div>
       <p style="margin-top:26px;font-size:11px;color:#94a3b8">
-        You're getting this because you have a HYRISE account. We send at most one of these a week.<br>
+        You're getting this because you have a ZENVY account. We send at most one of these a week.<br>
         <a href="${unsubscribe}" style="color:#6366f1">Stop these reminders</a>
       </p>
     </div>
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
 
   const supabase = createAdminClient();
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://hyrise.swache.in";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://zenvy.vercel.app";
 
   const awayCutoff = new Date(Date.now() - MIN_DAYS_AWAY * 86_400_000).toISOString();
   const staleCutoff = new Date(Date.now() - MAX_DAYS_AWAY * 86_400_000).toISOString();
@@ -173,7 +173,7 @@ export async function GET(request: Request) {
     try {
       const nudge = composeNudge(p, away, appUrl);
       await resend.emails.send({
-        from: process.env.EMAIL_FROM ?? "HYRISE <noreply@hyrise.swache.in>",
+        from: process.env.EMAIL_FROM ?? "ZENVY <noreply@zenvy.vercel.app>",
         to: p.email!,
         subject: nudge.subject,
         html: buildHtml(nudge, appUrl, p.id),

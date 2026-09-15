@@ -7,7 +7,7 @@ import { Sparkles } from "lucide-react";
 import { PageShell } from "@/components/ui/PageShell";
 import { ProGate } from "@/components/ui/ProGate";
 
-export const metadata = { title: "Profile Optimizer — HYRISE" };
+export const metadata = { title: "Profile Optimizer — ZENVY" };
 
 export default async function ProfileOptimizerPage() {
   const profile = await getCurrentProfile();

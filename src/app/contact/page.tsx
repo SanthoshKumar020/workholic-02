@@ -5,8 +5,8 @@ import { ContactForm } from "@/components/ContactForm";
 import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata: Metadata = {
-  title: "Contact — HYRISE",
-  description: "Get in touch with the HYRISE team for billing, refund, or feature questions.",
+  title: "Contact — ZENVY",
+  description: "Get in touch with the ZENVY team for billing, refund, or feature questions.",
 };
 
 export default function ContactPage() {
@@ -24,8 +24,8 @@ export default function ContactPage() {
           </p>
           <p className="mt-2 text-sm text-slate-500">
             Prefer email?{" "}
-            <a href="mailto:admin@swache.in" className="font-semibold text-brand-600 hover:underline">
-              admin@swache.in
+            <a href="mailto:kumarsanthosh2743@gmail.com" className="font-semibold text-brand-600 hover:underline">
+              kumarsanthosh2743@gmail.com
             </a>
           </p>
         </div>

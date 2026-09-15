@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Assemble the HYRISE explainer video from scene PNGs + voiceover.
+# Assemble the ZENVY explainer video from scene PNGs + voiceover.
 set -e
 cd "$(dirname "$0")/.."
 SCENES=public/marketing/scenes
 VO=public/marketing/voiceover.mp3
-OUT=public/marketing/hyrise-explainer.mp4
+OUT=public/marketing/zenvy-explainer.mp4
 TMP="public/marketing/.tmp_render"
 rm -rf "$TMP"; mkdir -p "$TMP"
 FONT="/c/Windows/Fonts/arial.ttf"

@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
  * `redirectTo` arrives in a query parameter, so it is attacker-controllable:
  * a link like /login?redirectTo=https://evil.example would otherwise turn our
  * own auth callback into an open redirect, which is a credible phishing
- * primitive ("the link really was hyrise.swache.in"). Anything that isn't a
+ * primitive ("the link really was zenvy.vercel.app"). Anything that isn't a
  * single-slash relative path is discarded.
  */
 function safeRedirectPath(raw: string | null): string | null {

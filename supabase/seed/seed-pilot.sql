@@ -16,7 +16,7 @@
 
 -- ── 1. The college ────────────────────────────────────────────────────────────
 insert into public.institutions (name, slug, contact_email, join_code, seat_limit, expires_at)
-values ('HYRISE Pilot College', 'hyrise-pilot', 'admin@swache.in', 'PILOT-2026', 50,
+values ('ZENVY Pilot College', 'zenvy-pilot', 'kumarsanthosh2743@gmail.com', 'PILOT-2026', 50,
         now() + interval '12 months')
 on conflict (slug) do update
   set join_code  = excluded.join_code,
@@ -68,7 +68,7 @@ select i.id,
             then 'CSE 2026' else 'ECE 2026' end
   from public.institutions i
   cross join auth.users u
- where i.slug = 'hyrise-pilot'
+ where i.slug = 'zenvy-pilot'
    and u.email like '%@pilot.test'
 on conflict (institution_id, user_id) do nothing;
 
@@ -77,15 +77,15 @@ update public.profiles p
    set plan = 'pro'
   from public.institution_members m
  where m.user_id = p.id
-   and m.institution_id = (select id from public.institutions where slug = 'hyrise-pilot');
+   and m.institution_id = (select id from public.institutions where slug = 'zenvy-pilot');
 
 -- ── 4. Make YOURSELF the placement-cell admin ─────────────────────────────────
--- Change the email if your HYRISE login differs.
+-- Change the email if your ZENVY login differs.
 insert into public.institution_members (institution_id, user_id, role, batch_label)
 select i.id, u.id, 'admin', null
   from public.institutions i, auth.users u
- where i.slug = 'hyrise-pilot'
-   and u.email = 'santhosh.k@swache.in'
+ where i.slug = 'zenvy-pilot'
+   and u.email = 'kumarsanthosh2743@gmail.com'
 on conflict (institution_id, user_id) do update set role = 'admin';
 
 -- ── 5. Sample activity so the dashboard isn't empty ───────────────────────────
@@ -131,7 +131,7 @@ notify pgrst, 'reload schema';
 -- Expect 8 students + 1 admin:
 --   select role, count(*) from public.institution_members m
 --     join public.institutions i on i.id = m.institution_id
---    where i.slug = 'hyrise-pilot' group by role;
+--    where i.slug = 'zenvy-pilot' group by role;
 --
 -- Then open /institution while logged in as the admin.
 -- Analytics need 5+ students; 8 clears that.
@@ -144,5 +144,5 @@ notify pgrst, 'reload schema';
 -- delete from public.resumes            where user_id in (select id from auth.users where email like '%@pilot.test');
 -- delete from public.institution_members where user_id in (select id from auth.users where email like '%@pilot.test');
 -- delete from auth.users where email like '%@pilot.test';   -- profiles cascade
--- delete from public.institution_members where institution_id = (select id from public.institutions where slug='hyrise-pilot');
--- delete from public.institutions where slug = 'hyrise-pilot';
+-- delete from public.institution_members where institution_id = (select id from public.institutions where slug='zenvy-pilot');
+-- delete from public.institutions where slug = 'zenvy-pilot';

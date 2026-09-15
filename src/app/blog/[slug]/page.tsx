@@ -18,10 +18,10 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const post = getBlogPost(params.slug);
-  if (!post) return { title: "Article not found — HYRISE" };
+  if (!post) return { title: "Article not found — ZENVY" };
   const url = `/blog/${post.slug}`;
   return {
-    title: `${post.title} | HYRISE`,
+    title: `${post.title} | ZENVY`,
     description: post.description,
     keywords: post.keywords,
     alternates: { canonical: url },
@@ -49,8 +49,8 @@ export default function BlogPostPage({ params }: Props) {
     description: post.description,
     datePublished: post.date,
     dateModified: post.date,
-    author: { "@type": "Organization", name: "HYRISE" },
-    publisher: { "@type": "Organization", name: "HYRISE" },
+    author: { "@type": "Organization", name: "ZENVY" },
+    publisher: { "@type": "Organization", name: "ZENVY" },
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
     keywords: post.keywords.join(", "),
   };

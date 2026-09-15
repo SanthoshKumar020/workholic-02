@@ -4,18 +4,18 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Placement Readiness Software for Colleges | HYRISE",
+  title: "Placement Readiness Software for Colleges | ZENVY",
   description:
     "Track placement readiness for every student in your batch. AI resume checks, mock interviews, aptitude and DSA tracking, and batch reports for your placement cell. Built in India. From ₹60,000/year.",
-  alternates: { canonical: "https://hyrise.swache.in/for-colleges" },
+  alternates: { canonical: "https://zenvy.vercel.app/for-colleges" },
   // Explicitly indexable. /institution is the gated app and stays noindex;
   // this is the public front door, and it was previously missing entirely —
-  // no TPO could find or evaluate HYRISE without an account.
+  // no TPO could find or evaluate ZENVY without an account.
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
-    url: "https://hyrise.swache.in/for-colleges",
-    title: "Placement Readiness Software for Colleges | HYRISE",
+    url: "https://zenvy.vercel.app/for-colleges",
+    title: "Placement Readiness Software for Colleges | ZENVY",
     description:
       "One dashboard for resume quality, aptitude, DSA and mock interview readiness across your whole batch.",
   },
@@ -74,7 +74,7 @@ const PRICING = [
 const FAQS = [
   {
     q: "Who owns the student data?",
-    a: "The institution does. HYRISE processes it on your behalf and deletes it on termination of the contract. We will sign a Data Processing Addendum setting that out. Students also retain their own accounts and can delete their data at any time.",
+    a: "The institution does. ZENVY processes it on your behalf and deletes it on termination of the contract. We will sign a Data Processing Addendum setting that out. Students also retain their own accounts and can delete their data at any time.",
   },
   {
     q: "What exactly can our placement cell see?",
@@ -89,7 +89,7 @@ const FAQS = [
     a: "No. The institution licence covers every tool for every enrolled student for the full contract term.",
   },
   {
-    q: "What if a student already has a HYRISE account?",
+    q: "What if a student already has a ZENVY account?",
     a: "They enter the join code on their existing account and keep all their history. Nothing is duplicated or lost.",
   },
   {
@@ -108,7 +108,7 @@ const faqJsonLd = {
   })),
 };
 
-const CONTACT_EMAIL = "admin@swache.in";
+const CONTACT_EMAIL = "kumarsanthosh2743@gmail.com";
 
 export default function ForCollegesPage() {
   return (
@@ -131,13 +131,13 @@ export default function ForCollegesPage() {
               <span className="text-gradient">three weeks before the drive.</span>
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
-              Your placement cell probably runs on Excel and WhatsApp. HYRISE gives you one
+              Your placement cell probably runs on Excel and WhatsApp. ZENVY gives you one
               dashboard for resume quality, aptitude, DSA and mock-interview readiness across your
               whole batch.
             </p>
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
-                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Demo request — HYRISE for colleges")}&body=${encodeURIComponent("College:\nBatch size:\nBranches:\nBest time to call:\n")}`}
+                href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Demo request — ZENVY for colleges")}&body=${encodeURIComponent("College:\nBatch size:\nBranches:\nBest time to call:\n")}`}
                 className="rounded-xl bg-brand-gradient px-8 py-4 text-base font-semibold text-white shadow-md transition hover:opacity-90"
               >
                 Book a 20-minute demo
@@ -292,7 +292,7 @@ export default function ForCollegesPage() {
               a reasonable call and we won&apos;t chase you.
             </p>
             <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Free semester pilot — HYRISE")}`}
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Free semester pilot — ZENVY")}`}
               className="mt-7 inline-block rounded-xl bg-brand-gradient px-7 py-3.5 text-sm font-bold text-white shadow-sm transition hover:opacity-90"
             >
               Ask about the free semester
@@ -331,7 +331,7 @@ export default function ForCollegesPage() {
               We&apos;ll show you the dashboard with your own batch structure. No slides.
             </p>
             <a
-              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Demo request — HYRISE for colleges")}&body=${encodeURIComponent("College:\nBatch size:\nBranches:\nBest time to call:\n")}`}
+              href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Demo request — ZENVY for colleges")}&body=${encodeURIComponent("College:\nBatch size:\nBranches:\nBest time to call:\n")}`}
               className="mt-8 inline-block rounded-xl bg-brand-gradient px-8 py-4 text-base font-semibold text-white shadow-md transition hover:opacity-90"
             >
               Email us to book a demo
@@ -346,7 +346,7 @@ export default function ForCollegesPage() {
               </a>
             </p>
             <p className="mt-6 text-xs leading-relaxed text-slate-400">
-              HYRISE is built by Santo square automation. We help
+              ZENVY is built by Santo Square Automation. We help
               students present themselves better and prepare properly — we do not guarantee
               placements, and you should be sceptical of anyone who does.
             </p>

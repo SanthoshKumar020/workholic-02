@@ -8,8 +8,8 @@ import { Analytics } from "@/components/Analytics";
 import { LanguageProvider, LANG_COOKIE } from "@/lib/i18n/LanguageProvider";
 import type { Locale } from "@/lib/i18n/translations";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://hyrise.swache.in";
-const SITE_NAME = "HYRISE";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://zenvy.vercel.app";
+const SITE_NAME = "ZENVY";
 const TAGLINE = "Your complete AI career platform in one place";
 const DESCRIPTION =
   "Free AI resume builder, ATS score checker, mock interview coach, and job match analyzer. Land your next job faster — built in India, free to start. ₹299 for 90 days.";
@@ -17,8 +17,8 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: `HYRISE — ${TAGLINE}`,
-    template: `%s · HYRISE`,
+    default: `ZENVY — ${TAGLINE}`,
+    template: `%s · ZENVY`,
   },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   // 2009 and Bing treats it as a spam signal, so it did nothing here except
   // date the site to anyone technical viewing source. Keywords belong in the
   // H1, the body copy and the URL — all of which this site already does.
-  authors: [{ name: "Santo square automation" }],
-  creator: "Santo square automation",
+  authors: [{ name: "Santo Square Automation" }],
+  creator: "Santo Square Automation",
   category: "careers",
   alternates: { canonical: APP_URL },
   robots: {
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: APP_URL,
     siteName: SITE_NAME,
-    title: `HYRISE — ${TAGLINE}`,
+    title: `ZENVY — ${TAGLINE}`,
     description: DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: `HYRISE — ${TAGLINE}`,
+    title: `ZENVY — ${TAGLINE}`,
     description: DESCRIPTION,
-    creator: "@hyrise",
+    creator: "@zenvy",
   },
   icons: {
     icon: "/logo.png",
@@ -91,12 +91,12 @@ const jsonLd = {
   // ratings come from actual, on-page, user-submitted reviews.
   publisher: {
     "@type": "Organization",
-    name: "Santo square automation",
+    name: "Santo Square Automation",
     url: APP_URL,
-    email: "admin@swache.in",
+    email: "kumarsanthosh2743@gmail.com",
     contactPoint: {
       "@type": "ContactPoint",
-      email: "admin@swache.in",
+      email: "kumarsanthosh2743@gmail.com",
       contactType: "customer support",
     },
   },

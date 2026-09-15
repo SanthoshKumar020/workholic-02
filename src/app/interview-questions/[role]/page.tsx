@@ -17,8 +17,8 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const role = getSeoRole(params.role);
-  if (!role) return { title: "Interview Questions — HYRISE" };
-  const title = `${role.name} Interview Questions (with Practice) | HYRISE`;
+  if (!role) return { title: "Interview Questions — ZENVY" };
+  const title = `${role.name} Interview Questions (with Practice) | ZENVY`;
   const description = `Common ${role.name} interview questions — behavioral, technical (${role.skills.slice(0, 3).join(", ")}), and role-specific. Practice with a free AI mock interview.`;
   return {
     title,
@@ -44,7 +44,7 @@ export default function InterviewQuestionsRolePage({ params }: Props) {
       name: q,
       acceptedAnswer: {
         "@type": "Answer",
-        text: `Practice answering "${q}" with the STAR method and a free AI mock interview on HYRISE.`,
+        text: `Practice answering "${q}" with the STAR method and a free AI mock interview on ZENVY.`,
       },
     })),
   };

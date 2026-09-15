@@ -7,7 +7,7 @@ import { PageShell } from "@/components/ui/PageShell";
 import { redirect } from "next/navigation";
 import { FREE_FEATURE_LIMIT } from "@/lib/usage";
 
-export const metadata = { title: "Learning Domains — HYRISE" };
+export const metadata = { title: "Learning Domains — ZENVY" };
 export const dynamic = "force-dynamic";
 
 export default async function DomainsPage() {

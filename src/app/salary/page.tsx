@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { PageShell } from "@/components/ui/PageShell";
 import { ProGate } from "@/components/ui/ProGate";
 
-export const metadata = { title: "Salary Negotiation Coach — HYRISE" };
+export const metadata = { title: "Salary Negotiation Coach — ZENVY" };
 
 export default async function SalaryPage() {
   const profile = await getCurrentProfile();

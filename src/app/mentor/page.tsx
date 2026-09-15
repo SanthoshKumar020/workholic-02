@@ -8,7 +8,7 @@ import { PageShell } from "@/components/ui/PageShell";
 import { ProGate } from "@/components/ui/ProGate";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "AI Career Mentor — HYRISE" };
+export const metadata = { title: "AI Career Mentor — ZENVY" };
 
 export default async function MentorPage() {
   const profile = await getCurrentProfile();

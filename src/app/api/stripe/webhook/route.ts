@@ -67,7 +67,7 @@ export async function POST(request: Request) {
         if (session.customer_details?.email) {
           await sendEmail({
             to: session.customer_details.email,
-            subject: "Welcome to HYRISE Pro 🎉",
+            subject: "Welcome to ZENVY Pro 🎉",
             html: `<p>Your upgrade is complete. All templates and job alerts are now unlocked. Head to your dashboard to get started.</p>`,
           });
         }

@@ -3,8 +3,8 @@ import { Footer } from "@/components/Footer";
 import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata = {
-  title: "Terms of Service — HYRISE",
-  description: "The terms governing your use of the HYRISE career platform.",
+  title: "Terms of Service — ZENVY",
+  description: "The terms governing your use of the ZENVY career platform.",
 };
 
 const LAST_UPDATED = "27 June 2026";
@@ -27,8 +27,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">1. Acceptance of terms</h2>
             <p className="mt-2">
-              By creating an account or using HYRISE (operated by <strong>Santo square automation</strong>,
-              accessible at <strong>hyrise.swache.in</strong>), you agree to these Terms of Service.
+              By creating an account or using ZENVY (operated by <strong>Santo Square Automation</strong>,
+              accessible at <strong>zenvy.vercel.app</strong>), you agree to these Terms of Service.
               If you do not agree, do not use the platform.
             </p>
           </section>
@@ -36,7 +36,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">2. Description of service</h2>
             <p className="mt-2">
-              HYRISE is an AI-powered career platform for job seekers. It provides tools including
+              ZENVY is an AI-powered career platform for job seekers. It provides tools including
               resume enhancement, ATS scoring, mock interviews, job matching, learning roadmaps,
               cover letter generation, and related career features. The platform uses the Groq API
               for AI processing.
@@ -67,7 +67,7 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold text-slate-900">5. Your content</h2>
             <p className="mt-2">
               You retain ownership of any resume content, documents, or text you upload or paste into
-              HYRISE. By submitting content, you grant us a limited licence to process it through our AI
+              ZENVY. By submitting content, you grant us a limited licence to process it through our AI
               pipeline solely to deliver the service to you. We do not claim ownership of your content
               and do not use it to train AI models.
             </p>
@@ -92,7 +92,7 @@ export default function TermsPage() {
               automatically and may not always be accurate, complete, or appropriate for your situation.
               Always review AI-generated content before using it professionally.{" "}
               <strong>
-                HYRISE does not guarantee interview calls, job offers, or employment outcomes.
+                ZENVY does not guarantee interview calls, job offers, or employment outcomes.
               </strong>{" "}
               Results vary based on many factors beyond our control.
             </p>
@@ -101,7 +101,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">8. Intellectual property</h2>
             <p className="mt-2">
-              The HYRISE name, logo, platform design, and proprietary code are owned by Santo square automation. You may not copy, reproduce, or distribute them without written permission.
+              The ZENVY name, logo, platform design, and proprietary code are owned by Santo Square Automation. You may not copy, reproduce, or distribute them without written permission.
             </p>
           </section>
 
@@ -116,8 +116,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">10. Limitation of liability</h2>
             <p className="mt-2">
-              To the maximum extent permitted by law, Santo square automation is not liable for any
-              indirect, incidental, or consequential damages arising from your use of HYRISE. Our total
+              To the maximum extent permitted by law, Santo Square Automation is not liable for any
+              indirect, incidental, or consequential damages arising from your use of ZENVY. Our total
               liability to you in any month shall not exceed the amount you paid us in that month.
             </p>
           </section>
@@ -133,11 +133,11 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">12. Contact</h2>
             <p className="mt-2">
-              Santo square automation{" "}
+              Santo Square Automation{" "}
               <br />
               Questions about these terms? Email us at{" "}
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>.
             </p>
           </section>

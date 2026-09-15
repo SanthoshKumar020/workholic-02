@@ -3,8 +3,8 @@ import { Footer } from "@/components/Footer";
 import { PageShell } from "@/components/ui/PageShell";
 
 export const metadata = {
-  title: "Refund Policy — HYRISE",
-  description: "HYRISE refund and cancellation policy.",
+  title: "Refund Policy — ZENVY",
+  description: "ZENVY refund and cancellation policy.",
 };
 
 const LAST_UPDATED = "27 June 2026";
@@ -27,10 +27,10 @@ export default function RefundPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">Our commitment</h2>
             <p className="mt-2">
-              We want you to be happy with HYRISE. If something went wrong with your subscription
+              We want you to be happy with ZENVY. If something went wrong with your subscription
               or payment, contact us at{" "}
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>{" "}
               and we will make it right.
             </p>
@@ -71,8 +71,8 @@ export default function RefundPage() {
             <ol className="mt-2 list-decimal space-y-1.5 pl-5">
               <li>
                 Email{" "}
-                <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                  admin@swache.in
+                <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                  kumarsanthosh2743@gmail.com
                 </a>{" "}
                 with the subject line <strong>&ldquo;Refund Request&rdquo;</strong>.
               </li>
@@ -96,10 +96,10 @@ export default function RefundPage() {
           <section>
             <h2 className="text-lg font-bold text-slate-900">Contact</h2>
             <p className="mt-2">
-              Santo square automation{" "}
+              Santo Square Automation{" "}
               <br />
-              <a href="mailto:admin@swache.in" className="text-brand-600 hover:underline">
-                admin@swache.in
+              <a href="mailto:kumarsanthosh2743@gmail.com" className="text-brand-600 hover:underline">
+                kumarsanthosh2743@gmail.com
               </a>
             </p>
           </section>

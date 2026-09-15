@@ -8,7 +8,7 @@ import nodemailer, { type Transporter } from "nodemailer";
  * Resend (an API sender) is the right tool for transactional volume: signup
  * confirmations, job alerts, nudges. It is the wrong tool for cold outreach.
  *
- * Cold email lands better from a real mailbox — admin@swache.in on Google
+ * Cold email lands better from a real mailbox — kumarsanthosh2743@gmail.com on Google
  * Workspace or Zoho already has sending history, engagement signal, and none
  * of the "bulk sender" fingerprint that spam filters are trained on. Twenty
  * emails through a freshly-verified API domain looks exactly like what gets
@@ -26,11 +26,11 @@ import nodemailer, { type Transporter } from "nodemailer";
  *      SMTP_PORT=587
  *      SMTP_USER=resend            ← literally the word "resend"
  *      SMTP_PASS=<your RESEND_API_KEY>
- *    Free tier ~3,000 emails/month. Requires swache.in verified in Resend
- *    (DNS only, no cost) before you can send from an @swache.in address.
+ *    Free tier ~3,000 emails/month. Requires your domain verified in Resend
+ *    (DNS only, no cost) before you can send from an address on your verified domain.
  *
- * 2. YOUR EXISTING HOSTING — if swache.in email runs on cPanel or similar,
- *    SMTP is already included at no extra cost. Usually mail.swache.in:587.
+ * 2. YOUR EXISTING HOSTING — if your domain email runs on cPanel or similar,
+ *    SMTP is already included at no extra cost. Usually smtp-relay.brevo.com:587.
  *    Check before signing up for anything.
  *
  * 3. BREVO — 300 emails/day free forever, SMTP relay included, no card.
@@ -51,9 +51,9 @@ import nodemailer, { type Transporter } from "nodemailer";
  *
  *   SMTP_HOST      see options above
  *   SMTP_PORT      587 (STARTTLS, usual) or 465 (implicit TLS)
- *   SMTP_USER      admin@swache.in, or "resend" if using Resend's relay
+ *   SMTP_USER      kumarsanthosh2743@gmail.com, or "resend" if using Resend's relay
  *   SMTP_PASS      an APP PASSWORD or API key — never an account login password
- *   SMTP_FROM      "Santhosh Kumar <admin@swache.in>"
+ *   SMTP_FROM      "Santhosh Kumar <kumarsanthosh2743@gmail.com>"
  *
  * Google Workspace (paid): enable 2-Step Verification, then create an App
  * Password at myaccount.google.com/apppasswords. Your normal password will

@@ -53,6 +53,7 @@
   body {
     @apply bg-[#f8f9ff] text-slate-900 antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: clip;
   }
 
   /* Soft brand aurora on light surfaces for depth */
@@ -79,6 +80,133 @@
       radial-gradient(80rem 60rem at 90% -5%, rgba(99, 102, 241, 0.15) 0%, transparent 65%),
       radial-gradient(60rem 60rem at -10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
       radial-gradient(40rem 40rem at 60% 100%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+  }
+
+  /* ── ZENVY dark marketing system (Linear-inspired) ── */
+  .zdark {
+    background-color: #08090a;
+    color: #f7f8f8;
+    font-feature-settings: "cv01", "ss03";
+  }
+
+  .zdark-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 35%, transparent 78%);
+  }
+
+  .zdark-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .zdark-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .zdark-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 9999px;
+    padding: 0.3rem 0.9rem;
+    font-size: 12px;
+    font-weight: 500;
+    color: #d0d6e0;
+  }
+
+  .zdark-display {
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    font-weight: 600;
+    color: #f7f8f8;
+    text-wrap: balance;
+  }
+
+  .zdark-body {
+    color: #8a8f98;
+    line-height: 1.65;
+  }
+
+  .zdark-btn-primary {
+    background: #5e6ad2;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 0 32px rgba(94, 106, 210, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  }
+
+  .zdark-btn-primary:hover {
+    background: #828fff;
+    box-shadow: 0 0 48px rgba(113, 112, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+
+  .zdark-btn-ghost {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e4e7;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .zdark-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .zdark-gradient-text {
+    background: linear-gradient(135deg, #828fff 0%, #c4b5fd 50%, #7170ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .zdark-faq[open] {
+    border-color: rgba(113, 112, 255, 0.4);
+    background: rgba(94, 106, 210, 0.07);
+  }
+
+  .mask-fade-x {
+    mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  }
+
+  .perspective-1200 {
+    perspective: 1200px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* Scroll reveal (paired with <Reveal/>) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 
   .glass-card {

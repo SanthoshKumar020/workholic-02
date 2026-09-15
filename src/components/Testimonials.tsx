@@ -75,32 +75,32 @@ export function Testimonials() {
     <section className="mx-auto max-w-6xl px-4 py-20">
       {/* ── How it works ──────────────────────────────────────────────── */}
       <div className="mx-auto max-w-2xl text-center">
-        <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+        <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-[#d0d6e0]">
           How it works
         </span>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+        <h2 className="mt-4 text-3xl font-bold tracking-tight text-white">
           Three steps, about a minute
         </h2>
-        <p className="mt-3 text-slate-500">
+        <p className="mt-3 text-[#8a8f98]">
           No onboarding wizard, no credit card, no &ldquo;book a demo&rdquo;.
         </p>
       </div>
 
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
+      <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
         {STEPS.map((s, i) => (
           <div
             key={s.n}
-            className="relative flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="relative flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
           >
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient text-base font-extrabold text-white shadow-sm">
               {s.n}
             </span>
-            <h3 className="mt-4 font-bold text-slate-900">{s.title}</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{s.body}</p>
+            <h3 className="mt-4 font-bold text-white">{s.title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-[#8a8f98]">{s.body}</p>
 
             {/* Connector arrow between cards on desktop */}
             {i < STEPS.length - 1 && (
-              <span className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 text-xl text-brand-300 md:block">
+              <span className="pointer-events-none absolute -right-3 top-1/2 hidden -translate-y-1/2 text-xl text-[#828fff] md:block">
                 →
               </span>
             )}
@@ -109,23 +109,23 @@ export function Testimonials() {
       </div>
 
       {/* ── What the score measures ───────────────────────────────────── */}
-      <div className="mt-20 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-100 bg-slate-50/70 px-8 py-6 text-center">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+      <div className="mt-20 overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.03] shadow-sm">
+        <div className="border-b border-white/[0.06] bg-white/[0.02] px-8 py-6 text-center">
+          <h2 className="text-2xl font-bold tracking-tight text-white">
             What your ATS score is actually measuring
           </h2>
-          <p className="mx-auto mt-2 max-w-xl text-sm text-slate-500">
+          <p className="mx-auto mt-2 max-w-xl text-sm text-[#8a8f98]">
             Not a black box. These are the six things the analysis looks at, and the
             report tells you which ones your resume is failing.
           </p>
         </div>
 
-        <div className="grid gap-px bg-slate-100 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-px bg-white/[0.07] sm:grid-cols-2 lg:grid-cols-3">
           {SIGNALS.map((s) => (
-            <div key={s.label} className="bg-white p-6 transition hover:bg-brand-50/40">
+            <div key={s.label} className="bg-[#0c0d10] p-6 transition hover:bg-white/[0.04]">
               <span className="text-2xl">{s.icon}</span>
-              <h3 className="mt-2.5 text-sm font-bold text-slate-900">{s.label}</h3>
-              <p className="mt-1 text-sm leading-relaxed text-slate-500">{s.body}</p>
+              <h3 className="mt-2.5 text-sm font-bold text-white">{s.label}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-[#8a8f98]">{s.body}</p>
             </div>
           ))}
         </div>
@@ -135,10 +135,10 @@ export function Testimonials() {
       {hasTestimonials ? (
         <>
           <div className="mx-auto mt-20 max-w-2xl text-center">
-            <span className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-[#d0d6e0]">
               What job seekers say
             </span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white">
               In their words
             </h2>
           </div>
@@ -147,9 +147,9 @@ export function Testimonials() {
             {TESTIMONIALS.map((t, i) => (
               <div
                 key={i}
-                className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
-                <p className="flex-1 text-sm leading-relaxed text-slate-600">
+                <p className="flex-1 text-sm leading-relaxed text-[#8a8f98]">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="mt-6 flex items-center gap-3">
@@ -159,8 +159,8 @@ export function Testimonials() {
                     {t.avatarInitials}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-sm font-semibold text-white">{t.name}</p>
+                    <p className="text-xs text-[#62666d]">
                       {t.role} · {t.company}
                     </p>
                   </div>
@@ -170,19 +170,19 @@ export function Testimonials() {
           </div>
         </>
       ) : (
-        <div className="mx-auto mt-20 max-w-3xl overflow-hidden rounded-3xl border border-brand-100 bg-gradient-to-br from-brand-50 to-violet-50 px-8 py-10 text-center">
-          <span className="inline-flex items-center rounded-full border border-brand-200 bg-white px-3 py-1 text-xs font-semibold text-brand-700">
+        <div className="mx-auto mt-20 max-w-3xl overflow-hidden rounded-3xl border border-[#5e6ad2]/30 bg-gradient-to-br from-[#5e6ad2]/20 via-[#141527] to-[#08090a] px-8 py-10 text-center">
+          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-semibold text-[#d0d6e0]">
             Being straight with you
           </span>
-          <h2 className="mx-auto mt-4 max-w-lg text-2xl font-bold tracking-tight text-slate-900">
+          <h2 className="mx-auto mt-4 max-w-lg text-2xl font-bold tracking-tight text-white">
             We&apos;re new, so there are no testimonials here yet
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-600">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#8a8f98]">
             Plenty of tools fill this space with stock photos and invented quotes. We
             would rather you just try the checker — it&apos;s free, it takes 20 seconds, and
             it doesn&apos;t ask for your email. Judge it on the result.
           </p>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-600">
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[#8a8f98]">
             If it helps you, tell us and we&apos;ll ask permission to quote you here. If it
             doesn&apos;t, tell us that too — that&apos;s more useful.
           </p>
@@ -195,12 +195,12 @@ export function Testimonials() {
             </Link>
             <Link
               href="/contact"
-              className="rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50"
+              className="rounded-xl border border-white/15 bg-white/[0.03] px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.07]"
             >
               Send us feedback
             </Link>
           </div>
-          <p className="mt-6 text-xs text-slate-400">
+          <p className="mt-6 text-xs text-[#62666d]">
             Built by Santo Square Automation 🇮🇳
           </p>
         </div>

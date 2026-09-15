@@ -65,10 +65,16 @@ const config: Config = {
       boxShadow: {
         "glow-sm": "0 0 16px rgba(99,102,241,0.18)",
         "glow-md": "0 0 32px rgba(99,102,241,0.22)",
+        "glow-indigo": "0 0 40px rgba(113,112,255,0.35)",
+        "card-dark": "0 0 0 1px rgba(255,255,255,0.08), 0 20px 60px rgba(0,0,0,0.5)",
       },
       backgroundImage: {
         "brand-gradient": "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
         "card-shine": "linear-gradient(145deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 60%)",
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        mono: ["var(--font-jetbrains)", "ui-monospace", "monospace"],
       },
       keyframes: {
         "fade-in": {
@@ -87,6 +93,22 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-6px)" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        orbit: {
+          "0%": { transform: "rotate(0deg) translateX(var(--orbit-r, 90px)) rotate(0deg)" },
+          "100%": { transform: "rotate(360deg) translateX(var(--orbit-r, 90px)) rotate(-360deg)" },
+        },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        aurora: {
+          "0%, 100%": { opacity: "0.5", transform: "translate(0, 0) scale(1)" },
+          "50%": { opacity: "0.9", transform: "translate(4%, -6%) scale(1.08)" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -101,6 +123,10 @@ const config: Config = {
         "slide-up": "slide-up 0.6s ease-out",
         shimmer: "shimmer 2s infinite",
         float: "float 4s ease-in-out infinite",
+        marquee: "marquee 32s linear infinite",
+        orbit: "orbit var(--orbit-t, 14s) linear infinite",
+        "spin-slow": "spin-slow 24s linear infinite",
+        aurora: "aurora 12s ease-in-out infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },

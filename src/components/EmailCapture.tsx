@@ -36,15 +36,15 @@ export function EmailCapture() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 pb-8">
-      <div className="overflow-hidden rounded-3xl border border-brand-100 bg-gradient-to-br from-brand-50 to-violet-50 px-8 py-12 text-center">
-        <span className="inline-flex items-center rounded-full border border-brand-200 bg-white px-3 py-1 text-xs font-semibold text-brand-700">
+      <div className="overflow-hidden rounded-3xl border border-[#5e6ad2]/30 bg-gradient-to-br from-[#5e6ad2]/20 via-[#141527] to-[#08090a] px-8 py-12 text-center">
+        <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs font-semibold text-[#d0d6e0]">
           Free weekly tips
         </span>
 
-        <h2 className="mx-auto mt-4 max-w-lg text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h2 className="mx-auto mt-4 max-w-lg text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Get your free resume score + career tips every week
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-sm text-slate-600">
+        <p className="mx-auto mt-3 max-w-md text-sm text-[#8a8f98]">
           No spam. Unsubscribe anytime. Delivered every Monday — actionable advice to help you
           land interviews faster.
         </p>
@@ -65,7 +65,7 @@ export function EmailCapture() {
               placeholder="your@email.com"
               required
               disabled={status === "loading"}
-              className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200 disabled:opacity-60"
+              className="flex-1 rounded-xl border border-white/15 bg-[#0c0d10] px-4 py-3 text-sm text-white shadow-sm placeholder:text-[#62666d] outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200 disabled:opacity-60"
             />
             <button
               type="submit"
@@ -81,7 +81,7 @@ export function EmailCapture() {
           <p className="mx-auto mt-3 max-w-sm text-xs text-red-600">{errorMsg}</p>
         )}
 
-        <p className="mt-4 text-[11px] text-slate-400">
+        <p className="mt-4 text-[11px] text-[#62666d]">
           No card required · Unsubscribe anytime
         </p>
       </div>

@@ -99,7 +99,7 @@ export default function ResumeCheckerRolePage({ params }: Props) {
         <section className="mt-12">
           <h2 className="text-2xl font-bold text-slate-900">Keywords ATS scans for in a {role.name} resume</h2>
           <p className="mt-2 text-slate-600">
-            Applicant tracking systems rank {role.name} resumes largely on keyword match. Include these where they're true:
+            Applicant tracking systems rank {role.name} resumes largely on keyword match. Include these where they&apos;re true:
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {keywords.map((kw) => (

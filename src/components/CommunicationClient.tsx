@@ -26,7 +26,6 @@ export function CommunicationClient() {
   const [isListening, setIsListening] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   useEffect(() => {
     const SpeechRec = window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition;

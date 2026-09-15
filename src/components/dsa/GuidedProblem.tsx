@@ -117,7 +117,7 @@ export function GuidedProblem({
               <div key={i} className="rounded-xl bg-slate-50 p-3 font-mono text-xs text-slate-600">
                 <div><span className="font-bold text-slate-400">Input:</span> {ex.input}</div>
                 <div><span className="font-bold text-slate-400">Output:</span> {ex.output}</div>
-                {ex.note && <div className="text-slate-400">// {ex.note}</div>}
+                {ex.note && <div className="text-slate-400">{"// "}{ex.note}</div>}
               </div>
             ))}
           </div>
